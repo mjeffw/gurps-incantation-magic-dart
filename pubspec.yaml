@@ -6,9 +6,11 @@ author: M. Jeff Wilson <geek.macbeer@gmail.com>
 homepage: http://hypermediocrity.us
 documentation:
 dependencies:
+  built_value:
+  range:
 
 dev_dependencies:
-  test: '>=0.12.0 <0.13.0'
+  test: '>=0.12.0'
   mockito:
 
 dependency_overrides:
