@@ -31,7 +31,9 @@ class _Demonology extends Path {
 }
 
 class _Elementalism extends Path {
-  _Elementalism() : super("Elementalism", "Air, earth, fire, water, and wood -- as well as void/sound/ether, if used in the campaign.");
+  _Elementalism()
+      : super("Elementalism",
+            "Air, earth, fire, water, and wood -- as well as void/sound/ether, if used in the campaign.");
 }
 
 class _Mesmerism extends Path {
