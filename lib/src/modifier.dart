@@ -29,12 +29,6 @@ abstract class Modifier {
 
   int get value => _value;
   set value(int val) => _value = val;
-
-  /// while SPs depend on value, it is not a one-for-one mapping; a single SP might cover a range of values. this
-  /// returns the min and max values for a given amount of SPs
-  List<int> valueRange(int sp) {
-    return [0, 0];
-  }
 }
 
 /// Adds the Affliction: Stun (p. B36) effect to a spell.
@@ -59,6 +53,8 @@ class Affliction extends Modifier {
     // negative percent is not allowed
     if (percent >= 0) {
       _value = percent;
+    } else {
+      _value = 0;
     }
   }
 
@@ -70,6 +66,62 @@ class Affliction extends Modifier {
     if (sp <= 0) {
       return [0, 0];
     }
-    return [((sp-1) * 5) + 1, sp * 5];
+    return [((sp - 1) * 5) + 1, sp * 5];
   }
+}
+
+/// Adds an Altered Trait to a spell.
+///
+/// Any spell that adds disadvantages, reduces attributes, or reduces or removes advantages adds +1 SP for
+/// every five character points removed. One that adds advantages, reduces or removes disadvantages, or increases
+/// attributes adds +1 SP for every character point added.
+class AlteredTraits extends Modifier {
+  AlteredTraits() : super("Altered Traits");
+
+  @override
+  int get spellPoints {
+    if (_value < 0) {
+      return (_value.abs() / 5.0).ceil();
+    } else {
+      return _value;
+    }
+  }
+}
+
+/// Adds an Area of Effect, optionally including or excluding specific targets in the area, to the spell.
+class AreaOfEffect extends Modifier {
+  int _targets = 0;
+  bool _includes = false;
+
+  AreaOfEffect() : super("Area of Effect");
+
+  /// Figure the circular area and add 10 SP per yard of radius from its center.
+  /// Add another +1 SP for every two specific subjects in the area that won’t be affected by the spell, or
+  /// +1 per two subjects included in the spell, if excluding everyone except specific targets.
+  @override
+  int get spellPoints {
+    return _value * 10 + (_targets / 2).ceil();
+  }
+
+  /// Excluding potential targets is possible -- alternately, you can exclude everyone except specific targets.
+  ///
+  /// Number is the number of targets to exclude (or include); set includes = true to indicate includes, false
+  /// for excludes.
+  void targets(int number, bool includes) {
+    _targets = number;
+    _includes = includes;
+  }
+}
+
+/// Range of rolls affected by a Bestows modifier.
+enum BestowsRange {
+  single
+}
+
+/// Adds a bonus or penalty to skills or attributes.
+class Bestows extends Modifier {
+  BestowsRange range = BestowsRange.single;
+
+  Bestows() : super ("Bestows a (Bonus or Penalty)");
+
 }
