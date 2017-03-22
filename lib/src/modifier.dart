@@ -1,3 +1,5 @@
+import 'dart:math';
+
 /// Describes a modifier to an Incantation Spell.
 ///
 /// Modifiers add Damage, Range, Duration, and other features to a spell, and the cost of the spell is adjusted by
@@ -91,7 +93,7 @@ class AlteredTraits extends Modifier {
 /// Adds an Area of Effect, optionally including or excluding specific targets in the area, to the spell.
 class AreaOfEffect extends Modifier {
   int _targets = 0;
-  bool _includes = false;
+  bool _includes = false; // ignore: unused_field
 
   AreaOfEffect() : super("Area of Effect");
 
@@ -114,14 +116,37 @@ class AreaOfEffect extends Modifier {
 }
 
 /// Range of rolls affected by a Bestows modifier.
-enum BestowsRange {
-  single
-}
+enum BestowsRange { single, moderate, broad }
 
 /// Adds a bonus or penalty to skills or attributes.
 class Bestows extends Modifier {
   BestowsRange range = BestowsRange.single;
 
-  Bestows() : super ("Bestows a (Bonus or Penalty)");
+  Bestows() : super("Bestows a (Bonus or Penalty)");
 
+  @override
+  int get spellPoints {
+    if (_value == 0) {
+      return 0;
+    }
+
+    var x = _value.abs();
+    switch (range) {
+      case BestowsRange.single:
+        return _baseSpellPoints(x);
+
+      case BestowsRange.moderate:
+        return _baseSpellPoints(x) * 2;
+
+      case BestowsRange.broad:
+        return _baseSpellPoints(x) * 5;
+    }
+  }
+
+  int _baseSpellPoints(int x) {
+    if (x < 5) {
+      return pow(2, x - 1).toInt();
+    }
+    return 12 + ((x - 5) * 4);
+  }
 }

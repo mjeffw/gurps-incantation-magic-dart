@@ -4,7 +4,11 @@ import "package:gurps_incantation_magic_model/incantation_magic.dart";
 void main() {
   // A spell effect to stun a foe requires no additional SP.
   group("Affliction (Stun):", () {
-    Modifier m = new AfflictionStun();
+    Modifier m;
+
+    setUp(() async {
+      m = new AfflictionStun();
+    });
 
     test("has initial state", () {
       expect(m.inherent, equals(false));
@@ -27,7 +31,11 @@ void main() {
   });
 
   group("Afflictions:", () {
-    Modifier m = new Affliction();
+    Modifier m;
+
+    setUp(() async {
+      m = new Affliction();
+    });
 
     test("has initial state", () {
       expect(m.inherent, equals(false));
@@ -62,7 +70,11 @@ void main() {
   });
 
   group("Altered Traits", () {
-    Modifier m = new AlteredTraits();
+    Modifier m;
+
+    setUp(() async {
+      m = new AlteredTraits();
+    });
 
     test("has initial state", () {
       expect(m.inherent, equals(false));
@@ -104,7 +116,11 @@ void main() {
   });
 
   group("Area of Effect:", () {
-    AreaOfEffect m = new AreaOfEffect();
+    AreaOfEffect m;
+
+    setUp(() async {
+      m = new AreaOfEffect();
+    });
 
     test("has initial state", () {
       expect(m.inherent, equals(false));
@@ -140,7 +156,11 @@ void main() {
   });
 
   group("Bestows a (Bonus or Penalty)", () {
-    Bestows m = new Bestows();
+    Bestows m;
+
+    setUp(() async {
+      m = new Bestows();
+    });
 
     test("has initial state", () {
       expect(m.inherent, equals(false));
@@ -155,8 +175,116 @@ void main() {
       expect(m.inherent, equals(true));
     });
 
+    test("has range", () {
+      m.range = BestowsRange.moderate;
+      expect(m.range, equals(BestowsRange.moderate));
+      m.range = BestowsRange.broad;
+      expect(m.range, equals(BestowsRange.broad));
+    });
+
     test("has Single roll cost", () {
-      fail("not implemented");
+      m.value = -7;
+      expect(m.spellPoints, equals(20));
+      m.value = -6;
+      expect(m.spellPoints, equals(16));
+      m.value = -5;
+      expect(m.spellPoints, equals(12));
+      m.value = -4;
+      expect(m.spellPoints, equals(8));
+      m.value = -3;
+      expect(m.spellPoints, equals(4));
+      m.value = -2;
+      expect(m.spellPoints, equals(2));
+      m.value = -1;
+      expect(m.spellPoints, equals(1));
+      m.value = 0;
+      expect(m.spellPoints, equals(0));
+      m.value = 1;
+      expect(m.spellPoints, equals(1));
+      m.value = 2;
+      expect(m.spellPoints, equals(2));
+      m.value = 3;
+      expect(m.spellPoints, equals(4));
+      m.value = 4;
+      expect(m.spellPoints, equals(8));
+      m.value = 5;
+      expect(m.spellPoints, equals(12));
+      m.value = 6;
+      expect(m.spellPoints, equals(16));
+      m.value = 7;
+      expect(m.spellPoints, equals(20));
+    });
+
+    test("should have moderate cost", () {
+      m.range = BestowsRange.moderate;
+
+      m.value = -7;
+      expect(m.spellPoints, equals(40));
+      m.value = -6;
+      expect(m.spellPoints, equals(32));
+      m.value = -5;
+      expect(m.spellPoints, equals(24));
+      m.value = -4;
+      expect(m.spellPoints, equals(16));
+      m.value = -3;
+      expect(m.spellPoints, equals(8));
+      m.value = -2;
+      expect(m.spellPoints, equals(4));
+      m.value = -1;
+      expect(m.spellPoints, equals(2));
+      m.value = 0;
+      expect(m.spellPoints, equals(0));
+      m.value = 1;
+      expect(m.spellPoints, equals(2));
+      m.value = 2;
+      expect(m.spellPoints, equals(4));
+      m.value = 3;
+      expect(m.spellPoints, equals(8));
+      m.value = 4;
+      expect(m.spellPoints, equals(16));
+      m.value = 5;
+      expect(m.spellPoints, equals(24));
+      m.value = 6;
+      expect(m.spellPoints, equals(32));
+      m.value = 7;
+      expect(m.spellPoints, equals(40));
+    });
+
+    test("should have broad cost", () {
+      m.range = BestowsRange.broad;
+
+      m.value = -7;
+      expect(m.spellPoints, equals(100));
+      m.value = -6;
+      expect(m.spellPoints, equals(80));
+      m.value = -5;
+      expect(m.spellPoints, equals(60));
+      m.value = -4;
+      expect(m.spellPoints, equals(40));
+      m.value = -3;
+      expect(m.spellPoints, equals(20));
+      m.value = -2;
+      expect(m.spellPoints, equals(10));
+      m.value = -1;
+      expect(m.spellPoints, equals(5));
+      m.value = 0;
+      expect(m.spellPoints, equals(0));
+      m.value = 1;
+      expect(m.spellPoints, equals(5));
+      m.value = 2;
+      expect(m.spellPoints, equals(10));
+      m.value = 3;
+      expect(m.spellPoints, equals(20));
+      m.value = 4;
+      expect(m.spellPoints, equals(40));
+      m.value = 5;
+      expect(m.spellPoints, equals(60));
+      m.value = 6;
+      expect(m.spellPoints, equals(80));
+      m.value = 7;
+      expect(m.spellPoints, equals(100));
+
+      fail("refactor to move multiplier to enum value");
     });
   });
 }
