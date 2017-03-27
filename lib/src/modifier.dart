@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'enhancer.dart';
 
 /// Describes a modifier to an Incantation Spell.
 ///
@@ -32,6 +33,8 @@ abstract class Modifier {
   int get value => _value;
   set value(int val) => _value = val;
 }
+// ----------------------------------
+
 
 /// Adds the Affliction: Stun (p. B36) effect to a spell.
 ///
@@ -43,6 +46,8 @@ class AfflictionStun extends Modifier {
   @override
   set value(_) => _;
 }
+// ----------------------------------
+
 
 /// Adds an Affliction (p. B36) effect to a spell.
 ///
@@ -71,6 +76,8 @@ class Affliction extends Modifier {
     return [((sp - 1) * 5) + 1, sp * 5];
   }
 }
+// ----------------------------------
+
 
 /// Adds an Altered Trait to a spell.
 ///
@@ -78,17 +85,35 @@ class Affliction extends Modifier {
 /// every five character points removed. One that adds advantages, reduces or removes disadvantages, or increases
 /// attributes adds +1 SP for every character point added.
 class AlteredTraits extends Modifier {
+
+  /// list of enhancers/limitations to apply to the cost of this modifier.
+  /// Enahncers apply to the cost of the AlteredTrait and are calculated before determining spell points.
+  EnhancerList _enhancers = new EnhancerList();
+
+  void addEnhancer(String name, String detail, int value) {
+    _enhancers.add(new Enhancer(name, detail, value));
+  }
+
   AlteredTraits() : super("Altered Traits");
 
   @override
   int get spellPoints {
+    int result = _baseSpellPoints();
+    return result + _enhancers.adjustment(result);
+  }
+
+  int _baseSpellPoints() {
+    int result;
     if (_value < 0) {
-      return (_value.abs() / 5.0).ceil();
+      result = (_value.abs() / 5.0).ceil();
     } else {
-      return _value;
+      result = _value;
     }
+    return result;
   }
 }
+// ----------------------------------
+
 
 /// Adds an Area of Effect, optionally including or excluding specific targets in the area, to the spell.
 class AreaOfEffect extends Modifier {
@@ -114,9 +139,14 @@ class AreaOfEffect extends Modifier {
     _includes = includes;
   }
 }
+// ----------------------------------
+
 
 /// Range of rolls affected by a Bestows modifier.
 enum BestowsRange { single, moderate, broad }
+
+// ----------------------------------
+
 
 /// Adds a bonus or penalty to skills or attributes.
 class Bestows extends Modifier {
@@ -150,3 +180,5 @@ class Bestows extends Modifier {
     return 12 + ((x - 5) * 4);
   }
 }
+// ----------------------------------
+

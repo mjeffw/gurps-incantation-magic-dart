@@ -70,7 +70,7 @@ void main() {
   });
 
   group("Altered Traits", () {
-    Modifier m;
+    AlteredTraits m;
 
     setUp(() async {
       m = new AlteredTraits();
@@ -112,6 +112,39 @@ void main() {
       expect(m.spellPoints, equals(24));
       m.value = 100;
       expect(m.spellPoints, equals(100));
+    });
+
+    test("allows for Limitations/Enhancements", () {
+      m.value = 24;
+      m.addEnhancer("Ten percent", null, 10);
+      expect(m.spellPoints, equals(27));
+
+      m.addEnhancer("Another enhancer", null, 5);
+      expect(m.spellPoints, equals(28));
+
+      m.addEnhancer("Limitation", null, -10);
+      expect(m.spellPoints, equals(26));
+    });
+
+    test("another test for Limitations/Enhancements", () {
+      m.addEnhancer("foo", null, 35);
+      m.addEnhancer("bar", "detail", -10);
+
+      m.value = 0;
+      expect(m.spellPoints, equals(0));
+
+      m.value = 30;
+      expect(m.spellPoints, equals(38));
+
+      m.value = 100;
+      expect(m.spellPoints, equals(125));
+
+      m.value = -10;
+      expect(m.spellPoints, equals(3));
+
+      m.value = -40;
+      expect(m.spellPoints, equals(10));
+
     });
   });
 
@@ -283,8 +316,6 @@ void main() {
       expect(m.spellPoints, equals(80));
       m.value = 7;
       expect(m.spellPoints, equals(100));
-
-      fail("refactor to move multiplier to enum value");
     });
   });
 }
