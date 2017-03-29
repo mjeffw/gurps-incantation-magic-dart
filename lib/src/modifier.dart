@@ -35,7 +35,6 @@ abstract class Modifier {
 }
 // ----------------------------------
 
-
 /// Adds the Affliction: Stun (p. B36) effect to a spell.
 ///
 /// This effect can be added without additional SP cost.
@@ -47,7 +46,6 @@ class AfflictionStun extends Modifier {
   set value(_) => _;
 }
 // ----------------------------------
-
 
 /// Adds an Affliction (p. B36) effect to a spell.
 ///
@@ -78,14 +76,12 @@ class Affliction extends Modifier {
 }
 // ----------------------------------
 
-
 /// Adds an Altered Trait to a spell.
 ///
 /// Any spell that adds disadvantages, reduces attributes, or reduces or removes advantages adds +1 SP for
 /// every five character points removed. One that adds advantages, reduces or removes disadvantages, or increases
 /// attributes adds +1 SP for every character point added.
 class AlteredTraits extends Modifier {
-
   /// list of enhancers/limitations to apply to the cost of this modifier.
   /// Enahncers apply to the cost of the AlteredTrait and are calculated before determining spell points.
   EnhancerList _enhancers = new EnhancerList();
@@ -114,7 +110,6 @@ class AlteredTraits extends Modifier {
 }
 // ----------------------------------
 
-
 /// Adds an Area of Effect, optionally including or excluding specific targets in the area, to the spell.
 class AreaOfEffect extends Modifier {
   int _targets = 0;
@@ -141,12 +136,10 @@ class AreaOfEffect extends Modifier {
 }
 // ----------------------------------
 
-
 /// Range of rolls affected by a Bestows modifier.
 enum BestowsRange { single, moderate, broad }
 
 // ----------------------------------
-
 
 /// Adds a bonus or penalty to skills or attributes.
 class Bestows extends Modifier {
@@ -184,3 +177,15 @@ class Bestows extends Modifier {
 }
 // ----------------------------------
 
+/// Damage types
+enum DamageType { crushing, cutting }
+
+/// For spells that damage its targets.
+class Damage extends Modifier {
+  DamageType type = DamageType.crushing;
+  bool direct = true;
+  bool explosive = false;
+  bool vampiric = false;
+
+  Damage() : super("Damage");
+}
