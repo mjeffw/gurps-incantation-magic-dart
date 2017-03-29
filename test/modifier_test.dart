@@ -144,7 +144,6 @@ void main() {
 
       m.value = -40;
       expect(m.spellPoints, equals(10));
-
     });
   });
 
@@ -183,7 +182,7 @@ void main() {
       expect(m.spellPoints, equals(41));
       m.targets(6, false);
       expect(m.spellPoints, equals(43));
-      m.targets(7, false);
+      m.targets(7, true);
       expect(m.spellPoints, equals(44));
     });
   });
@@ -316,6 +315,16 @@ void main() {
       expect(m.spellPoints, equals(80));
       m.value = 7;
       expect(m.spellPoints, equals(100));
+    });
+
+    test("should have specialization", () {
+      m.specialization = "Foo";
+
+      expect(m.specialization, equals("Foo"));
+
+      m.specialization = null;
+
+      expect(m.specialization, equals(null));
     });
   });
 }

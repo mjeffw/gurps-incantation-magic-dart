@@ -152,6 +152,8 @@ enum BestowsRange { single, moderate, broad }
 class Bestows extends Modifier {
   BestowsRange range = BestowsRange.single;
 
+  String specialization;
+
   Bestows() : super("Bestows a (Bonus or Penalty)");
 
   @override
