@@ -318,4 +318,40 @@ void main() {
       expect(m.spellPoints, equals(100));
     });
   });
+
+  group("Damage:", () {
+    Damage m;
+
+    setUp(() async {
+      m = new Damage();
+    });
+
+    test("has initial state", () {
+      expect(m.inherent, equals(false));
+      expect(m.value, equals(0));
+      expect(m.name, equals("Damage"));
+      expect(m.spellPoints, equals(0));
+
+      expect(m.type, equals((DamageType.crushing)));
+      expect(m.direct, equals((true)));
+      expect(m.explosive, equals((false)));
+      expect(m.vampiric, equals((false)));
+
+    });
+
+    test("has inherent", () {
+      m.inherent = true;
+      expect(m.inherent, equals(true));
+    });
+
+    test("has type", () {
+      m.type = DamageType.cutting;
+      expect(m.type, equals(DamageType.cutting));
+    });
+
+    test("has direct", () {
+      m.direct = false;
+      expect(m.direct, equals(false));
+    });
+  });
 }
