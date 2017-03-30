@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'enhancer.dart';
+import 'package:gurps_incantation_magic_model/src/die_roll.dart';
 
 /// Describes a modifier to an Incantation Spell.
 ///
@@ -178,7 +179,28 @@ class Bestows extends Modifier {
 // ----------------------------------
 
 /// Damage types
-enum DamageType { crushing, cutting }
+enum DamageType {
+  burning,
+  corrosive,
+  crushing,
+  cutting,
+  fatigue,
+  impaling,
+  hugePiercing,
+  largePiercing,
+  piercing,
+  smallPiercing,
+  toxic
+}
+
+final List<DamageType> impalingTypes = [
+  DamageType.corrosive,
+  DamageType.fatigue,
+  DamageType.impaling,
+  DamageType.hugePiercing
+];
+final List<DamageType> crushingTypes = [DamageType.burning, DamageType.crushing, DamageType.piercing, DamageType.toxic];
+final List<DamageType> cuttingTypes = [DamageType.cutting, DamageType.largePiercing];
 
 /// For spells that damage its targets.
 class Damage extends Modifier {
@@ -188,4 +210,40 @@ class Damage extends Modifier {
   bool vampiric = false;
 
   Damage() : super("Damage");
+
+  @override
+  int get spellPoints {
+    if (type == DamageType.smallPiercing) {
+      return ((_value + 1) / 2).floor() * _vampiricFactor();
+    } else if (impalingTypes.contains(type)) {
+      return _value * 2 * _vampiricFactor();
+    } else if (crushingTypes.contains(type)) {
+      return value * _vampiricFactor();
+    } else if (cuttingTypes.contains(type)){
+      return (value + (value + 1) / 2).floor() * _vampiricFactor();
+    }
+    return 0;
+  }
+
+  int _vampiricFactor() {
+    if (vampiric) {
+      return 2;
+    }
+    return 1;
+  }
+
+  DieRoll get dice {
+    DieRoll d = new DieRoll(1, value);
+    return d * _explosiveFactor();
+  }
+
+  int _explosiveFactor() {
+    if (explosive) {
+      return 2;
+    } else if (direct) {
+      return 1;
+    } else {
+      return 3;
+    }
+  }
 }
