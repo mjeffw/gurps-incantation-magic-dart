@@ -204,6 +204,14 @@ final List<DamageType> cuttingTypes = [DamageType.cutting, DamageType.largePierc
 
 /// For spells that damage its targets.
 class Damage extends Modifier {
+  /// list of enhancers/limitations to apply to the cost of this modifier.
+  /// Enahncers apply to the cost of the AlteredTrait and are calculated before determining spell points.
+  EnhancerList _enhancers = new EnhancerList();
+
+  void addEnhancer(String name, String detail, int value) {
+    _enhancers.add(new Enhancer(name, detail, value));
+  }
+
   DamageType type = DamageType.crushing;
   bool direct = true;
   bool explosive = false;
@@ -213,19 +221,43 @@ class Damage extends Modifier {
 
   @override
   int get spellPoints {
-    if (type == DamageType.smallPiercing) {
-      return ((_value + 1) / 2).floor() * _vampiricFactor();
-    } else if (impalingTypes.contains(type)) {
-      return _value * 2 * _vampiricFactor();
-    } else if (crushingTypes.contains(type)) {
-      return value * _vampiricFactor();
-    } else if (cuttingTypes.contains(type)){
-      return (value + (value + 1) / 2).floor() * _vampiricFactor();
-    }
-    return 0;
+    int sp = _spellPointsForDamageType;
+    return (sp + _adjustmentForEnhancements(sp))  * _vampiricFactor;
   }
 
-  int _vampiricFactor() {
+  int get _spellPointsForDamageType {
+    int sp = 0;
+    if (type == DamageType.smallPiercing) {
+      sp = ((_value + 1) / 2).floor();
+    } else if (impalingTypes.contains(type)) {
+      sp = _value * 2;
+    } else if (crushingTypes.contains(type)) {
+      sp = value;
+    } else if (cuttingTypes.contains(type)) {
+      sp = (value + (value + 1) / 2).floor();
+    }
+    return sp;
+  }
+
+  // Enhancements may be added to Damage.
+  int _adjustmentForEnhancements(int sp) {
+    // Added limitations reduce this surcharge, but will never provide a net SP discount.
+    int sum = _enhancers.sum;
+    if (sum < 0) {
+      return 0;
+    }
+
+    // If Damage costs 21 SP or more, apply the enhancement percentage to the SP cost for Damage only (not to the cost
+    // of the whole spell); round up
+    if (sp > 20) {
+      return sum;
+    }
+
+    // Each +5% adds 1 SP if the base cost for Damage is 20 SP or less.
+    return (sum / 5).ceil();
+  }
+
+  int get _vampiricFactor {
     if (vampiric) {
       return 2;
     }

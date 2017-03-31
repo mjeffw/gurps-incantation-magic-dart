@@ -21,11 +21,13 @@ class EnhancerList implements List<Enhancer> {
   }
 
   int adjustment(int baseValue) {
-    if (_delegate.isEmpty) {
-      return 0;
-    }
-
-    double x = _delegate.map<double>((i) => i.level / 100.0).reduce((a, b) => a + b);
+//    if (_delegate.isEmpty) {
+//      return 0;
+//    }
+//
+    double x = _delegate.map<double>((i) => i.level / 100.0).fold(0.0, (a, b) => a + b);
     return (baseValue * x).ceil();
   }
+
+  int get sum => _delegate.map<int>((e) => e.level).fold<int>(0, (a, b) => a + b);
 }

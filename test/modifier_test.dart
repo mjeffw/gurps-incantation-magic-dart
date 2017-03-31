@@ -462,6 +462,70 @@ void main() {
         }
       }
     });
+
+    // Each +5% adds 1 SP if the base cost for Damage is 20 SP or less.
+    test("should add 1 SP per 5 Percent of Enhancers", () {
+      m.addEnhancer("foo", null, 1);
+      m.value = 10;
+      expect(m.spellPoints, equals(11));
+      m.value = 20;
+      expect(m.spellPoints, equals(21));
+
+      m.addEnhancer("bar", null, 4);
+      m.value = 10;
+      expect(m.spellPoints, equals(11));
+      m.value = 20;
+      expect(m.spellPoints, equals(21));
+
+      m.addEnhancer("baz", null, 2);
+      m.value = 10;
+      expect(m.spellPoints, equals(12));
+      m.value = 20;
+      expect(m.spellPoints, equals(22));
+
+      m.addEnhancer("dum", null, 8);
+      m.value = 10;
+      expect(m.spellPoints, equals(13));
+      m.value = 20;
+      expect(m.spellPoints, equals(23));
+    });
+
+    // If Damage costs 21 SP or more, apply the enhancement percentage to the SP cost for Damage only (not to the cost
+    // of the whole spell); round up.
+    test("should Add 1 Point Per 1 Percent", () {
+      m.addEnhancer("foo", null, 1);
+      m.value = 25;
+      expect(m.spellPoints, equals(26));
+
+      m.addEnhancer("foo", null, 4);
+      m.value = 30;
+      expect(m.spellPoints, equals(35));
+
+      m.addEnhancer("foo", null, 2);
+      m.value = 33;
+      expect(m.spellPoints, equals(40));
+
+      m.addEnhancer("foo", null, 8);
+      m.value = 50;
+      expect(m.spellPoints, equals(65));
+    });
+
+    // Added limitations reduce this surcharge, but will never provide a net SP discount.
+    test("should Not Add 1 Point", () {
+
+      m.addEnhancer("foo", null, 10);
+      m.addEnhancer("bar", null, -5);
+      m.value = 10;
+      expect(m.spellPoints, equals(11));
+      m.value = 30;
+      expect(m.spellPoints, equals(35));
+
+      m.addEnhancer("baz", null, -10);
+      m.value = 10;
+      expect(m.spellPoints, equals(10));
+      m.value = 30;
+      expect(m.spellPoints, equals(30));
+    });
   });
 }
 
