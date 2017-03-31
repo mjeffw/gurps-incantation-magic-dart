@@ -36,6 +36,16 @@ abstract class Modifier {
 }
 // ----------------------------------
 
+/// Define the Enhanceable mixin
+abstract class _Enhanceable {
+  EnhancerList _enhancers = new EnhancerList();
+
+  void addEnhancer(String name, String detail, int value) {
+    _enhancers.add(new Enhancer(name, detail, value));
+  }
+}
+// ----------------------------------
+
 /// Adds the Affliction: Stun (p. B36) effect to a spell.
 ///
 /// This effect can be added without additional SP cost.
@@ -82,15 +92,7 @@ class Affliction extends Modifier {
 /// Any spell that adds disadvantages, reduces attributes, or reduces or removes advantages adds +1 SP for
 /// every five character points removed. One that adds advantages, reduces or removes disadvantages, or increases
 /// attributes adds +1 SP for every character point added.
-class AlteredTraits extends Modifier {
-  /// list of enhancers/limitations to apply to the cost of this modifier.
-  /// Enahncers apply to the cost of the AlteredTrait and are calculated before determining spell points.
-  EnhancerList _enhancers = new EnhancerList();
-
-  void addEnhancer(String name, String detail, int value) {
-    _enhancers.add(new Enhancer(name, detail, value));
-  }
-
+class AlteredTraits extends Modifier with _Enhanceable {
   AlteredTraits() : super("Altered Traits");
 
   @override
@@ -203,15 +205,7 @@ final List<DamageType> crushingTypes = [DamageType.burning, DamageType.crushing,
 final List<DamageType> cuttingTypes = [DamageType.cutting, DamageType.largePiercing];
 
 /// For spells that damage its targets.
-class Damage extends Modifier {
-  /// list of enhancers/limitations to apply to the cost of this modifier.
-  /// Enahncers apply to the cost of the AlteredTrait and are calculated before determining spell points.
-  EnhancerList _enhancers = new EnhancerList();
-
-  void addEnhancer(String name, String detail, int value) {
-    _enhancers.add(new Enhancer(name, detail, value));
-  }
-
+class Damage extends Modifier with _Enhanceable {
   DamageType type = DamageType.crushing;
   bool direct = true;
   bool explosive = false;
@@ -278,4 +272,9 @@ class Damage extends Modifier {
       return 3;
     }
   }
+}
+
+/// Add a Duration to a spell.
+class DurationMod extends Modifier {
+  DurationMod() : super("Duration");
 }

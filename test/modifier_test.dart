@@ -4,7 +4,7 @@ import "package:gurps_incantation_magic_model/incantation_magic.dart";
 void main() {
   // A spell effect to stun a foe requires no additional SP.
   group("Affliction (Stun):", () {
-    Modifier m;
+    AfflictionStun m;
 
     setUp(() async {
       m = new AfflictionStun();
@@ -31,7 +31,7 @@ void main() {
   });
 
   group("Afflictions:", () {
-    Modifier m;
+    Affliction m;
 
     setUp(() async {
       m = new Affliction();
@@ -99,8 +99,6 @@ void main() {
       expect(m.spellPoints, equals(2));
       m.value = -11;
       expect(m.spellPoints, equals(3));
-      m.value = -20;
-      expect(m.spellPoints, equals(4));
     });
 
     test("adds +1 SP for every character point added", () {
@@ -132,16 +130,12 @@ void main() {
 
       m.value = 0;
       expect(m.spellPoints, equals(0));
-
       m.value = 30;
       expect(m.spellPoints, equals(38));
-
       m.value = 100;
       expect(m.spellPoints, equals(125));
-
       m.value = -10;
       expect(m.spellPoints, equals(3));
-
       m.value = -40;
       expect(m.spellPoints, equals(10));
     });
@@ -215,12 +209,6 @@ void main() {
     });
 
     test("has Single roll cost", () {
-      m.value = -7;
-      expect(m.spellPoints, equals(20));
-      m.value = -6;
-      expect(m.spellPoints, equals(16));
-      m.value = -5;
-      expect(m.spellPoints, equals(12));
       m.value = -4;
       expect(m.spellPoints, equals(8));
       m.value = -3;
@@ -239,23 +227,11 @@ void main() {
       expect(m.spellPoints, equals(4));
       m.value = 4;
       expect(m.spellPoints, equals(8));
-      m.value = 5;
-      expect(m.spellPoints, equals(12));
-      m.value = 6;
-      expect(m.spellPoints, equals(16));
-      m.value = 7;
-      expect(m.spellPoints, equals(20));
     });
 
     test("should have moderate cost", () {
       m.range = BestowsRange.moderate;
 
-      m.value = -7;
-      expect(m.spellPoints, equals(40));
-      m.value = -6;
-      expect(m.spellPoints, equals(32));
-      m.value = -5;
-      expect(m.spellPoints, equals(24));
       m.value = -4;
       expect(m.spellPoints, equals(16));
       m.value = -3;
@@ -274,23 +250,11 @@ void main() {
       expect(m.spellPoints, equals(8));
       m.value = 4;
       expect(m.spellPoints, equals(16));
-      m.value = 5;
-      expect(m.spellPoints, equals(24));
-      m.value = 6;
-      expect(m.spellPoints, equals(32));
-      m.value = 7;
-      expect(m.spellPoints, equals(40));
     });
 
     test("should have broad cost", () {
       m.range = BestowsRange.broad;
 
-      m.value = -7;
-      expect(m.spellPoints, equals(100));
-      m.value = -6;
-      expect(m.spellPoints, equals(80));
-      m.value = -5;
-      expect(m.spellPoints, equals(60));
       m.value = -4;
       expect(m.spellPoints, equals(40));
       m.value = -3;
@@ -309,21 +273,13 @@ void main() {
       expect(m.spellPoints, equals(20));
       m.value = 4;
       expect(m.spellPoints, equals(40));
-      m.value = 5;
-      expect(m.spellPoints, equals(60));
-      m.value = 6;
-      expect(m.spellPoints, equals(80));
-      m.value = 7;
-      expect(m.spellPoints, equals(100));
     });
 
     test("should have specialization", () {
       m.specialization = "Foo";
-
       expect(m.specialization, equals("Foo"));
 
       m.specialization = null;
-
       expect(m.specialization, equals(null));
     });
   });
@@ -527,6 +483,45 @@ void main() {
       expect(m.spellPoints, equals(30));
     });
   });
+
+  group("Duration:", ()
+  {
+    DurationMod m;
+
+    setUp(() async {
+      m = new DurationMod();
+    });
+
+    test("has initial state", () {
+      expect(m.inherent, equals(false));
+      expect(m.value, equals(0));
+      expect(m.name, equals("Duration"));
+      expect(m.spellPoints, equals(0));
+    });
+
+    test("has inherent", () {
+      m.inherent = true;
+      expect(m.inherent, equals(true));
+    });
+
+    /*
+       | Duration      | SP |
+       | Momentary     |  0 |
+       | Up to 10 secs | +1 |
+       | Up to 30 secs | +2 |
+       | Up to 1 min   | +3 |
+       | Up to 3 min   | +4 |
+       | Up to 6 min   | +5 |
+       | Up to 12 mins | +6 |
+       | Up to 1 hour  | +7 |
+       | Up to 3 hours | +8 |
+       | Up to 6 hours | +9 |
+       | Up to 12 hours|+10 |
+       | Up to 1 day   |+11 |
+     */
+
+  });
 }
 
 String _colFromTable(String line, int index2) => line.split("|")[index2].trim();
+
