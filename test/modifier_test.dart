@@ -486,22 +486,22 @@ void main() {
 
   group("Duration:", ()
   {
-    DurationMod m;
+    DurationMod dur;
 
     setUp(() async {
-      m = new DurationMod();
+      dur = new DurationMod();
     });
 
     test("has initial state", () {
-      expect(m.inherent, equals(false));
-      expect(m.value, equals(0));
-      expect(m.name, equals("Duration"));
-      expect(m.spellPoints, equals(0));
+      expect(dur.inherent, equals(false));
+      expect(dur.value, equals(0));
+      expect(dur.name, equals("Duration"));
+      expect(dur.spellPoints, equals(0));
     });
 
     test("has inherent", () {
-      m.inherent = true;
-      expect(m.inherent, equals(true));
+      dur.inherent = true;
+      expect(dur.inherent, equals(true));
     });
 
     /*
@@ -519,7 +519,33 @@ void main() {
        | Up to 12 hours|+10 |
        | Up to 1 day   |+11 |
      */
+    test("should have SpellPoints", () {
+      dur.value = 0;
+      expect(dur.spellPoints, equals(0));
+      dur.value = 1;
+      expect(dur.spellPoints, equals(1));
+      dur.value = 2;
+      expect(dur.spellPoints, equals(2));
+      dur.value = 3;
+      expect(dur.spellPoints, equals(3));
+      dur.value = 4;
+      expect(dur.spellPoints, equals(4));
+      dur.value = 5;
+      expect(dur.spellPoints, equals(5));
+      dur.value = 6;
+      expect(dur.spellPoints, equals(6));
+      dur.value = 7;
+      expect(dur.spellPoints, equals(7));
+      dur.value = 8;
+      expect(dur.spellPoints, equals(8));
+      dur.value = 9;
+      expect(dur.spellPoints, equals(9));
+      dur.value = 10;
+      expect(dur.spellPoints, equals(10));
+      dur.value = 11;
+      expect(dur.spellPoints, equals(11));
 
+    });
   });
 }
 

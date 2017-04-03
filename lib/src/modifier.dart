@@ -205,6 +205,8 @@ final List<DamageType> crushingTypes = [DamageType.burning, DamageType.crushing,
 final List<DamageType> cuttingTypes = [DamageType.cutting, DamageType.largePiercing];
 
 /// For spells that damage its targets.
+///
+/// To convert from value to DieRoll: DieRoll dieRoll = new DieRoll(1, value);
 class Damage extends Modifier with _Enhanceable {
   DamageType type = DamageType.crushing;
   bool direct = true;
@@ -275,6 +277,8 @@ class Damage extends Modifier with _Enhanceable {
 }
 
 /// Add a Duration to a spell.
+///
+/// Value is number of seconds in duration.
 class DurationMod extends Modifier {
   DurationMod() : super("Duration");
 }
