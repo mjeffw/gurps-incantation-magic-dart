@@ -345,7 +345,6 @@ void main() {
     ];
 
     void _testCost(DieRoll dice, DamageType type, int expectedCost) {
-      print("$dice $type $expectedCost");
       m.vampiric = false;
       m.direct = true;
       m.type = type;
@@ -468,7 +467,6 @@ void main() {
 
     // Added limitations reduce this surcharge, but will never provide a net SP discount.
     test("should Not Add 1 Point", () {
-
       m.addEnhancer("foo", null, 10);
       m.addEnhancer("bar", null, -5);
       m.value = 10;
@@ -484,8 +482,7 @@ void main() {
     });
   });
 
-  group("Duration:", ()
-  {
+  group("Duration:", () {
     DurationMod dur;
 
     setUp(() async {
@@ -522,32 +519,32 @@ void main() {
     test("should have SpellPoints", () {
       dur.value = 0;
       expect(dur.spellPoints, equals(0));
-      dur.value = 1;
+      dur.value = new Duration(seconds: 9).inSeconds;
       expect(dur.spellPoints, equals(1));
-      dur.value = 2;
+      dur.value = new Duration(seconds: 10).inSeconds;
+      expect(dur.spellPoints, equals(1));
+      dur.value = new Duration(seconds: 30).inSeconds;
       expect(dur.spellPoints, equals(2));
-      dur.value = 3;
+      dur.value = new Duration(minutes: 1).inSeconds;
       expect(dur.spellPoints, equals(3));
-      dur.value = 4;
+      dur.value = new Duration(minutes: 3).inSeconds;
       expect(dur.spellPoints, equals(4));
-      dur.value = 5;
+      dur.value = new Duration(minutes: 6).inSeconds;
       expect(dur.spellPoints, equals(5));
-      dur.value = 6;
+      dur.value = new Duration(minutes: 12).inSeconds;
       expect(dur.spellPoints, equals(6));
-      dur.value = 7;
+      dur.value = new Duration(hours: 1).inSeconds;
       expect(dur.spellPoints, equals(7));
-      dur.value = 8;
+      dur.value = new Duration(hours: 3).inSeconds;
       expect(dur.spellPoints, equals(8));
-      dur.value = 9;
+      dur.value = new Duration(hours: 6).inSeconds;
       expect(dur.spellPoints, equals(9));
-      dur.value = 10;
+      dur.value = new Duration(hours: 12).inSeconds;
       expect(dur.spellPoints, equals(10));
-      dur.value = 11;
+      dur.value = new Duration(days: 1).inSeconds;
       expect(dur.spellPoints, equals(11));
-
     });
   });
 }
 
 String _colFromTable(String line, int index2) => line.split("|")[index2].trim();
-

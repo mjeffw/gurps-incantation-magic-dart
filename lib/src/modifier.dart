@@ -218,7 +218,7 @@ class Damage extends Modifier with _Enhanceable {
   @override
   int get spellPoints {
     int sp = _spellPointsForDamageType;
-    return (sp + _adjustmentForEnhancements(sp))  * _vampiricFactor;
+    return (sp + _adjustmentForEnhancements(sp)) * _vampiricFactor;
   }
 
   int get _spellPointsForDamageType {
@@ -280,5 +280,28 @@ class Damage extends Modifier with _Enhanceable {
 ///
 /// Value is number of seconds in duration.
 class DurationMod extends Modifier {
+  static List<Duration> array = [
+    new Duration(seconds: 0),
+    new Duration(seconds: 10),
+    new Duration(seconds: 30),
+    new Duration(minutes: 1),
+    new Duration(minutes: 3),
+    new Duration(minutes: 6),
+    new Duration(minutes: 12),
+    new Duration(hours: 1),
+    new Duration(hours: 3),
+    new Duration(hours: 6),
+    new Duration(hours: 12),
+    new Duration(days: 1)
+  ];
+
   DurationMod() : super("Duration");
+
+  @override
+  int get spellPoints {
+    if (_value == 0) {
+      return 0;
+    }
+    return array.indexOf(array.lastWhere((d) => d.inSeconds < _value)) + 1;
+  }
 }
