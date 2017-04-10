@@ -17,11 +17,9 @@ void main() {
       expect(m.spellPoints, equals(0));
     });
 
-    test("has 0 Spell Points regardless of value", () {
-      m.value = 100;
-      expect(m.spellPoints, equals(0));
-      m.value = -100;
-      expect(m.spellPoints, equals(0));
+    test("should throw exception if value is set", () {
+      expect(() => m.value = 1, throwsException);
+      expect(() => m.value = -1, throwsException);
     });
 
     test("has inherent", () {
@@ -63,10 +61,10 @@ void main() {
       expect(m.spellPoints, equals(3));
     });
 
-    test("negative percentage does nothing", () {
-      m.value = -15;
-      expect(m.value, equals(0));
+    test("should throw exception if negative", () {
+      expect(() => m.value = -1, throwsException);
     });
+
   });
 
   group("Altered Traits", () {
@@ -178,6 +176,10 @@ void main() {
       expect(m.spellPoints, equals(43));
       m.targets(7, true);
       expect(m.spellPoints, equals(44));
+    });
+
+    test("should throw exception if negative", () {
+      expect(() => m.value = -1, throwsException);
     });
   });
 
@@ -303,6 +305,10 @@ void main() {
       expect(m.vampiric, equals((false)));
     });
 
+    test("should throw exception if negative", () {
+      expect(() => m.value = -1, throwsException);
+    });
+
     test("has inherent", () {
       m.inherent = true;
       expect(m.inherent, equals(true));
@@ -319,8 +325,17 @@ void main() {
     });
 
     test("has explosive", () {
+      // setting explosive to true when direct is also true has no effect
+      m.explosive = true;
+      expect(m.explosive, equals(false));
+
+      m.direct = false;
       m.explosive = true;
       expect(m.explosive, equals(true));
+
+      // setting direct to true will set explosive to false
+      m.direct = true;
+      expect(m.explosive, equals(false));
     });
 
     test("has vampiric", () {
@@ -543,6 +558,48 @@ void main() {
       expect(dur.spellPoints, equals(10));
       dur.value = new Duration(days: 1).inSeconds;
       expect(dur.spellPoints, equals(11));
+
+      dur.value = new Duration(days: 1).inSeconds + 1;
+      expect(dur.spellPoints, equals(11));
+    });
+  });
+
+  group("Girded:", () {
+    Modifier m;
+
+    setUp(() async {
+      m = new Girded();
+    });
+
+    test("has initial state", () {
+      expect(m.inherent, equals(false));
+      expect(m.value, equals(0));
+      expect(m.name, equals("Girded"));
+      expect(m.spellPoints, equals(0));
+    });
+
+    test("has inherent", () {
+      m.inherent = true;
+      expect(m.inherent, equals(true));
+    });
+
+    test("should have spellPoints", () {
+      m.value = 0;
+      expect(m.spellPoints, equals(0));
+      m.value = 1;
+      expect(m.spellPoints, equals(1));
+      m.value = 2;
+      expect(m.spellPoints, equals(2));
+      m.value = 3;
+      expect(m.spellPoints, equals(3));
+      m.value = 4;
+      expect(m.spellPoints, equals(4));
+      m.value = 7;
+      expect(m.spellPoints, equals(7));
+      m.value = 8;
+      expect(m.spellPoints, equals(8));
+      m.value = 11;
+      expect(m.spellPoints, equals(11));
     });
   });
 }

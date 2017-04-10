@@ -2,6 +2,17 @@ import 'dart:math';
 import 'enhancer.dart';
 import 'package:gurps_incantation_magic_model/src/die_roll.dart';
 
+class InputException implements Exception {
+  String message;
+  InputException(this.message);
+}
+
+typedef bool Predicate(int item);
+Predicate zeroOnly = (x) => x == 0;
+Predicate anyValue = (_) => true;
+Predicate nonNegative = (x) => x >= 0;
+Predicate validDuration = (x) => x >= 0 && x <= Duration.SECONDS_PER_DAY;
+
 /// Describes a modifier to an Incantation Spell.
 ///
 /// Modifiers add Damage, Range, Duration, and other features to a spell, and the cost of the spell is adjusted by
@@ -22,21 +33,33 @@ abstract class Modifier {
   /// is this Modifier instance inherent to the spell?
   bool _inherent = false;
 
+  Predicate _predicate = nonNegative;
+
   /// the current value of this modifier - depends on the modifier, it could represent character points, a time unit,
   /// distance unit, a percentage modifier, etc.
   int _value = 0;
 
   Modifier(this.name);
 
+  Modifier.withPredicate(this.name, this._predicate);
+
   bool get inherent => _inherent;
   set inherent(bool i) => _inherent = i;
 
   int get value => _value;
-  set value(int val) => _value = val;
+  set value(int val) {
+    if (_predicate(val)) {
+      _value = val;
+    } else {
+      throw new InputException("Value out of range");
+    }
+  }
 }
 // ----------------------------------
 
-/// Define the Enhanceable mixin
+/// Define the Enhanceable mixin.
+///
+/// Classes that are extended with _Enhanceable maintain a list of enhancements and limitations
 abstract class _Enhanceable {
   EnhancerList _enhancers = new EnhancerList();
 
@@ -48,13 +71,9 @@ abstract class _Enhanceable {
 
 /// Adds the Affliction: Stun (p. B36) effect to a spell.
 ///
-/// This effect can be added without additional SP cost.
+/// A spell effect to stun a foe requires no additional SP.
 class AfflictionStun extends Modifier {
-  AfflictionStun() : super("Affliction (Stun)");
-
-  /// value cannot be set for AfflictionStun
-  @override
-  set value(_) => _;
+  AfflictionStun() : super.withPredicate("Affliction (Stun)", zeroOnly);
 }
 // ----------------------------------
 
@@ -63,16 +82,6 @@ class AfflictionStun extends Modifier {
 /// This adds +1 SP for every +5% it’s worth as an enhancement to Affliction.
 class Affliction extends Modifier {
   Affliction() : super("Affliction");
-
-  @override
-  set value(int percent) {
-    // negative percent is not allowed
-    if (percent >= 0) {
-      _value = percent;
-    } else {
-      _value = 0;
-    }
-  }
 
   @override
   int get spellPoints => (_value / 5.0).ceil();
@@ -93,7 +102,7 @@ class Affliction extends Modifier {
 /// every five character points removed. One that adds advantages, reduces or removes disadvantages, or increases
 /// attributes adds +1 SP for every character point added.
 class AlteredTraits extends Modifier with _Enhanceable {
-  AlteredTraits() : super("Altered Traits");
+  AlteredTraits() : super.withPredicate("Altered Traits", anyValue);
 
   @override
   int get spellPoints {
@@ -114,6 +123,11 @@ class AlteredTraits extends Modifier with _Enhanceable {
 // ----------------------------------
 
 /// Adds an Area of Effect, optionally including or excluding specific targets in the area, to the spell.
+///
+/// Figure the circular area and add 10 SP per yard of radius from its center. Excluding potential targets is
+/// possible – add another +1 SP for every two specific subjects in the area that won’t be affected by the spell.
+/// Alternatively, you may exclude everyone in the area, but then include willing potential targets for +1 SP per
+/// two specific subjects
 class AreaOfEffect extends Modifier {
   int _targets = 0;
   bool _includes = false; // ignore: unused_field
@@ -150,7 +164,7 @@ class Bestows extends Modifier {
 
   String specialization;
 
-  Bestows() : super("Bestows a (Bonus or Penalty)");
+  Bestows() : super.withPredicate("Bestows a (Bonus or Penalty)", anyValue);
 
   @override
   int get spellPoints {
@@ -206,11 +220,14 @@ final List<DamageType> cuttingTypes = [DamageType.cutting, DamageType.largePierc
 
 /// For spells that damage its targets.
 ///
+/// If the spell will cause damage, use the table on p. 16, based on whether the damage is direct or indirect, and
+/// on what type of damage is being done.
+///
 /// To convert from value to DieRoll: DieRoll dieRoll = new DieRoll(1, value);
 class Damage extends Modifier with _Enhanceable {
   DamageType type = DamageType.crushing;
-  bool direct = true;
-  bool explosive = false;
+  bool _direct = true;
+  bool _explosive = false;
   bool vampiric = false;
 
   Damage() : super("Damage");
@@ -265,6 +282,24 @@ class Damage extends Modifier with _Enhanceable {
     return d * _explosiveFactor();
   }
 
+  bool get direct => _direct;
+
+  set direct(bool newValue) {
+    _direct = newValue;
+    if (_direct) {
+      // explosive is incompatible with direct
+      _explosive = false;
+    }
+  }
+
+  bool get explosive => _explosive;
+
+  set explosive(bool newValue) {
+    if (!_direct) {
+      _explosive = newValue;
+    }
+  }
+
   int _explosiveFactor() {
     if (explosive) {
       return 2;
@@ -276,7 +311,12 @@ class Damage extends Modifier with _Enhanceable {
   }
 }
 
+
+
 /// Add a Duration to a spell.
+///
+/// Unless the spell is instantaneous, use the following table. Durations longer than a day are not normally
+/// allowed; the GM will adjudicate a fair SP cost for any exceptions.
 ///
 /// Value is number of seconds in duration.
 class DurationMod extends Modifier {
@@ -295,7 +335,7 @@ class DurationMod extends Modifier {
     new Duration(days: 1)
   ];
 
-  DurationMod() : super("Duration");
+  DurationMod() : super.withPredicate("Duration", validDuration);
 
   @override
   int get spellPoints {
@@ -304,4 +344,11 @@ class DurationMod extends Modifier {
     }
     return array.indexOf(array.lastWhere((d) => d.inSeconds < _value)) + 1;
   }
+}
+
+class Girded extends Modifier {
+  Girded() : super("Girded");
+
+  @override
+  int get spellPoints => _value;
 }
