@@ -366,10 +366,7 @@ class RangeCrossTime extends Modifier {
       return 1;
     }
 
-    int convertToDaysRoundUp = (_value / 24).ceil();
-    print("table.valueToOrdinal(${convertToDaysRoundUp}) = ${table.valueToOrdinal(convertToDaysRoundUp)}");
-
-    return table.valueToOrdinal(convertToDaysRoundUp) + 2;
+    return table.valueToOrdinal((_value / 24).ceil()) + 2;
   }
 }
 
