@@ -3,7 +3,7 @@ import "package:gurps_incantation_magic_model/incantation_magic.dart";
 
 void main() {
   // A spell effect to stun a foe requires no additional SP.
-  group("Affliction (Stun):", () {
+  group("Affliction, Stun:", () {
     AfflictionStun m;
 
     setUp(() async {
@@ -13,7 +13,7 @@ void main() {
     test("has initial state", () {
       expect(m.inherent, equals(false));
       expect(m.value, equals(0));
-      expect(m.name, equals("Affliction (Stun)"));
+      expect(m.name, equals("Affliction, Stun"));
       expect(m.spellPoints, equals(0));
     });
 
@@ -64,7 +64,6 @@ void main() {
     test("should throw exception if negative", () {
       expect(() => m.value = -1, throwsException);
     });
-
   });
 
   group("Altered Traits", () {
@@ -516,6 +515,14 @@ void main() {
       expect(dur.inherent, equals(true));
     });
 
+    test("should throw exception if negative", () {
+      expect(() => dur.value = -1, throwsException);
+    });
+
+    test("should throw exception if more than one day", () {
+      expect(() => dur.value = new Duration(days: 1).inSeconds + 1, throwsException);
+    });
+
     /*
        | Duration      | SP |
        | Momentary     |  0 |
@@ -558,9 +565,6 @@ void main() {
       expect(dur.spellPoints, equals(10));
       dur.value = new Duration(days: 1).inSeconds;
       expect(dur.spellPoints, equals(11));
-
-      dur.value = new Duration(days: 1).inSeconds + 1;
-      expect(dur.spellPoints, equals(11));
     });
   });
 
@@ -600,6 +604,119 @@ void main() {
       expect(m.spellPoints, equals(8));
       m.value = 11;
       expect(m.spellPoints, equals(11));
+    });
+
+    test("should throw exception if negative", () {
+      expect(() => m.value = -1, throwsException);
+    });
+  });
+
+  group("Range, Cross-Time:", () {
+    Modifier m;
+
+    setUp(() async {
+      m = new RangeCrossTime();
+    });
+
+    test("has initial state", () {
+      expect(m.inherent, equals(false));
+      expect(m.value, equals(0));
+      expect(m.name, equals("Range, Cross-Time"));
+      expect(m.spellPoints, equals(0));
+    });
+
+    test("has inherent", () {
+      m.inherent = true;
+      expect(m.inherent, equals(true));
+    });
+
+    /// Time          Spell Points
+    /// Up to 2 hours  0
+    /// 1/2 day       +1
+    /// 1 day         +2
+    /// 3 days        +3
+    /// 10 days       +4
+    /// 30 days       +5
+    /// 100 days      +6
+    /// 300 days      +7
+    /// 1,000 days    +8
+    /// Add another +2 per additional factor of 10.
+    test("should have spellPoints", () {
+      m.value = 0;
+      expect(m.spellPoints, equals(0));
+
+      m.value = 2;
+      expect(m.spellPoints, equals(0));
+
+      m.value = 3;
+      expect(m.spellPoints, equals(1));
+
+      m.value = 12;
+      expect(m.spellPoints, equals(1));
+
+      m.value = 13;
+      expect(m.spellPoints, equals(2));
+
+      m.value = new Duration(days: 1).inHours;
+      expect(m.spellPoints, equals(2));
+
+      m.value = new Duration(days: 3).inHours;
+      expect(m.spellPoints, equals(3));
+
+      m.value = new Duration(days: 10).inHours;
+      expect(m.spellPoints, equals(4));
+
+      m.value = new Duration(days: 30).inHours;
+      expect(m.spellPoints, equals(5));
+
+      m.value = new Duration(days: 100).inHours;
+      expect(m.spellPoints, equals(6));
+
+      m.value = new Duration(days: 300).inHours;
+      expect(m.spellPoints, equals(7));
+
+      m.value = new Duration(days: 1000).inHours;
+      expect(m.spellPoints, equals(8));
+
+      m.value = new Duration(days: 3000).inHours;
+      expect(m.spellPoints, equals(9));
+    });
+
+    test("should throw exception if negative", () {
+      expect(() => m.value = -1, throwsException);
+    });
+  });
+
+  group("Range, Extradimensional:", () {
+    Modifier m;
+
+    setUp(() async {
+      m = new RangeDimensional();
+    });
+
+    test("has initial state", () {
+      expect(m.inherent, equals(false));
+      expect(m.value, equals(0));
+      expect(m.name, equals("Range, Extradimensional"));
+      expect(m.spellPoints, equals(0));
+    });
+
+    test("has inherent", () {
+      m.inherent = true;
+      expect(m.inherent, equals(true));
+    });
+
+    test("cost 10 spellPoints per Dimension crossed", () {
+      m.value = 1;
+      expect(m.spellPoints, equals(10));
+      m.value = 2;
+      expect(m.spellPoints, equals(20));
+      m.value = 3;
+      expect(m.spellPoints, equals(30));
+    });
+
+    test("should throw exception if negative", () {
+      expect(() => m.value = -1, throwsException);
     });
   });
 }

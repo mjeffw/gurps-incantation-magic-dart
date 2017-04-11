@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'enhancer.dart';
 import 'package:gurps_incantation_magic_model/src/die_roll.dart';
+import 'package:gurps_incantation_magic_model/util/repeating_sequence.dart';
 
 class InputException implements Exception {
   String message;
@@ -73,7 +74,7 @@ abstract class _Enhanceable {
 ///
 /// A spell effect to stun a foe requires no additional SP.
 class AfflictionStun extends Modifier {
-  AfflictionStun() : super.withPredicate("Affliction (Stun)", zeroOnly);
+  AfflictionStun() : super.withPredicate("Affliction, Stun", zeroOnly);
 }
 // ----------------------------------
 
@@ -311,8 +312,6 @@ class Damage extends Modifier with _Enhanceable {
   }
 }
 
-
-
 /// Add a Duration to a spell.
 ///
 /// Unless the spell is instantaneous, use the following table. Durations longer than a day are not normally
@@ -351,4 +350,32 @@ class Girded extends Modifier {
 
   @override
   int get spellPoints => _value;
+}
+
+/// Value is in hours.
+class RangeCrossTime extends Modifier {
+  static RepeatingSequenceConverter table = new RepeatingSequenceConverter([1, 3]);
+
+  RangeCrossTime() : super("Range, Cross-Time");
+
+  @override
+  int get spellPoints {
+    if (_value <= 2) {
+      return 0;
+    } else if (_value <= 12) {
+      return 1;
+    }
+
+    int convertToDaysRoundUp = (_value / 24).ceil();
+    print("table.valueToOrdinal(${convertToDaysRoundUp}) = ${table.valueToOrdinal(convertToDaysRoundUp)}");
+
+    return table.valueToOrdinal(convertToDaysRoundUp) + 2;
+  }
+}
+
+class RangeDimensional extends Modifier {
+  RangeDimensional() : super("Range, Extradimensional");
+
+  @override
+  int get spellPoints => _value * 10;
 }
