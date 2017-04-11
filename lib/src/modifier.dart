@@ -2,6 +2,7 @@ import 'dart:math';
 import 'enhancer.dart';
 import 'package:gurps_incantation_magic_model/src/die_roll.dart';
 import 'package:gurps_incantation_magic_model/util/repeating_sequence.dart';
+import 'package:gurps_incantation_magic_model/util/distance.dart';
 
 class InputException implements Exception {
   String message;
@@ -394,7 +395,7 @@ class RangeInformational extends Modifier {
       return 1;
     }
 
-    var miles = (_value / 1760).ceil();
+    var miles = (_value / Distance.YARDS_PER_MILE).ceil();
     return longDistanceModifiers.valueToOrdinal(miles) + 2;
   }
 }
