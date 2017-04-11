@@ -352,9 +352,10 @@ class Girded extends Modifier {
   int get spellPoints => _value;
 }
 
+final RepeatingSequenceConverter longDistanceModifiers = new RepeatingSequenceConverter([1, 3]);
+
 /// Value is in hours.
 class RangeCrossTime extends Modifier {
-  static RepeatingSequenceConverter table = new RepeatingSequenceConverter([1, 3]);
 
   RangeCrossTime() : super("Range, Cross-Time");
 
@@ -366,13 +367,34 @@ class RangeCrossTime extends Modifier {
       return 1;
     }
 
-    return table.valueToOrdinal((_value / 24).ceil()) + 2;
+    var days = (_value / 24).ceil();
+    return longDistanceModifiers.valueToOrdinal(days) + 2;
   }
 }
 
 class RangeDimensional extends Modifier {
   RangeDimensional() : super("Range, Extradimensional");
 
+  /// Crossing dimensional barriers adds a flat 10 SP per dimension.
   @override
   int get spellPoints => _value * 10;
+}
+
+/// Range is _value in yards
+class RangeInformational extends Modifier {
+  RangeInformational() : super("Range, Informational");
+
+  /// For information spells (e.g., Seek Treasure), consult Long-Distance Modifiers (p. B241) and apply the penalty
+  /// (inverted) as additional SP; e.g., +2 SP for one mile.
+  @override
+  int get spellPoints {
+    if (_value <= 200) {
+      return 0;
+    } else if (_value <= 880) {
+      return 1;
+    }
+
+    var miles = (_value / 1760).ceil();
+    return longDistanceModifiers.valueToOrdinal(miles) + 2;
+  }
 }
