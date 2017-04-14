@@ -357,7 +357,6 @@ final RepeatingSequenceConverter longDistanceModifiers = new RepeatingSequenceCo
 
 /// Value is in hours.
 class RangeCrossTime extends Modifier {
-
   RangeCrossTime() : super("Range, Cross-Time");
 
   @override
@@ -397,5 +396,52 @@ class RangeInformational extends Modifier {
 
     var miles = (_value / Distance.YARDS_PER_MILE).ceil();
     return longDistanceModifiers.valueToOrdinal(miles) + 2;
+  }
+}
+
+final RepeatingSequenceConverter rangeTable = new RepeatingSequenceConverter([2, 3, 5, 7, 10, 15]);
+
+class Range extends Modifier {
+  Range() : super("Range");
+
+  int get spellPoints => rangeTable.valueToOrdinal(_value);
+}
+
+class Repair extends Modifier {
+  Repair() : super("Repair");
+
+  int get spellPoints => _value;
+}
+
+class Speed extends Modifier {
+  Speed() : super("Speed");
+
+  int get spellPoints => rangeTable.valueToOrdinal(_value);
+}
+
+class SubjectWeight extends Modifier {
+  static RepeatingSequenceConverter sequence = new RepeatingSequenceConverter([10, 30]);
+
+  SubjectWeight() : super("Subject Weight");
+
+  int get spellPoints => sequence.valueToOrdinal(_value);
+}
+
+class Summoned extends Modifier {
+  Summoned() : super("Summoned");
+
+  //  | Power                                    | Add SP |
+  //  |  25% of Static Point Total (62 points*)  |  +4 SP |
+  //  |  50% of Static Point Total (125 points*) |  +8 SP |
+  //  |  75% of Static Point Total (187 points*) | +12 SP |
+  //  | 100% of Static Point Total (250 points*) | +20 SP |
+  //  | 150% of Static Point Total (375 points*) | +40 SP |
+  //  | +50% of Static Point Total (+125 points*)| +20 SP |
+  int get spellPoints {
+    if (_value <= 75)
+    {
+      return (value / 25.0).ceil() * 4;
+    }
+    return ((value / 50).ceil() - 1) * 20;
   }
 }
