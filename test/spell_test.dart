@@ -10,6 +10,7 @@ void main(){
 
   test("creation", () {
     expect(spell, isNotNull);
+    expect(spell.spellPoints, equals(0));
   });
 
   test("has name", () {
@@ -18,5 +19,20 @@ void main(){
     expect(spell.name, equals("Joe"));
     spell.name = null;
     expect(spell.name, equals(""));
+  });
+
+  test("contains SpellEffects", () {
+    spell.add(new SpellEffect(Effect.Sense, Path.Augury));
+    expect(spell.spellPoints, equals(2));
+
+    spell.add(new SpellEffect(Effect.Control, Path.Arcanum));
+    expect(spell.spellPoints, equals(7));
+
+    spell.add(new SpellEffect(Effect.Create, Path.Elementalism));
+    expect(spell.spellPoints, equals(13));
+  });
+
+  test("contains Modifiers", () {
+
   });
 }
