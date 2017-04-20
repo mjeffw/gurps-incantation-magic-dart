@@ -98,4 +98,36 @@ void main() {
       expect(necromancy.aspect, equals("The dead and undead, as well as shadows and darkness."));
     });
   });
+
+  group("Protection:", () {
+    Path protection = new Path.fromString("Protection");
+
+    test("can create from String", () {
+      expect(protection, isNotNull);
+    });
+
+    test("has name", () {
+      expect(protection.name, equals("Protection"));
+    });
+
+    test("has aspects", () {
+      expect(protection.aspect, equals("All sorts of defensive magic."));
+    });
+  });
+
+  group("Transfiguration:", () {
+    Path protection = new Path.fromString("Transfiguration");
+
+    test("can create from String", () {
+      expect(protection, isNotNull);
+    });
+
+    test("has name", () {
+      expect(protection.name, equals("Transfiguration"));
+    });
+
+    test("has aspects", () {
+      expect(protection.aspect, equals("Living sapient beings, including their flesh and blood in general."));
+    });
+  });
 }

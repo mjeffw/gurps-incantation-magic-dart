@@ -1,8 +1,9 @@
 import 'dart:math';
 import 'enhancer.dart';
-import 'package:gurps_incantation_magic_model/src/die_roll.dart';
-import 'package:gurps_incantation_magic_model/util/repeating_sequence.dart';
-import 'package:gurps_incantation_magic_model/util/distance.dart';
+import 'die_roll.dart';
+import '../util/repeating_sequence.dart';
+import '../util/distance.dart';
+import '../util/gurps_duration.dart';
 
 class InputException implements Exception {
   String message;
@@ -13,15 +14,15 @@ typedef bool Predicate(int item);
 Predicate zeroOnly = (x) => x == 0;
 Predicate anyValue = (_) => true;
 Predicate nonNegative = (x) => x >= 0;
-Predicate validDuration = (x) => x >= 0 && x <= Duration.SECONDS_PER_DAY;
+Predicate validDuration = (x) => x >= 0 && x <= GurpsDuration.SECONDS_PER_DAY;
 
 /// Describes a modifier to an Incantation Spell.
 ///
-/// Modifiers add Damage, Range, Duration, and other features to a spell, and the cost of the spell is adjusted by
+/// Modifiers add Damage, Range, GurpsDuration, and other features to a spell, and the cost of the spell is adjusted by
 /// the value of the modifiers. Modifiers are identified by their name, and can be inherent (intrisic) or not.
 ///
-/// For example, a spell might momentarily open a Gate between dimensions; a Duration modifier can be added to make
-/// the Gate remain for a longer time. The Duration is not inherent or intrinsic in this case.
+/// For example, a spell might momentarily open a Gate between dimensions; a GurpsDuration modifier can be added to make
+/// the Gate remain for a longer time. The GurpsDuration is not inherent or intrinsic in this case.
 ///
 /// A spell that adds +2 to the subject's Strength would need a Bestows a Bonus modifier; this effect is inherent to
 /// the spell.
@@ -313,26 +314,26 @@ class Damage extends Modifier with _Enhanceable {
   }
 }
 
-/// Add a Duration to a spell.
+/// Add a GurpsDuration to a spell.
 ///
-/// Unless the spell is instantaneous, use the following table. Durations longer than a day are not normally
+/// Unless the spell is instantaneous, use the following table. GurpsDurations longer than a day are not normally
 /// allowed; the GM will adjudicate a fair SP cost for any exceptions.
 ///
-/// Value is number of seconds in duration.
+/// Value is number of seconds in GurpsDuration.
 class DurationMod extends Modifier {
-  static List<Duration> array = [
-    new Duration(seconds: 0),
-    new Duration(seconds: 10),
-    new Duration(seconds: 30),
-    new Duration(minutes: 1),
-    new Duration(minutes: 3),
-    new Duration(minutes: 6),
-    new Duration(minutes: 12),
-    new Duration(hours: 1),
-    new Duration(hours: 3),
-    new Duration(hours: 6),
-    new Duration(hours: 12),
-    new Duration(days: 1)
+  static List<GurpsDuration> array = [
+    const GurpsDuration(seconds: 0),
+    const GurpsDuration(seconds: 10),
+    const GurpsDuration(seconds: 30),
+    const GurpsDuration(minutes: 1),
+    const GurpsDuration(minutes: 3),
+    const GurpsDuration(minutes: 6),
+    const GurpsDuration(minutes: 12),
+    const GurpsDuration(hours: 1),
+    const GurpsDuration(hours: 3),
+    const GurpsDuration(hours: 6),
+    const GurpsDuration(hours: 12),
+    const GurpsDuration(days: 1)
   ];
 
   DurationMod() : super.withPredicate("Duration", validDuration);

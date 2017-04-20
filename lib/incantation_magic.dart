@@ -6,3 +6,4 @@ export 'src/spell.dart';
 export 'src/die_roll.dart';
 export 'util/distance.dart';
 export 'util/weight.dart';
+export 'util/gurps_duration.dart';

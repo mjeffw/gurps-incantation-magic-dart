@@ -26,7 +26,7 @@ void main() {
     });
 
     test("should throw exception if more than one day", () {
-      expect(() => dur.value = new Duration(days: 1).inSeconds + 1, throwsException);
+      expect(() => dur.value = const GurpsDuration(days: 1).inSeconds + 1, throwsException);
     });
 
     /*
@@ -47,29 +47,29 @@ void main() {
     test("should have SpellPoints", () {
       dur.value = 0;
       expect(dur.spellPoints, equals(0));
-      dur.value = new Duration(seconds: 9).inSeconds;
+      dur.value = const GurpsDuration(seconds: 9).inSeconds;
       expect(dur.spellPoints, equals(1));
-      dur.value = new Duration(seconds: 10).inSeconds;
+      dur.value = const GurpsDuration(seconds: 10).inSeconds;
       expect(dur.spellPoints, equals(1));
-      dur.value = new Duration(seconds: 30).inSeconds;
+      dur.value = const GurpsDuration(seconds: 30).inSeconds;
       expect(dur.spellPoints, equals(2));
-      dur.value = new Duration(minutes: 1).inSeconds;
+      dur.value = const GurpsDuration(minutes: 1).inSeconds;
       expect(dur.spellPoints, equals(3));
-      dur.value = new Duration(minutes: 3).inSeconds;
+      dur.value = const GurpsDuration(minutes: 3).inSeconds;
       expect(dur.spellPoints, equals(4));
-      dur.value = new Duration(minutes: 6).inSeconds;
+      dur.value = const GurpsDuration(minutes: 6).inSeconds;
       expect(dur.spellPoints, equals(5));
-      dur.value = new Duration(minutes: 12).inSeconds;
+      dur.value = const GurpsDuration(minutes: 12).inSeconds;
       expect(dur.spellPoints, equals(6));
-      dur.value = new Duration(hours: 1).inSeconds;
+      dur.value = const GurpsDuration(hours: 1).inSeconds;
       expect(dur.spellPoints, equals(7));
-      dur.value = new Duration(hours: 3).inSeconds;
+      dur.value = const GurpsDuration(hours: 3).inSeconds;
       expect(dur.spellPoints, equals(8));
-      dur.value = new Duration(hours: 6).inSeconds;
+      dur.value = const GurpsDuration(hours: 6).inSeconds;
       expect(dur.spellPoints, equals(9));
-      dur.value = new Duration(hours: 12).inSeconds;
+      dur.value = const GurpsDuration(hours: 12).inSeconds;
       expect(dur.spellPoints, equals(10));
-      dur.value = new Duration(days: 1).inSeconds;
+      dur.value = const GurpsDuration(days: 1).inSeconds;
       expect(dur.spellPoints, equals(11));
     });
   });
@@ -163,28 +163,28 @@ void main() {
       m.value = 13;
       expect(m.spellPoints, equals(2));
 
-      m.value = new Duration(days: 1).inHours;
+      m.value = const GurpsDuration(days: 1).inHours;
       expect(m.spellPoints, equals(2));
 
-      m.value = new Duration(days: 3).inHours;
+      m.value = const GurpsDuration(days: 3).inHours;
       expect(m.spellPoints, equals(3));
 
-      m.value = new Duration(days: 10).inHours;
+      m.value = const GurpsDuration(days: 10).inHours;
       expect(m.spellPoints, equals(4));
 
-      m.value = new Duration(days: 30).inHours;
+      m.value = const GurpsDuration(days: 30).inHours;
       expect(m.spellPoints, equals(5));
 
-      m.value = new Duration(days: 100).inHours;
+      m.value = const GurpsDuration(days: 100).inHours;
       expect(m.spellPoints, equals(6));
 
-      m.value = new Duration(days: 300).inHours;
+      m.value = const GurpsDuration(days: 300).inHours;
       expect(m.spellPoints, equals(7));
 
-      m.value = new Duration(days: 1000).inHours;
+      m.value = const GurpsDuration(days: 1000).inHours;
       expect(m.spellPoints, equals(8));
 
-      m.value = new Duration(days: 3000).inHours;
+      m.value = const GurpsDuration(days: 3000).inHours;
       expect(m.spellPoints, equals(9));
     });
 
