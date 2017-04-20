@@ -29,6 +29,8 @@ class Spell {
 
   final List<Modifier> _modifiers = new List<Modifier>();
 
+  bool conditional = false;
+
   String get name => _name;
 
   set name(String name) => _name = name ?? "";
@@ -37,7 +39,24 @@ class Spell {
 
   void addModifier(Modifier mod) => _modifiers.add(mod);
 
-  int get spellPoints => _effects.map((it) => it.spellPoints).fold(0, (a, b) => a + b);
+  int get spellPoints {
+    int effectCost = _effects.map((it) => it.spellPoints).fold(0, (a, b) => a + b);
+    int conditionalCost = _addForConditional();
+    int modifierCost = _addForModifiers();
+    return effectCost + conditionalCost + modifierCost;
+  }
+
+  int _addForConditional() {
+    if (conditional) {
+      return 5;
+    } else {
+      return 0;
+    }
+  }
+
+  int _addForModifiers() {
+    return _modifiers.map((it) => it.spellPoints).fold(0, (int a, int b) => a + b);
+  }
 
   GurpsDuration get castingTime {
     if (_effects.length < 13) {

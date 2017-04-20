@@ -1,7 +1,7 @@
 import "package:test/test.dart";
 import "package:gurps_incantation_magic_model/incantation_magic.dart";
 
-void main(){
+void main() {
   Spell spell;
 
   setUp(() async {
@@ -84,5 +84,34 @@ void main(){
 
     spell.addEffect(new SpellEffect(Effect.Create, Path.Necromancy));
     expect(spell.castingTime, equals(const GurpsDuration(months: 3)));
+  });
+
+  test("conditional spells require an additional +5 SP", () {
+    spell.addEffect(new SpellEffect(Effect.Sense, Path.Augury));
+    spell.addEffect(new SpellEffect(Effect.Control, Path.Arcanum));
+    spell.addEffect(new SpellEffect(Effect.Create, Path.Demonology));
+    expect(spell.spellPoints, equals(13));
+
+    spell.conditional = true;
+    expect(spell.spellPoints, equals(18));
+  });
+
+  test("should add Modifier cost to spellPoints", () {
+    spell.addEffect(new SpellEffect(Effect.Sense, Path.Augury));
+    spell.addEffect(new SpellEffect(Effect.Control, Path.Arcanum));
+    spell.addEffect(new SpellEffect(Effect.Create, Path.Demonology));
+    expect(spell.spellPoints, equals(13));
+
+    Bestows bestows = new Bestows();
+    bestows.value = 5;
+    spell.addModifier(bestows);
+
+    expect(spell.spellPoints, equals(25));
+
+    AlteredTraits traits = new AlteredTraits();
+    traits.value = -15;
+    spell.addModifier(traits);
+
+    expect(spell.spellPoints, equals(28));
   });
 }
