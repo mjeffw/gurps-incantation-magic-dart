@@ -42,9 +42,13 @@ abstract class Modifier {
   /// distance unit, a percentage modifier, etc.
   int _value = 0;
 
-  Modifier(this.name);
+  Modifier(this.name, this._value, this._inherent);
 
-  Modifier.withPredicate(this.name, this._predicate);
+  Modifier.withPredicate(this.name, this._predicate, {int value: 0, bool inherent: false})
+      : _value = value,
+        _inherent = inherent;
+
+  Modifier.withPredicateNew(this.name, this._predicate, this._value, this._inherent);
 
   bool get inherent => _inherent;
   set inherent(bool i) => _inherent = i;
@@ -84,7 +88,7 @@ class AfflictionStun extends Modifier {
 ///
 /// This adds +1 SP for every +5% it’s worth as an enhancement to Affliction.
 class Affliction extends Modifier {
-  Affliction() : super("Affliction");
+  Affliction() : super("Affliction", 0, false);
 
   @override
   int get spellPoints => (_value / 5.0).ceil();
@@ -105,7 +109,7 @@ class Affliction extends Modifier {
 /// every five character points removed. One that adds advantages, reduces or removes disadvantages, or increases
 /// attributes adds +1 SP for every character point added.
 class AlteredTraits extends Modifier with _Enhanceable {
-  AlteredTraits() : super.withPredicate("Altered Traits", anyValue);
+  AlteredTraits() : super.withPredicateNew("Altered Traits", anyValue, 0, false);
 
   @override
   int get spellPoints {
@@ -135,7 +139,7 @@ class AreaOfEffect extends Modifier {
   int _targets = 0;
   bool _includes = false; // ignore: unused_field
 
-  AreaOfEffect() : super("Area of Effect");
+  AreaOfEffect() : super("Area of Effect", 0, false);
 
   /// Figure the circular area and add 10 SP per yard of radius from its center.
   /// Add another +1 SP for every two specific subjects in the area that won’t be affected by the spell, or
@@ -167,7 +171,9 @@ class Bestows extends Modifier {
 
   String specialization;
 
-  Bestows() : super.withPredicate("Bestows a (Bonus or Penalty)", anyValue);
+  Bestows({BestowsRange range: BestowsRange.single, int value: 0, bool inherent: false})
+      : this.range = range,
+        super.withPredicateNew("Bestows a (Bonus or Penalty)", anyValue, value, inherent);
 
   @override
   int get spellPoints {
@@ -233,7 +239,7 @@ class Damage extends Modifier with _Enhanceable {
   bool _explosive = false;
   bool vampiric = false;
 
-  Damage() : super("Damage");
+  Damage() : super("Damage", 0, false);
 
   @override
   int get spellPoints {
@@ -348,7 +354,7 @@ class DurationMod extends Modifier {
 }
 
 class Girded extends Modifier {
-  Girded() : super("Girded");
+  Girded({int value: 0, bool inherent: false}) : super("Girded", value, inherent);
 
   @override
   int get spellPoints => _value;
@@ -358,7 +364,7 @@ final RepeatingSequenceConverter longDistanceModifiers = new RepeatingSequenceCo
 
 /// Value is in hours.
 class RangeCrossTime extends Modifier {
-  RangeCrossTime() : super("Range, Cross-Time");
+  RangeCrossTime() : super("Range, Cross-Time", 0, false);
 
   @override
   int get spellPoints {
@@ -374,7 +380,7 @@ class RangeCrossTime extends Modifier {
 }
 
 class RangeDimensional extends Modifier {
-  RangeDimensional() : super("Range, Extradimensional");
+  RangeDimensional() : super("Range, Extradimensional", 0, false);
 
   /// Crossing dimensional barriers adds a flat 10 SP per dimension.
   @override
@@ -383,7 +389,7 @@ class RangeDimensional extends Modifier {
 
 /// Range is _value in yards
 class RangeInformational extends Modifier {
-  RangeInformational() : super("Range, Informational");
+  RangeInformational() : super("Range, Informational", 0, false);
 
   /// For information spells (e.g., Seek Treasure), consult Long-Distance Modifiers (p. B241) and apply the penalty
   /// (inverted) as additional SP; e.g., +2 SP for one mile.
@@ -403,19 +409,19 @@ class RangeInformational extends Modifier {
 final RepeatingSequenceConverter rangeTable = new RepeatingSequenceConverter([2, 3, 5, 7, 10, 15]);
 
 class Range extends Modifier {
-  Range() : super("Range");
+  Range() : super("Range", 0, false);
 
   int get spellPoints => rangeTable.valueToOrdinal(_value);
 }
 
 class Repair extends Modifier {
-  Repair() : super("Repair");
+  Repair() : super("Repair", 0, false);
 
   int get spellPoints => _value;
 }
 
 class Speed extends Modifier {
-  Speed() : super("Speed");
+  Speed() : super("Speed", 0, false);
 
   int get spellPoints => rangeTable.valueToOrdinal(_value);
 }
@@ -423,13 +429,13 @@ class Speed extends Modifier {
 class SubjectWeight extends Modifier {
   static RepeatingSequenceConverter sequence = new RepeatingSequenceConverter([10, 30]);
 
-  SubjectWeight() : super("Subject Weight");
+  SubjectWeight() : super("Subject Weight", 0, false);
 
   int get spellPoints => sequence.valueToOrdinal(_value);
 }
 
 class Summoned extends Modifier {
-  Summoned() : super("Summoned");
+  Summoned() : super("Summoned", 0, false);
 
   //  | Power                                    | Add SP |
   //  |  25% of Static Point Total (62 points*)  |  +4 SP |
@@ -439,8 +445,7 @@ class Summoned extends Modifier {
   //  | 150% of Static Point Total (375 points*) | +40 SP |
   //  | +50% of Static Point Total (+125 points*)| +20 SP |
   int get spellPoints {
-    if (_value <= 75)
-    {
+    if (_value <= 75) {
       return (value / 25.0).ceil() * 4;
     }
     return ((value / 50).ceil() - 1) * 20;
