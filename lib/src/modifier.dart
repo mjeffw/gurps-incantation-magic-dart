@@ -1,16 +1,19 @@
 import 'dart:math';
-import 'enhancer.dart';
-import 'die_roll.dart';
-import '../util/repeating_sequence.dart';
+
 import '../util/distance.dart';
 import '../util/gurps_duration.dart';
+import '../util/repeating_sequence.dart';
+import 'die_roll.dart';
+import 'enhancer.dart';
 
 class InputException implements Exception {
   String message;
+
   InputException(this.message);
 }
 
 typedef bool Predicate(int item);
+
 Predicate zeroOnly = (x) => x == 0;
 Predicate anyValue = (_) => true;
 Predicate nonNegative = (x) => x >= 0;
@@ -51,9 +54,11 @@ abstract class Modifier {
   Modifier.withPredicateNew(this.name, this._predicate, this._value, this._inherent);
 
   bool get inherent => _inherent;
+
   set inherent(bool i) => _inherent = i;
 
   int get value => _value;
+
   set value(int val) {
     if (_predicate(val)) {
       _value = val;
@@ -80,7 +85,7 @@ abstract class _Enhanceable {
 ///
 /// A spell effect to stun a foe requires no additional SP.
 class AfflictionStun extends Modifier {
-  AfflictionStun() : super.withPredicate("Affliction, Stun", zeroOnly);
+  AfflictionStun({bool inherent: false}) : super.withPredicate("Affliction, Stun", zeroOnly, inherent: inherent);
 }
 // ----------------------------------
 
@@ -139,7 +144,7 @@ class AreaOfEffect extends Modifier {
   int _targets = 0;
   bool _includes = false; // ignore: unused_field
 
-  AreaOfEffect() : super("Area of Effect", 0, false);
+  AreaOfEffect({int value: 0, bool inherent: false}) : super("Area of Effect", value, inherent);
 
   /// Figure the circular area and add 10 SP per yard of radius from its center.
   /// Add another +1 SP for every two specific subjects in the area that won’t be affected by the spell, or
@@ -342,7 +347,8 @@ class DurationMod extends Modifier {
     const GurpsDuration(days: 1)
   ];
 
-  DurationMod() : super.withPredicate("Duration", validDuration);
+  DurationMod({int value: 0, bool inherent: false})
+      : super.withPredicate("Duration", validDuration, value: value, inherent: inherent);
 
   @override
   int get spellPoints {

@@ -1,5 +1,5 @@
-import "package:test/test.dart";
 import "package:gurps_incantation_magic_model/incantation_magic.dart";
+import "package:test/test.dart";
 
 void main() {
   test("can be constructed from a String", () {
@@ -105,7 +105,7 @@ void main() {
     expect(new DieRoll(5, 0) * 3, equals(new DieRoll(15, 0)));
     expect(new DieRoll(1, -1) * 3, equals(new DieRoll(2, 1)));
   });
-  
+
   test("can divide", () {
     expect(new DieRoll(1, 0) / 1, equals(new DieRoll(1, 0)));
 

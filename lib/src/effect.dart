@@ -2,27 +2,30 @@ abstract class Effect {
   final String name;
 
   String get description;
+
   int get spellPoints;
 
-  Effect(this.name);
+  const Effect(this.name);
 
-  factory Effect.fromString(String name) {
-    return _list.where((Effect e) => e.name == name).first;
+  static Effect fromString(String name) {
+    return _list
+        .where((Effect e) => e.name == name)
+        .first;
   }
 
-  static Effect Sense = new _Sense();
-  static Effect Strengthen = new _Strengthen();
-  static Effect Restore = new _Restore();
-  static Effect Control = new _Control();
-  static Effect Destroy = new _Destroy();
-  static Effect Create = new _Create();
-  static Effect Transform = new _Transform();
+  static const Effect Sense = const _Sense();
+  static const Effect Strengthen = const _Strengthen();
+  static const Effect Restore = const _Restore();
+  static const Effect Control = const _Control();
+  static const Effect Destroy = const _Destroy();
+  static const Effect Create = const _Create();
+  static const Effect Transform = const _Transform();
 
-  static List<Effect> _list = [Sense, Strengthen, Restore, Control, Destroy, Create, Transform];
+  static const List<Effect> _list = const [Sense, Strengthen, Restore, Control, Destroy, Create, Transform];
 }
 
 class _Sense extends Effect {
-  _Sense() : super("Sense");
+  const _Sense() : super("Sense");
 
   @override
   String get description => "Learn something about, or communicate with, the subject.";
@@ -32,7 +35,7 @@ class _Sense extends Effect {
 }
 
 class _Strengthen extends Effect {
-  _Strengthen() : super("Strengthen");
+  const _Strengthen() : super("Strengthen");
 
   @override
   String get description => "Protect, enhance, or otherwise augment the subject.";
@@ -42,7 +45,7 @@ class _Strengthen extends Effect {
 }
 
 class _Restore extends Effect {
-  _Restore() : super("Restore");
+  const _Restore() : super("Restore");
 
   @override
   String get description => "Repair subject or undo a transformation.";
@@ -52,7 +55,7 @@ class _Restore extends Effect {
 }
 
 class _Control extends Effect {
-  _Control() : super("Control");
+  const _Control() : super("Control");
 
   @override
   String get description => "Direct or move the subject without changing it fundamentally.";
@@ -62,7 +65,7 @@ class _Control extends Effect {
 }
 
 class _Destroy extends Effect {
-  _Destroy() : super("Destroy");
+  const _Destroy() : super("Destroy");
 
   @override
   String get description => "Damage or weaken the subject.";
@@ -72,7 +75,7 @@ class _Destroy extends Effect {
 }
 
 class _Create extends Effect {
-  _Create() : super("Create");
+  const _Create() : super("Create");
 
   @override
   String get description => "Bring subject into being from nothing.";
@@ -82,7 +85,7 @@ class _Create extends Effect {
 }
 
 class _Transform extends Effect {
-  _Transform() : super("Transform");
+  const _Transform() : super("Transform");
 
   @override
   String get description => "Significantly alter the subject.";

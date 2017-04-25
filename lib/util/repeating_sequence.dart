@@ -20,16 +20,15 @@ class RepeatingSequenceConverter {
 //    return _pattern.firstWhere((i) => i == arrayValue) + (loops * _pattern.length);
   }
 
-  int _smallestTableValueGreaterThanOrEqualTo(double val)
-  {
-    return _pattern.where((i) => i >= val).first;
+  int _smallestTableValueGreaterThanOrEqualTo(double val) {
+    return _pattern
+        .where((i) => i >= val)
+        .first;
   }
 
-  int _numberOfLoops(int value)
-  {
+  int _numberOfLoops(int value) {
     int loops = 0;
-    while (value > (_pattern[_pattern.length - 1] * pow(_base, loops)))
-    {
+    while (value > (_pattern[_pattern.length - 1] * pow(_base, loops))) {
       loops++;
     }
     return loops;

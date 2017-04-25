@@ -1,6 +1,10 @@
-import 'spell_effect.dart';
-import 'modifier.dart';
 import '../util/gurps_duration.dart';
+import 'modifier.dart';
+import 'spell_effect.dart';
+
+abstract class Exporter {
+  void addName(String name);
+}
 
 class Spell {
   static final List<GurpsDuration> times = [
@@ -23,21 +27,33 @@ class Spell {
     const GurpsDuration(months: 1)
   ];
 
-  String _name = "";
-
   final List<SpellEffect> _effects = new List<SpellEffect>();
 
   final List<Modifier> _modifiers = new List<Modifier>();
 
+  String _name = "";
+
   bool conditional = false;
 
+  String description;
+
   String get name => _name;
+
+  /// The final SP total determines the penalty to Path skill to cast the spell; this is -(SP/10), rounded up, as shown
+  /// by the Spell Penalty Table.
+  int get skillPenalty => (spellPoints / -10).ceil();
 
   set name(String name) => _name = name ?? "";
 
   void addEffect(SpellEffect effect) => _effects.add(effect);
 
+  List<SpellEffect> get effects => new List.unmodifiable(_effects);
+
   void addModifier(Modifier mod) => _modifiers.add(mod);
+
+  List<Modifier> get inherentModifiers => new List.unmodifiable(_modifiers.where((it) => it.inherent == true));
+
+  List<Modifier> get modifiers => new List.unmodifiable(_modifiers);
 
   int get spellPoints {
     int effectCost = _effects.map((it) => it.spellPoints).fold(0, (a, b) => a + b);
@@ -64,5 +80,9 @@ class Spell {
     } else {
       return new GurpsDuration(months: _effects.length - 11);
     }
+  }
+
+  void export(Exporter exporter) {
+    exporter.addName(name);
   }
 }

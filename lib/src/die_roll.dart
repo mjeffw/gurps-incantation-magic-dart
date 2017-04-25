@@ -83,11 +83,15 @@ class DieRoll {
   }
 
   int get adds => _adds;
+
   int get numberOfDice => _numberOfDice;
 
   DieRoll operator +(int adds) => new DieRoll(this._numberOfDice, this._adds + adds);
+
   DieRoll operator -(int adds) => new DieRoll(this._numberOfDice, this._adds - adds);
+
   DieRoll operator *(int factor) => new DieRoll(0, DieRoll.denormalize(this, 0) * factor);
+
   DieRoll operator /(int divisor) => new DieRoll(0, (DieRoll.denormalize(this, 0) / divisor).floor());
 
   @override

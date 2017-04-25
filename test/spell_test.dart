@@ -1,5 +1,5 @@
-import "package:test/test.dart";
 import "package:gurps_incantation_magic_model/incantation_magic.dart";
+import "package:test/test.dart";
 
 void main() {
   Spell spell;
@@ -13,6 +13,8 @@ void main() {
     expect(spell.spellPoints, equals(0));
     expect(spell.name, equals(""));
     expect(spell.castingTime, equals(const GurpsDuration(seconds: 0)));
+    expect(spell.effects, isEmpty);
+    expect(spell.inherentModifiers, isEmpty);
   });
 
   test("has name", () {
@@ -24,20 +26,55 @@ void main() {
   });
 
   test("contains SpellEffects", () {
-    spell.addEffect(new SpellEffect(Effect.Sense, Path.Augury));
+    spell.addEffect(const SpellEffect(Effect.Sense, Path.Augury));
     expect(spell.spellPoints, equals(2));
+    expect(spell.effects.length, equals(1));
+    expect(spell.effects, contains(const SpellEffect(Effect.Sense, Path.Augury)));
 
-    spell.addEffect(new SpellEffect(Effect.Control, Path.Arcanum));
+    spell.addEffect(const SpellEffect(Effect.Control, Path.Arcanum));
     expect(spell.spellPoints, equals(7));
+    expect(spell.effects.length, equals(2));
+    expect(spell.effects, contains(const SpellEffect(Effect.Sense, Path.Augury)));
+    expect(spell.effects, contains(const SpellEffect(Effect.Control, Path.Arcanum)));
 
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Elementalism));
+    spell.addEffect(const SpellEffect(Effect.Create, Path.Elementalism));
     expect(spell.spellPoints, equals(13));
+    expect(spell.effects.length, equals(3));
+    expect(spell.effects, contains(const SpellEffect(Effect.Sense, Path.Augury)));
+    expect(spell.effects, contains(const SpellEffect(Effect.Control, Path.Arcanum)));
+    expect(spell.effects, contains(const SpellEffect(Effect.Create, Path.Elementalism)));
   });
 
   test("contains Modifiers", () {
-    spell.addEffect(new SpellEffect(Effect.Sense, Path.Augury));
-    spell.addModifier(new AfflictionStun());
-    expect(spell.spellPoints, equals(2));
+    AfflictionStun afflictionStun = new AfflictionStun();
+    spell.addModifier(afflictionStun);
+    expect(spell.inherentModifiers, isEmpty);
+    expect(spell.modifiers.length, equals(1));
+    expect(spell.modifiers, contains(afflictionStun));
+
+    Range range = new Range();
+    spell.addModifier(range);
+    expect(spell.inherentModifiers, isEmpty);
+    expect(spell.modifiers.length, equals(2));
+    expect(spell.modifiers, contains(afflictionStun));
+    expect(spell.modifiers, contains(range));
+  });
+
+  test("contains inherent Modifiers", () {
+    AfflictionStun afflictionStun = new AfflictionStun(inherent: true);
+    spell.addModifier(afflictionStun);
+    Range range = new Range();
+    spell.addModifier(range);
+
+    expect(spell.inherentModifiers.length, equals(1));
+    expect(spell.inherentModifiers, contains(afflictionStun));
+
+    DurationMod dur = new DurationMod(inherent: true);
+    spell.addModifier(dur);
+
+    expect(spell.inherentModifiers.length, equals(2));
+    expect(spell.inherentModifiers, contains(afflictionStun));
+    expect(spell.inherentModifiers, contains(dur));
   });
 
   test("should have casting time", () {

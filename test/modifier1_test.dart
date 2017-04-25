@@ -1,5 +1,5 @@
-import "package:test/test.dart";
 import "package:gurps_incantation_magic_model/incantation_magic.dart";
+import "package:test/test.dart";
 
 void main() {
   // A spell effect to stun a foe requires no additional SP.

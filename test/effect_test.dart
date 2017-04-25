@@ -1,9 +1,9 @@
-import "package:test/test.dart";
 import "package:gurps_incantation_magic_model/incantation_magic.dart";
+import "package:test/test.dart";
 
 void main() {
   group("Sense:", () {
-    Effect sense = new Effect.fromString("Sense");
+    Effect sense = Effect.fromString("Sense");
 
     test("has name", () {
       expect(sense.name, equals("Sense"));
@@ -23,7 +23,7 @@ void main() {
   });
 
   group("Strengthen:", () {
-    Effect strengthen = new Effect.fromString("Strengthen");
+    Effect strengthen = Effect.fromString("Strengthen");
 
     test("can be constructed by name", () {
       expect(strengthen, equals(Effect.Strengthen));
@@ -43,7 +43,7 @@ void main() {
   });
 
   group("Restore:", () {
-    Effect restore = new Effect.fromString("Restore");
+    Effect restore = Effect.fromString("Restore");
 
     test("can be constructed by name", () {
       expect(restore, equals(Effect.Restore));
@@ -63,7 +63,7 @@ void main() {
   });
 
   group("Control:", () {
-    Effect control = new Effect.fromString("Control");
+    Effect control = Effect.fromString("Control");
 
     test("can be constructed by name", () {
       expect(control, equals(Effect.Control));
@@ -83,7 +83,7 @@ void main() {
   });
 
   group("Destroy:", () {
-    Effect destroy = new Effect.fromString("Destroy");
+    Effect destroy = Effect.fromString("Destroy");
 
     test("can be constructed by name", () {
       expect(destroy, equals(Effect.Destroy));
@@ -103,7 +103,7 @@ void main() {
   });
 
   group("Create:", () {
-    Effect create = new Effect.fromString("Create");
+    Effect create = Effect.fromString("Create");
 
     test("can be constructed by name", () {
       expect(create, equals(Effect.Create));
@@ -123,7 +123,7 @@ void main() {
   });
 
   group("Transform:", () {
-    Effect transform = new Effect.fromString("Transform");
+    Effect transform = Effect.fromString("Transform");
 
     test("can be constructed by name", () {
       expect(transform, equals(Effect.Transform));

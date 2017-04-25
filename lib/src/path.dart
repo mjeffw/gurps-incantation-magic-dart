@@ -1,14 +1,14 @@
 abstract class Path {
-  static Path Arcanum = const _Arcanum();
-  static Path Augury = const _Augury();
-  static Path Demonology = const _Demonology();
-  static Path Elementalism = const _Elementalism();
-  static Path Mesmerism = const _Mesmerism();
-  static Path Necromancy = const _Necromancy();
-  static Path Protection = const _Protection();
-  static Path Transfiguration = const _Transfiguration();
+  static const Path Arcanum = const _Arcanum();
+  static const Path Augury = const _Augury();
+  static const Path Demonology = const _Demonology();
+  static const Path Elementalism = const _Elementalism();
+  static const Path Mesmerism = const _Mesmerism();
+  static const Path Necromancy = const _Necromancy();
+  static const Path Protection = const _Protection();
+  static const Path Transfiguration = const _Transfiguration();
 
-  static List<Path> _list = [
+  static const List<Path> _list = const [
     Arcanum,
     Augury,
     Demonology,
@@ -25,7 +25,9 @@ abstract class Path {
   const Path(this.name, this.aspect);
 
   factory Path.fromString(String name) {
-    return _list.where((Path e) => e.name == name).first;
+    return _list
+        .where((Path e) => e.name == name)
+        .first;
   }
 }
 
@@ -44,7 +46,7 @@ class _Demonology extends Path {
 class _Elementalism extends Path {
   const _Elementalism()
       : super("Elementalism",
-            "Air, earth, fire, water, and wood -- as well as void/sound/ether, if used in the campaign.");
+      "Air, earth, fire, water, and wood -- as well as void/sound/ether, if used in the campaign.");
 }
 
 class _Mesmerism extends Path {
