@@ -15,6 +15,7 @@ void main() {
     expect(spell.castingTime, equals(const GurpsDuration(seconds: 0)));
     expect(spell.effects, isEmpty);
     expect(spell.inherentModifiers, isEmpty);
+    expect(spell.skillPenalty, equals(0));
   });
 
   test("has name", () {
@@ -150,5 +151,16 @@ void main() {
     spell.addModifier(traits);
 
     expect(spell.spellPoints, equals(28));
+  });
+
+  test("skill penalty", () {
+    spell.addEffect(new SpellEffect(Effect.Sense, Path.Augury));
+    spell.addEffect(new SpellEffect(Effect.Control, Path.Arcanum));
+    spell.addEffect(new SpellEffect(Effect.Create, Path.Demonology));
+    spell.addModifier(new Bestows(value: 5));
+    spell.addModifier(new AlteredTraits(value: -15));
+    spell.conditional = true;
+
+    expect(spell.skillPenalty, equals(-3));
   });
 }

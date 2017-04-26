@@ -114,7 +114,8 @@ class Affliction extends Modifier {
 /// every five character points removed. One that adds advantages, reduces or removes disadvantages, or increases
 /// attributes adds +1 SP for every character point added.
 class AlteredTraits extends Modifier with _Enhanceable {
-  AlteredTraits() : super.withPredicateNew("Altered Traits", anyValue, 0, false);
+  AlteredTraits({int value: 0, bool inherent: false})
+      : super.withPredicateNew("Altered Traits", anyValue, value, inherent);
 
   @override
   int get spellPoints {
