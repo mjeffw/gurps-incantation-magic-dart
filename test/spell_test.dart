@@ -157,8 +157,8 @@ void main() {
     spell.addEffect(new SpellEffect(Effect.Sense, Path.Augury));
     spell.addEffect(new SpellEffect(Effect.Control, Path.Arcanum));
     spell.addEffect(new SpellEffect(Effect.Create, Path.Demonology));
-    spell.addModifier(new Bestows(value: 5));
-    spell.addModifier(new AlteredTraits(value: -15));
+    spell.addRitualModifier(new Bestows(value: 5));
+    spell.addRitualModifier(new AlteredTraits(value: -15));
     spell.conditional = true;
 
     expect(spell.skillPenalty, equals(-3));
