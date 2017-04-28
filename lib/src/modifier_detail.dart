@@ -1,5 +1,5 @@
-import 'enhancer.dart';
-import 'die_roll.dart';
+import '../gurps/modifier.dart';
+import '../gurps/die_roll.dart';
 
 abstract class ModifierDetail {
   String get name;
@@ -13,7 +13,11 @@ abstract class ModifierDetail {
   set value(int value);
 
   String get typicalText;
-  String get briefText;
+  String get summaryText;
+}
+
+abstract class AfflictionDetail extends ModifierDetail {
+  set specialization(String spec);
 }
 
 abstract class AreaOfEffectDetail extends ModifierDetail {
@@ -30,5 +34,5 @@ abstract class DamageDetail extends ModifierDetail {
 
   set type(String type);
   set direct(bool direct);
-  void addEnhancer(Enhancer e);
+  void addEnhancer(Modifier e);
 }

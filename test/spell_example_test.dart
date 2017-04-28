@@ -29,10 +29,10 @@ void main() {
 
     Bestows bestows = new Bestows(value: 6, inherent: true);
     bestows.specialization = "Dispelling";
-    spell.addModifier(bestows);
+    spell.addRitualModifier(bestows);
 
     Girded girded = new Girded(value: 20, inherent: true);
-    spell.addModifier(girded);
+    spell.addRitualModifier(girded);
 
     expect(spell.name, equals("Dispelling"));
     expect(spell.spellPoints, equals(41));
@@ -56,7 +56,7 @@ void main() {
       spell.conditional = true;
       spell.addEffect(new SpellEffect(Effect.Create, Path.Arcanum));
       AreaOfEffect m = new AreaOfEffect(value: 5, inherent: true)..targets(6, true);
-      spell.addModifier(m);
+      spell.addRitualModifier(m);
       spell.description = _description;
 
       TextSpellExporter exporter = new TextSpellExporter();
@@ -92,8 +92,8 @@ void main() {
       spell.name = "Animate Object";
       spell.addEffect(new SpellEffect(Effect.Create, Path.Arcanum));
       spell.addEffect(new SpellEffect(Effect.Control, Path.Arcanum));
-      spell.addModifier(new DurationMod(value: new GurpsDuration(hours: 12).inSeconds));
-      spell.addModifier(new SubjectWeight(value: 100));
+      spell.addRitualModifier(new DurationMod(value: new GurpsDuration(hours: 12).inSeconds));
+      spell.addRitualModifier(new SubjectWeight(value: 100));
       spell.description = _description;
 
       TextSpellExporter exporter = new TextSpellExporter();
@@ -129,8 +129,8 @@ void main() {
       spell.name = 'Arcane Fire';
       spell.addEffect(new SpellEffect(Effect.Create, Path.Arcanum));
       Damage dam = new Damage(type: DamageType.burning, value: 4, inherent: true, direct: false);
-      dam.addEnhancer("Alternative Enhancements", null, 77);
-      spell.addModifier(dam);
+      dam.addModifier("Alternative Enhancements", null, 77);
+      spell.addRitualModifier(dam);
       spell.description = _description;
 
       TextSpellExporter exporter = new TextSpellExporter();
@@ -148,11 +148,46 @@ void main() {
       expect(lines[GAP3], '');
       expect(
           lines[TYPICAL],
-          startsWith('Typical Casting: '
+          equals('Typical Casting: '
               'Create Arcanum (6) '
               '+ Damage, Indirect Burning 6d (Alternative Enhancements, +77%) (20). '
-//              '26 SP.'
-              ));
+              '26 SP.'));
+    });
+
+    test('Bewitchment', () {
+      String _description =
+          "This spell holds the subject (who must have an IQ of 6 or higher) motionless and unaware of time's "
+          "passage (treat as dazed, p. B428). The subject may roll against the better of HT or Will to 'shake "
+          "off' the effect every (margin of loss) minutes. Otherwise, this lasts as long as the caster and the "
+          "subject's eyes meet; if either one can no longer see the other's eyes, the spell is instantly broken. "
+          "(The short casting time is due to this drawback; see Limited Spells, p. 15.) This is often cast as a "
+          "'blocking' spell (p. 20) at the usual -10 to skill.";
+      Spell spell = new Spell();
+      spell.name = 'Bewitchment';
+      spell.addEffect(new SpellEffect(Effect.Destroy, Path.Mesmerism));
+      spell.addModifier("Requires eye contact", null, -40);
+      spell.addRitualModifier(new Affliction("Daze", value: 50, inherent: true));
+      spell.description = _description;
+
+      TextSpellExporter exporter = new TextSpellExporter();
+      spell.export(exporter);
+
+      List<String> lines = exporter.toString().split('\n');
+      expect(lines[NAME], equals('Bewitchment'));
+      expect(lines[GAP1], equals(''));
+      expect(lines[EFFECTS], equals("Spell Effects: Destroy Mesmerism."));
+      expect(lines[MODS], equals('Inherent Modifiers: Afflictions, Daze.'));
+      expect(lines[PENALTY], equals("Skill Penalty: Path of Mesmerism-1."));
+      expect(lines[TIME], equals('Casting Time: 2 minutes.'));
+      expect(lines[GAP2], '');
+      expect(lines[DESC], equals(_description));
+      expect(lines[GAP3], '');
+      expect(
+          lines[TYPICAL],
+          startsWith('Typical Casting: '
+              'Destroy Mesmerism (5) '
+              '+ Afflictions, Daze (10). '
+              '15 SP.'));
     });
   });
 }

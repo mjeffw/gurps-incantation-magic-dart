@@ -12,7 +12,7 @@ void main() {
     expect(spell, isNotNull);
     expect(spell.spellPoints, equals(0));
     expect(spell.name, equals(""));
-    expect(spell.castingTime, equals(const GurpsDuration(seconds: 0)));
+    expect(spell.castingTime, equals(const GurpsDuration(minutes: 2)));
     expect(spell.effects, isEmpty);
     expect(spell.inherentModifiers, isEmpty);
   });
@@ -47,30 +47,30 @@ void main() {
 
   test("contains Modifiers", () {
     AfflictionStun afflictionStun = new AfflictionStun();
-    spell.addModifier(afflictionStun);
+    spell.addRitualModifier(afflictionStun);
     expect(spell.inherentModifiers, isEmpty);
-    expect(spell.modifiers.length, equals(1));
-    expect(spell.modifiers, contains(afflictionStun));
+    expect(spell.ritualModifiers.length, equals(1));
+    expect(spell.ritualModifiers, contains(afflictionStun));
 
     Range range = new Range();
-    spell.addModifier(range);
+    spell.addRitualModifier(range);
     expect(spell.inherentModifiers, isEmpty);
-    expect(spell.modifiers.length, equals(2));
-    expect(spell.modifiers, contains(afflictionStun));
-    expect(spell.modifiers, contains(range));
+    expect(spell.ritualModifiers.length, equals(2));
+    expect(spell.ritualModifiers, contains(afflictionStun));
+    expect(spell.ritualModifiers, contains(range));
   });
 
   test("contains inherent Modifiers", () {
     AfflictionStun afflictionStun = new AfflictionStun(inherent: true);
-    spell.addModifier(afflictionStun);
+    spell.addRitualModifier(afflictionStun);
     Range range = new Range();
-    spell.addModifier(range);
+    spell.addRitualModifier(range);
 
     expect(spell.inherentModifiers.length, equals(1));
     expect(spell.inherentModifiers, contains(afflictionStun));
 
     DurationMod dur = new DurationMod(inherent: true);
-    spell.addModifier(dur);
+    spell.addRitualModifier(dur);
 
     expect(spell.inherentModifiers.length, equals(2));
     expect(spell.inherentModifiers, contains(afflictionStun));
@@ -141,13 +141,13 @@ void main() {
 
     Bestows bestows = new Bestows();
     bestows.value = 5;
-    spell.addModifier(bestows);
+    spell.addRitualModifier(bestows);
 
     expect(spell.spellPoints, equals(25));
 
     AlteredTraits traits = new AlteredTraits();
     traits.value = -15;
-    spell.addModifier(traits);
+    spell.addRitualModifier(traits);
 
     expect(spell.spellPoints, equals(28));
   });

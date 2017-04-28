@@ -1,4 +1,4 @@
-import 'package:gurps_incantation_magic_model/util/gurps_duration.dart';
+import '../../units/gurps_duration.dart';
 import '../exporter.dart';
 import '../modifier_detail.dart';
 import 'text_modifier_detail.dart';
@@ -127,7 +127,7 @@ class TextModifierExporter implements ModifierExporter {
     if (_details.every((f) => !f.inherent)) {
       return "None";
     } else {
-      return _details.map((a) => a.briefText).join(' + ');
+      return _details.map((a) => a.summaryText).join(' + ');
     }
   }
 
@@ -159,5 +159,10 @@ class TextModifierExporter implements ModifierExporter {
   @override
   DamageDetail createDamageDetail() {
     return new TextDamageDetail();
+  }
+
+  @override
+  AfflictionDetail createAfflictionDetail() {
+    return new TextAfflictionDetail();
   }
 }

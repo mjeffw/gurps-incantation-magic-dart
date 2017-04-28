@@ -1,10 +1,9 @@
 import 'dart:math';
 
-import '../util/distance.dart';
-import '../util/gurps_duration.dart';
+import '../units/distance.dart';
+import '../units/gurps_duration.dart';
 import '../util/repeating_sequence.dart';
-import 'die_roll.dart';
-import 'enhancer.dart';
+import '../gurps/modifier.dart';
 import 'exporter.dart';
 import 'modifier_detail.dart';
 
@@ -31,7 +30,7 @@ Predicate validDuration = (x) => x >= 0 && x <= GurpsDuration.SECONDS_PER_DAY;
 ///
 /// A spell that adds +2 to the subject's Strength would need a Bestows a Bonus modifier; this effect is inherent to
 /// the spell.
-abstract class Modifier {
+abstract class RitualModifier {
   /// the name of this Modifier
   final String name;
 
@@ -47,13 +46,13 @@ abstract class Modifier {
   /// distance unit, a percentage modifier, etc.
   int _value = 0;
 
-  Modifier(this.name, this._value, this.inherent);
+  RitualModifier(this.name, this._value, this.inherent);
 
-  Modifier.withPredicate(this.name, this._predicate, {int value: 0, bool inherent: false})
+  RitualModifier.withPredicate(this.name, this._predicate, {int value: 0, bool inherent: false})
       : _value = value,
         inherent = inherent;
 
-  Modifier.withPredicateNew(this.name, this._predicate, this._value, this.inherent);
+  RitualModifier.withPredicateNew(this.name, this._predicate, this._value, this.inherent);
 
   int get value => _value;
 
@@ -76,22 +75,12 @@ abstract class Modifier {
 }
 // ----------------------------------
 
-/// Define the Enhanceable mixin.
-///
-/// Classes that are extended with _Enhanceable maintain a list of enhancements and limitations
-abstract class _Enhanceable {
-  final EnhancerList _enhancers = new EnhancerList();
-
-  void addEnhancer(String name, String detail, int value) {
-    _enhancers.add(new Enhancer(name, detail, value));
-  }
-}
 // ----------------------------------
 
 /// Adds the Affliction: Stun (p. B36) effect to a spell.
 ///
 /// A spell effect to stun a foe requires no additional SP.
-class AfflictionStun extends Modifier {
+class AfflictionStun extends RitualModifier {
   AfflictionStun({bool inherent: false}) : super.withPredicate("Affliction, Stun", zeroOnly, inherent: inherent);
 }
 // ----------------------------------
@@ -99,8 +88,10 @@ class AfflictionStun extends Modifier {
 /// Adds an Affliction (p. B36) effect to a spell.
 ///
 /// This adds +1 SP for every +5% it’s worth as an enhancement to Affliction.
-class Affliction extends Modifier {
-  Affliction() : super("Affliction", 0, false);
+class Affliction extends RitualModifier {
+  String specialization;
+
+  Affliction(this.specialization, {int value: 0, bool inherent: false}) : super("Afflictions", value, inherent);
 
   @override
   int get spellPoints => (_value / 5.0).ceil();
@@ -112,6 +103,13 @@ class Affliction extends Modifier {
     }
     return [((sp - 1) * 5) + 1, sp * 5];
   }
+
+  void export(ModifierExporter exporter) {
+    AfflictionDetail detailExporter = exporter.createAfflictionDetail();
+    super.exportDetail(detailExporter);
+    detailExporter.specialization = specialization;
+    exporter.addDetail(detailExporter);
+  }
 }
 // ----------------------------------
 
@@ -120,23 +118,18 @@ class Affliction extends Modifier {
 /// Any spell that adds disadvantages, reduces attributes, or reduces or removes advantages adds +1 SP for
 /// every five character points removed. One that adds advantages, reduces or removes disadvantages, or increases
 /// attributes adds +1 SP for every character point added.
-class AlteredTraits extends Modifier with _Enhanceable {
+class AlteredTraits extends RitualModifier with Modifiable {
   AlteredTraits() : super.withPredicateNew("Altered Traits", anyValue, 0, false);
 
   @override
-  int get spellPoints {
-    int result = _baseSpellPoints();
-    return result + _enhancers.adjustment(result);
-  }
+  int get spellPoints => _baseSpellPoints() + adjustmentForModifiers(_baseSpellPoints());
 
   int _baseSpellPoints() {
-    int result;
     if (_value < 0) {
-      result = (_value.abs() / 5.0).ceil();
+      return (_value.abs() / 5.0).ceil();
     } else {
-      result = _value;
+      return _value;
     }
-    return result;
   }
 }
 // ----------------------------------
@@ -147,7 +140,7 @@ class AlteredTraits extends Modifier with _Enhanceable {
 /// possible – add another +1 SP for every two specific subjects in the area that won’t be affected by the spell.
 /// Alternatively, you may exclude everyone in the area, but then include willing potential targets for +1 SP per
 /// two specific subjects
-class AreaOfEffect extends Modifier {
+class AreaOfEffect extends RitualModifier {
   int _targets = 0;
   bool _includes = false; // ignore: unused_field
 
@@ -185,7 +178,7 @@ enum BestowsRange { single, moderate, broad }
 // ----------------------------------
 
 /// Adds a bonus or penalty to skills or attributes.
-class Bestows extends Modifier {
+class Bestows extends RitualModifier {
   BestowsRange range = BestowsRange.single;
 
   String specialization;
@@ -200,16 +193,15 @@ class Bestows extends Modifier {
       return 0;
     }
 
-    var x = _value.abs();
     switch (range) {
       case BestowsRange.single:
-        return _baseSpellPoints(x);
+        return _baseSpellPoints(_value.abs());
 
       case BestowsRange.moderate:
-        return _baseSpellPoints(x) * 2;
+        return _baseSpellPoints(_value.abs()) * 2;
 
       case BestowsRange.broad:
-        return _baseSpellPoints(x) * 5;
+        return _baseSpellPoints(_value.abs()) * 5;
     }
   }
 
@@ -222,158 +214,13 @@ class Bestows extends Modifier {
 }
 // ----------------------------------
 
-/// Damage types
-enum DamageType {
-  burning,
-  corrosive,
-  crushing,
-  cutting,
-  fatigue,
-  impaling,
-  hugePiercing,
-  largePiercing,
-  piercing,
-  smallPiercing,
-  toxic
-}
-
-final Map<DamageType, String> damageTypeLabels = {
-  DamageType.burning: "Burning",
-  DamageType.corrosive: "Corrosive",
-  DamageType.crushing: "Crushing",
-  DamageType.cutting: "Cutting",
-  DamageType.fatigue: "Fatigue",
-  DamageType.impaling: "Impaling",
-  DamageType.hugePiercing: "Huge Piercing",
-  DamageType.largePiercing: "Large Piercing",
-  DamageType.piercing: "Piercing",
-  DamageType.smallPiercing: "Small Piercing",
-  DamageType.toxic: "Toxic"
-};
-
-final List<DamageType> impalingTypes = [
-  DamageType.corrosive,
-  DamageType.fatigue,
-  DamageType.impaling,
-  DamageType.hugePiercing
-];
-final List<DamageType> crushingTypes = [DamageType.burning, DamageType.crushing, DamageType.piercing, DamageType.toxic];
-final List<DamageType> cuttingTypes = [DamageType.cutting, DamageType.largePiercing];
-
-/// For spells that damage its targets.
-///
-/// If the spell will cause damage, use the table on p. 16, based on whether the damage is direct or indirect, and
-/// on what type of damage is being done.
-///
-/// To convert from value to DieRoll: DieRoll dieRoll = new DieRoll(1, value);
-class Damage extends Modifier with _Enhanceable {
-  DamageType type = DamageType.crushing;
-  bool _direct = true;
-  bool _explosive = false;
-  bool vampiric = false;
-
-  Damage({DamageType type: DamageType.crushing, bool direct: true, int value: 0, bool inherent: false})
-      : this.type = type,
-        this._direct = direct,
-        super("Damage", value, inherent);
-
-  @override
-  int get spellPoints {
-    int sp = _spellPointsForDamageType;
-    return (sp + _adjustmentForEnhancements(sp)) * _vampiricFactor;
-  }
-
-  int get _spellPointsForDamageType {
-    int sp = 0;
-    if (type == DamageType.smallPiercing) {
-      sp = ((_value + 1) / 2).floor();
-    } else if (impalingTypes.contains(type)) {
-      sp = _value * 2;
-    } else if (crushingTypes.contains(type)) {
-      sp = value;
-    } else if (cuttingTypes.contains(type)) {
-      sp = (value + (value + 1) / 2).floor();
-    }
-    return sp;
-  }
-
-  // Enhancements may be added to Damage.
-  int _adjustmentForEnhancements(int sp) {
-    // Added limitations reduce this surcharge, but will never provide a net SP discount.
-    int sum = _enhancers.sum;
-    if (sum < 0) {
-      return 0;
-    }
-
-    // If Damage costs 21 SP or more, apply the enhancement percentage to the SP cost for Damage only (not to the cost
-    // of the whole spell); round up
-    if (sp > 20) {
-      return sum;
-    }
-
-    // Each +5% adds 1 SP if the base cost for Damage is 20 SP or less.
-    return (sum / 5).ceil();
-  }
-
-  int get _vampiricFactor {
-    if (vampiric) {
-      return 2;
-    }
-    return 1;
-  }
-
-  DieRoll get dice {
-    DieRoll d = new DieRoll(1, value);
-    return d * _explosiveFactor();
-  }
-
-  bool get direct => _direct;
-
-  set direct(bool newValue) {
-    _direct = newValue;
-    if (_direct) {
-      // explosive is incompatible with direct
-      _explosive = false;
-    }
-  }
-
-  bool get explosive => _explosive;
-
-  set explosive(bool newValue) {
-    if (!_direct) {
-      _explosive = newValue;
-    }
-  }
-
-  int _explosiveFactor() {
-    if (explosive) {
-      return 2;
-    } else if (direct) {
-      return 1;
-    } else {
-      return 3;
-    }
-  }
-
-  @override
-  void export(ModifierExporter exporter) {
-    DamageDetail detail = exporter.createDamageDetail();
-    super.exportDetail(detail);
-    detail.type = damageTypeLabels[type];
-    detail.direct = _direct;
-    _enhancers.forEach((it) => detail.addEnhancer(it));
-    detail.dieRoll = dice;
-    exporter.addDetail(detail);
-  }
-}
-
 /// Add a GurpsDuration to a spell.
 ///
 /// Unless the spell is instantaneous, use the following table. GurpsDurations longer than a day are not normally
 /// allowed; the GM will adjudicate a fair SP cost for any exceptions.
 ///
 /// Value is number of seconds in GurpsDuration.
-class DurationMod extends Modifier {
+class DurationMod extends RitualModifier {
   static List<GurpsDuration> array = [
     const GurpsDuration(seconds: 0),
     const GurpsDuration(seconds: 10),
@@ -408,7 +255,7 @@ class DurationMod extends Modifier {
   }
 }
 
-class Girded extends Modifier {
+class Girded extends RitualModifier {
   Girded({int value: 0, bool inherent: false}) : super("Girded", value, inherent);
 
   @override
@@ -418,7 +265,7 @@ class Girded extends Modifier {
 final RepeatingSequenceConverter longDistanceModifiers = new RepeatingSequenceConverter([1, 3]);
 
 /// Value is in hours.
-class RangeCrossTime extends Modifier {
+class RangeCrossTime extends RitualModifier {
   RangeCrossTime() : super("Range, Cross-Time", 0, false);
 
   @override
@@ -434,7 +281,7 @@ class RangeCrossTime extends Modifier {
   }
 }
 
-class RangeDimensional extends Modifier {
+class RangeDimensional extends RitualModifier {
   RangeDimensional() : super("Range, Extradimensional", 0, false);
 
   /// Crossing dimensional barriers adds a flat 10 SP per dimension.
@@ -443,7 +290,7 @@ class RangeDimensional extends Modifier {
 }
 
 /// Range is _value in yards
-class RangeInformational extends Modifier {
+class RangeInformational extends RitualModifier {
   RangeInformational() : super("Range, Informational", 0, false);
 
   /// For information spells (e.g., Seek Treasure), consult Long-Distance Modifiers (p. B241) and apply the penalty
@@ -463,25 +310,25 @@ class RangeInformational extends Modifier {
 
 final RepeatingSequenceConverter rangeTable = new RepeatingSequenceConverter([2, 3, 5, 7, 10, 15]);
 
-class Range extends Modifier {
+class Range extends RitualModifier {
   Range() : super("Range", 0, false);
 
   int get spellPoints => rangeTable.valueToOrdinal(_value);
 }
 
-class Repair extends Modifier {
+class Repair extends RitualModifier {
   Repair() : super("Repair", 0, false);
 
   int get spellPoints => _value;
 }
 
-class Speed extends Modifier {
+class Speed extends RitualModifier {
   Speed() : super("Speed", 0, false);
 
   int get spellPoints => rangeTable.valueToOrdinal(_value);
 }
 
-class SubjectWeight extends Modifier {
+class SubjectWeight extends RitualModifier {
   static RepeatingSequenceConverter sequence = new RepeatingSequenceConverter([10, 30]);
 
   SubjectWeight({int value: 0, bool inherent: false}) : super("Subject Weight", value, inherent);
@@ -496,7 +343,7 @@ class SubjectWeight extends Modifier {
   }
 }
 
-class Summoned extends Modifier {
+class Summoned extends RitualModifier {
   Summoned() : super("Summoned", 0, false);
 
   //  | Power                                    | Add SP |

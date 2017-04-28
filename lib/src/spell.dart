@@ -1,11 +1,12 @@
-import '../util/gurps_duration.dart';
+import '../units/gurps_duration.dart';
 import 'exporter.dart';
-import 'modifier.dart';
+import 'ritual_modifier.dart';
 import 'spell_effect.dart';
+import '../gurps/modifier.dart';
 
-class Spell {
+class Spell extends Object with Modifiable {
   static final List<GurpsDuration> times = [
-    const GurpsDuration(seconds: 0), // Placeholder to make index equivalent to number of effects
+    const GurpsDuration(minutes: 2), // Placeholder to make index equivalent to number of effects
 
     const GurpsDuration(minutes: 5),
     const GurpsDuration(minutes: 10),
@@ -26,7 +27,7 @@ class Spell {
 
   final List<SpellEffect> _effects = new List<SpellEffect>();
 
-  final List<Modifier> _modifiers = new List<Modifier>();
+  final List<RitualModifier> _ritualMods = new List<RitualModifier>();
 
   String _name = "";
 
@@ -35,22 +36,29 @@ class Spell {
   String description;
 
   String get name => _name;
+  set name(String name) => _name = name ?? "";
 
   /// The final SP total determines the penalty to Path skill to cast the spell; this is -(SP/10), rounded up, as shown
   /// by the Spell Penalty Table.
   int get skillPenalty => (spellPoints / -10).ceil();
 
-  set name(String name) => _name = name ?? "";
-
   void addEffect(SpellEffect effect) => _effects.add(effect);
 
   List<SpellEffect> get effects => new List.unmodifiable(_effects);
 
-  void addModifier(Modifier mod) => _modifiers.add(mod);
+  void addRitualModifier(RitualModifier mod) => _ritualMods.add(mod);
 
-  List<Modifier> get inherentModifiers => new List.unmodifiable(_modifiers.where((it) => it.inherent == true));
+  List<RitualModifier> get inherentModifiers => new List.unmodifiable(_ritualMods.where((it) => it.inherent == true));
 
-  List<Modifier> get modifiers => new List.unmodifiable(_modifiers);
+  List<RitualModifier> get ritualModifiers => new List.unmodifiable(_ritualMods);
+
+  @override
+  void addModifier(String name, String detail, int value) {
+    if (value > 0) {
+      throw new InputException("only limitations are allowed in Spell");
+    }
+    super.addModifier(name, detail, value);
+  }
 
   int get spellPoints {
     int effectCost = _effects.map((it) => it.spellPoints).fold(0, (a, b) => a + b);
@@ -68,14 +76,15 @@ class Spell {
   }
 
   int _addForModifiers() {
-    return _modifiers.map((it) => it.spellPoints).fold(0, (int a, int b) => a + b);
+    return _ritualMods.map((it) => it.spellPoints).fold(0, (int a, int b) => a + b);
   }
 
   GurpsDuration get castingTime {
-    if (_effects.length < 13) {
-      return times[_effects.length];
+    int effectiveNumberOfEffects = _effects.length + sumOfModifierLevels ~/ 40;
+    if (effectiveNumberOfEffects < 13) {
+      return times[effectiveNumberOfEffects];
     } else {
-      return new GurpsDuration(months: _effects.length - 11);
+      return new GurpsDuration(months: effectiveNumberOfEffects - 11);
     }
   }
 
@@ -86,7 +95,7 @@ class Spell {
     _effects.forEach((it) => it.export(effectExporter));
 
     ModifierExporter modifierExporter = exporter.modifierExporter;
-    _modifiers.forEach((it) => it.export(modifierExporter));
+    _ritualMods.forEach((it) => it.export(modifierExporter));
 
     exporter.penalty = skillPenalty;
     exporter.time = castingTime;

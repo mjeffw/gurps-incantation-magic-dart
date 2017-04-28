@@ -1,7 +1,7 @@
 import '../modifier_detail.dart';
-import '../../util/gurps_duration.dart';
-import '../enhancer.dart';
-import '../die_roll.dart';
+import '../../units/gurps_duration.dart';
+import '../../gurps/modifier.dart';
+import '../../gurps/die_roll.dart';
 
 class TextModifierDetail implements ModifierDetail {
   bool inherent;
@@ -13,7 +13,17 @@ class TextModifierDetail implements ModifierDetail {
   String get typicalText => '${name} (${spellPoints})';
 
   @override
-  String get briefText => name;
+  String get summaryText => name;
+}
+
+class TextAfflictionDetail extends TextModifierDetail implements AfflictionDetail {
+  String specialization;
+
+  @override
+  String get summaryText => '${name}, ${specialization}';
+
+  @override
+  String get typicalText => '${name}, ${specialization} (${spellPoints})';
 }
 
 class TextAreaOfEffectDetail extends TextModifierDetail implements AreaOfEffectDetail {
@@ -49,11 +59,11 @@ class TextAreaOfEffectDetail extends TextModifierDetail implements AreaOfEffectD
 class TextDamageDetail extends TextModifierDetail implements DamageDetail {
   bool direct;
   String type;
-  final List<Enhancer> enhancers = [];
+  final List<Modifier> enhancers = [];
   DieRoll dieRoll;
 
   @override
-  String get briefText {
+  String get summaryText {
     String temp = '${name}, ${_directText} ${type}';
     if (enhancers.isNotEmpty) {
       temp += ' (${enhancers.map((e) => e.name).join(', ')})';
@@ -73,13 +83,13 @@ class TextDamageDetail extends TextModifierDetail implements DamageDetail {
   String get typicalText {
     String temp = '${name}, ${_directText} ${type} ${dieRoll}';
     if (enhancers.isNotEmpty) {
-      temp += ' (${enhancers.map((e) => e.name).join(', ')})';
+      temp += ' (${enhancers.map((e) => "${e.name}, ${toSignedString(e.level)}%").join(', ')})';
     }
-    return temp;
+    return '${temp} (${spellPoints})';
   }
 
   @override
-  void addEnhancer(Enhancer e) {
+  void addEnhancer(Modifier e) {
     enhancers.add(e);
   }
 }
@@ -92,4 +102,12 @@ class TextDurationDetail extends TextModifierDetail implements DurationDetail {
 class TextSubjectWeightDetail extends TextModifierDetail implements SubjectWeightDetail {
   @override
   String get typicalText => '${name}, ${value} pounds (${spellPoints})';
+}
+
+String toSignedString(int x) {
+  if (x < 0) {
+    return x.toString();
+  } else {
+    return '+${x}';
+  }
 }

@@ -75,7 +75,7 @@ void main() {
   });
 
   group("Girded:", () {
-    Modifier m;
+    RitualModifier m;
 
     setUp(() async {
       m = new Girded();
@@ -118,7 +118,7 @@ void main() {
   });
 
   group("Range, Cross-Time:", () {
-    Modifier m;
+    RitualModifier m;
 
     setUp(() async {
       m = new RangeCrossTime();
@@ -194,7 +194,7 @@ void main() {
   });
 
   group("Range, Extradimensional:", () {
-    Modifier m;
+    RitualModifier m;
 
     setUp(() async {
       m = new RangeDimensional();
@@ -227,7 +227,7 @@ void main() {
   });
 
   group("Range, Informational", () {
-    Modifier m;
+    RitualModifier m;
 
     setUp(() async {
       m = new RangeInformational();
@@ -295,7 +295,7 @@ void main() {
   });
 
   group("Range:", () {
-    Modifier m;
+    RitualModifier m;
 
     setUp(() async {
       m = new Range();
@@ -381,7 +381,7 @@ void main() {
   });
 
   group("Repair:", () {
-    Modifier m;
+    RitualModifier m;
 
     setUp(() async {
       m = new Repair();
@@ -422,7 +422,7 @@ void main() {
   });
 
   group("Speed:", () {
-    Modifier m;
+    RitualModifier m;
 
     setUp(() async {
       m = new Speed();
@@ -501,7 +501,7 @@ void main() {
   });
 
   group("SubjectWeight:", () {
-    Modifier m;
+    RitualModifier m;
 
     setUp(() async {
       m = new SubjectWeight();
@@ -562,7 +562,7 @@ void main() {
   });
 
   group("Summoned:", () {
-    Modifier m;
+    RitualModifier m;
 
     setUp(() async {
       m = new Summoned();

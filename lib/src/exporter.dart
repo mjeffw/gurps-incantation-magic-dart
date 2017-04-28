@@ -1,4 +1,4 @@
-import '../util/gurps_duration.dart';
+import '../units/gurps_duration.dart';
 import 'modifier_detail.dart';
 
 abstract class SpellExporter {
@@ -36,4 +36,5 @@ abstract class ModifierExporter {
   DamageDetail createDamageDetail();
   DurationDetail createDurationDetail();
   SubjectWeightDetail createSubjectWeight();
+  AfflictionDetail  createAfflictionDetail();
 }

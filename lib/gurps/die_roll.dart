@@ -96,6 +96,9 @@ class DieRoll {
 
   @override
   String toString() {
+    if (_adds == 0) {
+      return "${_numberOfDice}d";
+    }
     String sign = "";
     if (!_adds.isNegative) {
       sign = "+";
