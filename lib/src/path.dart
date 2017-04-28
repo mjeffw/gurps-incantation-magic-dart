@@ -25,9 +25,7 @@ abstract class Path {
   const Path(this.name, this.aspect);
 
   factory Path.fromString(String name) {
-    return _list
-        .where((Path e) => e.name == name)
-        .first;
+    return _list.where((Path e) => e.name == name).first;
   }
 }
 
@@ -46,7 +44,7 @@ class _Demonology extends Path {
 class _Elementalism extends Path {
   const _Elementalism()
       : super("Elementalism",
-      "Air, earth, fire, water, and wood -- as well as void/sound/ether, if used in the campaign.");
+            "Air, earth, fire, water, and wood -- as well as void/sound/ether, if used in the campaign.");
 }
 
 class _Mesmerism extends Path {

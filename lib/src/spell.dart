@@ -1,10 +1,7 @@
 import '../util/gurps_duration.dart';
+import 'exporter.dart';
 import 'modifier.dart';
 import 'spell_effect.dart';
-
-abstract class Exporter {
-  void addName(String name);
-}
 
 class Spell {
   static final List<GurpsDuration> times = [
@@ -82,7 +79,19 @@ class Spell {
     }
   }
 
-  void export(Exporter exporter) {
-    exporter.addName(name);
+  void export(SpellExporter exporter) {
+    exporter.name = name;
+
+    EffectExporter effectExporter = exporter.effectExporter;
+    _effects.forEach((it) => it.export(effectExporter));
+
+    ModifierExporter modifierExporter = exporter.modifierExporter;
+    _modifiers.forEach((it) => it.export(modifierExporter));
+
+    exporter.penalty = skillPenalty;
+    exporter.time = castingTime;
+    exporter.description = description;
+    exporter.conditional = conditional;
+    exporter.spellPoints = spellPoints;
   }
 }

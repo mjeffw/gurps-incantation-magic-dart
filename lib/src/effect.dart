@@ -8,9 +8,7 @@ abstract class Effect {
   const Effect(this.name);
 
   static Effect fromString(String name) {
-    return _list
-        .where((Effect e) => e.name == name)
-        .first;
+    return _list.where((Effect e) => e.name == name).first;
   }
 
   static const Effect Sense = const _Sense();

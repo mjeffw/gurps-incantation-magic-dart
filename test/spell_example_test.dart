@@ -2,8 +2,16 @@ import "package:gurps_incantation_magic_model/incantation_magic.dart";
 import "package:test/test.dart";
 
 void main() {
-  final NAME = 0;
-  final GAP1 = 1;
+  final int NAME = 0;
+  final int GAP1 = 1;
+  final int EFFECTS = 2;
+  final int MODS = 3;
+  final int PENALTY = 4;
+  final int TIME = 5;
+  final int GAP2 = 6;
+  final int DESC = 7;
+  final int GAP3 = 8;
+  final int TYPICAL = 9;
 
   Spell spell;
 
@@ -47,18 +55,104 @@ void main() {
       spell.name = "Alarm";
       spell.conditional = true;
       spell.addEffect(new SpellEffect(Effect.Create, Path.Arcanum));
-      AreaOfEffect m = new AreaOfEffect(value: 5, inherent: true)
-        ..targets(6, true);
+      AreaOfEffect m = new AreaOfEffect(value: 5, inherent: true)..targets(6, true);
       spell.addModifier(m);
       spell.description = _description;
 
-      SpellExporter exporter = new SpellExporter();
+      TextSpellExporter exporter = new TextSpellExporter();
       spell.export(exporter);
 
-      String text = exporter.toText();
-      var split = text.split('\n');
-      expect(split[NAME], equals('Alarm'));
-      expect(split[GAP1], equals(''));
+      List<String> lines = exporter.toString().split('\n');
+      expect(lines[NAME], equals('Alarm'));
+      expect(lines[GAP1], equals(''));
+      expect(lines[EFFECTS], equals("Spell Effects: Create Arcanum."));
+      expect(lines[MODS], equals('Inherent Modifiers: Area of Effect.'));
+      expect(lines[PENALTY], equals("Skill Penalty: Path of Arcanum-6."));
+      expect(lines[TIME], equals('Casting Time: 5 minutes.'));
+      expect(lines[GAP2], '');
+      expect(lines[DESC], equals(_description));
+      expect(lines[GAP3], '');
+      expect(
+          lines[TYPICAL],
+          equals('Typical Casting: '
+              'Create Arcanum (6) + Conditional Spell (5) + '
+              'Area of Effect, 5 yards, including 6 targets (53). 64 SP.'));
+    });
+
+    test('Animate Object', () {
+      String _description =
+          'This spell gives any inanimate object the ability move, and to understand and follow simple commands. '
+          'It has DX equal to your Path level-5, Move equal to Path/3 (round down), and ST/HP based on its weight '
+          '(see p. B558). It has whatever skills (equal to your Path of Arcanum level) and advantages the GM '
+          'thinks are appropriate to an object of its shape or purpose. For example, if a caster had Path of '
+          'Arcanum-15 and he animated a 3 lb. broom, it might have ST/HP 12, DX 10, Move 5, and Housekeeping-15. '
+          'Many casters will customize this spell, using Bestows a Bonus (p. 15) to give higher skills or '
+          'attributes. Botches usually produce an animated object with creative and hostile intent!';
+      Spell spell = new Spell();
+      spell.name = "Animate Object";
+      spell.addEffect(new SpellEffect(Effect.Create, Path.Arcanum));
+      spell.addEffect(new SpellEffect(Effect.Control, Path.Arcanum));
+      spell.addModifier(new DurationMod(value: new GurpsDuration(hours: 12).inSeconds));
+      spell.addModifier(new SubjectWeight(value: 100));
+      spell.description = _description;
+
+      TextSpellExporter exporter = new TextSpellExporter();
+      spell.export(exporter);
+
+      List<String> lines = exporter.toString().split('\n');
+      expect(lines[NAME], equals('Animate Object'));
+      expect(lines[GAP1], equals(''));
+      expect(lines[EFFECTS], equals("Spell Effects: Create Arcanum + Control Arcanum."));
+      expect(lines[MODS], equals('Inherent Modifiers: None.'));
+      expect(lines[PENALTY], equals("Skill Penalty: Path of Arcanum-2."));
+      expect(lines[TIME], equals('Casting Time: 10 minutes.'));
+      expect(lines[GAP2], '');
+      expect(lines[DESC], equals(_description));
+      expect(lines[GAP3], '');
+      expect(
+          lines[TYPICAL],
+          equals('Typical Casting: '
+              'Create Arcanum (6) + Control Arcanum (5) '
+              '+ Duration, 12 hours (10) '
+              '+ Subject Weight, 100 pounds (2). 23 SP.'));
+    });
+
+    test('Arcane Fire', () {
+      String _description =
+          "This spell conjures a ball of pure magical energy. In addition to causing 6d burning damage, it also "
+          "reduces the target's resistance to further magic. For each point of damage that penetrates the target's DR, "
+          "he must make a HT roll (at -1 per 2 points of penetrating damage), or lose a level of Magic Resistance per "
+          "point by which he failed. If the target has no Magic Resistance, he instead gains levels of Magical "
+          "Susceptibility per point by which he failed his roll (maximum of five). These effects last for (20 - HT) "
+          "minutes, minimum of one minute.";
+      Spell spell = new Spell();
+      spell.name = 'Arcane Fire';
+      spell.addEffect(new SpellEffect(Effect.Create, Path.Arcanum));
+      Damage dam = new Damage(type: DamageType.burning, value: 4, inherent: true, direct: false);
+      dam.addEnhancer("Alternative Enhancements", null, 77);
+      spell.addModifier(dam);
+      spell.description = _description;
+
+      TextSpellExporter exporter = new TextSpellExporter();
+      spell.export(exporter);
+
+      List<String> lines = exporter.toString().split('\n');
+      expect(lines[NAME], equals('Arcane Fire'));
+      expect(lines[GAP1], equals(''));
+      expect(lines[EFFECTS], equals("Spell Effects: Create Arcanum."));
+      expect(lines[MODS], equals('Inherent Modifiers: Damage, Indirect Burning (Alternative Enhancements).'));
+      expect(lines[PENALTY], equals("Skill Penalty: Path of Arcanum-2."));
+      expect(lines[TIME], equals('Casting Time: 5 minutes.'));
+      expect(lines[GAP2], '');
+      expect(lines[DESC], equals(_description));
+      expect(lines[GAP3], '');
+      expect(
+          lines[TYPICAL],
+          startsWith('Typical Casting: '
+              'Create Arcanum (6) '
+              '+ Damage, Indirect Burning 6d (Alternative Enhancements, +77%) (20). '
+//              '26 SP.'
+              ));
     });
   });
 }

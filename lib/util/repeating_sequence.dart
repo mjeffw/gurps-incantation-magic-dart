@@ -21,9 +21,7 @@ class RepeatingSequenceConverter {
   }
 
   int _smallestTableValueGreaterThanOrEqualTo(double val) {
-    return _pattern
-        .where((i) => i >= val)
-        .first;
+    return _pattern.where((i) => i >= val).first;
   }
 
   int _numberOfLoops(int value) {

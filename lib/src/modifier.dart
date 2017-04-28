@@ -5,6 +5,8 @@ import '../util/gurps_duration.dart';
 import '../util/repeating_sequence.dart';
 import 'die_roll.dart';
 import 'enhancer.dart';
+import 'exporter.dart';
+import 'modifier_detail.dart';
 
 class InputException implements Exception {
   String message;
@@ -15,7 +17,7 @@ class InputException implements Exception {
 typedef bool Predicate(int item);
 
 Predicate zeroOnly = (x) => x == 0;
-Predicate anyValue = (_) => true;
+Predicate anyValue = (x) => true;
 Predicate nonNegative = (x) => x >= 0;
 Predicate validDuration = (x) => x >= 0 && x <= GurpsDuration.SECONDS_PER_DAY;
 
@@ -37,7 +39,7 @@ abstract class Modifier {
   int get spellPoints => 0;
 
   /// is this Modifier instance inherent to the spell?
-  bool _inherent = false;
+  bool inherent = false;
 
   Predicate _predicate = nonNegative;
 
@@ -45,17 +47,13 @@ abstract class Modifier {
   /// distance unit, a percentage modifier, etc.
   int _value = 0;
 
-  Modifier(this.name, this._value, this._inherent);
+  Modifier(this.name, this._value, this.inherent);
 
   Modifier.withPredicate(this.name, this._predicate, {int value: 0, bool inherent: false})
       : _value = value,
-        _inherent = inherent;
+        inherent = inherent;
 
-  Modifier.withPredicateNew(this.name, this._predicate, this._value, this._inherent);
-
-  bool get inherent => _inherent;
-
-  set inherent(bool i) => _inherent = i;
+  Modifier.withPredicateNew(this.name, this._predicate, this._value, this.inherent);
 
   int get value => _value;
 
@@ -66,6 +64,15 @@ abstract class Modifier {
       throw new InputException("Value out of range");
     }
   }
+
+  void export(ModifierExporter exporter);
+
+  void exportDetail(ModifierDetail exporter) {
+    exporter.name = name;
+    exporter.spellPoints = spellPoints;
+    exporter.inherent = inherent;
+    exporter.value = _value;
+  }
 }
 // ----------------------------------
 
@@ -73,7 +80,7 @@ abstract class Modifier {
 ///
 /// Classes that are extended with _Enhanceable maintain a list of enhancements and limitations
 abstract class _Enhanceable {
-  EnhancerList _enhancers = new EnhancerList();
+  final EnhancerList _enhancers = new EnhancerList();
 
   void addEnhancer(String name, String detail, int value) {
     _enhancers.add(new Enhancer(name, detail, value));
@@ -150,9 +157,7 @@ class AreaOfEffect extends Modifier {
   /// Add another +1 SP for every two specific subjects in the area that won’t be affected by the spell, or
   /// +1 per two subjects included in the spell, if excluding everyone except specific targets.
   @override
-  int get spellPoints {
-    return _value * 10 + (_targets / 2).ceil();
-  }
+  int get spellPoints => _value * 10 + (_targets / 2).ceil();
 
   /// Excluding potential targets is possible -- alternately, you can exclude everyone except specific targets.
   ///
@@ -161,6 +166,15 @@ class AreaOfEffect extends Modifier {
   void targets(int number, bool includes) {
     _targets = number;
     _includes = includes;
+  }
+
+  @override
+  void export(ModifierExporter exporter) {
+    AreaOfEffectDetail detailExporter = exporter.createAreaEffectDetail();
+    super.exportDetail(detailExporter);
+    detailExporter.targets = _targets;
+    detailExporter.includes = _includes;
+    exporter.addDetail(detailExporter);
   }
 }
 // ----------------------------------
@@ -223,6 +237,20 @@ enum DamageType {
   toxic
 }
 
+final Map<DamageType, String> damageTypeLabels = {
+  DamageType.burning: "Burning",
+  DamageType.corrosive: "Corrosive",
+  DamageType.crushing: "Crushing",
+  DamageType.cutting: "Cutting",
+  DamageType.fatigue: "Fatigue",
+  DamageType.impaling: "Impaling",
+  DamageType.hugePiercing: "Huge Piercing",
+  DamageType.largePiercing: "Large Piercing",
+  DamageType.piercing: "Piercing",
+  DamageType.smallPiercing: "Small Piercing",
+  DamageType.toxic: "Toxic"
+};
+
 final List<DamageType> impalingTypes = [
   DamageType.corrosive,
   DamageType.fatigue,
@@ -244,7 +272,10 @@ class Damage extends Modifier with _Enhanceable {
   bool _explosive = false;
   bool vampiric = false;
 
-  Damage() : super("Damage", 0, false);
+  Damage({DamageType type: DamageType.crushing, bool direct: true, int value: 0, bool inherent: false})
+      : this.type = type,
+        this._direct = direct,
+        super("Damage", value, inherent);
 
   @override
   int get spellPoints {
@@ -323,6 +354,17 @@ class Damage extends Modifier with _Enhanceable {
       return 3;
     }
   }
+
+  @override
+  void export(ModifierExporter exporter) {
+    DamageDetail detail = exporter.createDamageDetail();
+    super.exportDetail(detail);
+    detail.type = damageTypeLabels[type];
+    detail.direct = _direct;
+    _enhancers.forEach((it) => detail.addEnhancer(it));
+    detail.dieRoll = dice;
+    exporter.addDetail(detail);
+  }
 }
 
 /// Add a GurpsDuration to a spell.
@@ -356,6 +398,13 @@ class DurationMod extends Modifier {
       return 0;
     }
     return array.indexOf(array.lastWhere((d) => d.inSeconds < _value)) + 1;
+  }
+
+  @override
+  void export(ModifierExporter exporter) {
+    DurationDetail detailExporter = exporter.createDurationDetail();
+    super.exportDetail(detailExporter);
+    exporter.addDetail(detailExporter);
   }
 }
 
@@ -435,9 +484,16 @@ class Speed extends Modifier {
 class SubjectWeight extends Modifier {
   static RepeatingSequenceConverter sequence = new RepeatingSequenceConverter([10, 30]);
 
-  SubjectWeight() : super("Subject Weight", 0, false);
+  SubjectWeight({int value: 0, bool inherent: false}) : super("Subject Weight", value, inherent);
 
   int get spellPoints => sequence.valueToOrdinal(_value);
+
+  @override
+  void export(ModifierExporter exporter) {
+    SubjectWeightDetail detailExporter = exporter.createSubjectWeight();
+    super.exportDetail(detailExporter);
+    exporter.addDetail(detailExporter);
+  }
 }
 
 class Summoned extends Modifier {
