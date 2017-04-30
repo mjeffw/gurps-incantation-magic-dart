@@ -184,7 +184,7 @@ class Bestows extends RitualModifier {
 
   String specialization;
 
-  Bestows({BestowsRange range: BestowsRange.single, int value: 0, bool inherent: false})
+  Bestows(this.specialization, {BestowsRange range: BestowsRange.single, int value: 0, bool inherent: false})
       : this.range = range,
         super.withPredicateNew("Bestows a (Bonus or Penalty)", anyValue, value, inherent);
 
@@ -211,6 +211,15 @@ class Bestows extends RitualModifier {
       return pow(2, x - 1).toInt();
     }
     return 12 + ((x - 5) * 4);
+  }
+
+  @override
+  void export(ModifierExporter exporter) {
+    BestowsDetail detail = exporter.createBestowsDetail();
+    super.exportDetail(detail);
+    detail.specialization = specialization;
+    detail.range = range.toString();
+    exporter.addDetail(detail);
   }
 }
 // ----------------------------------
@@ -312,9 +321,16 @@ class RangeInformational extends RitualModifier {
 final RepeatingSequenceConverter rangeTable = new RepeatingSequenceConverter([2, 3, 5, 7, 10, 15]);
 
 class Range extends RitualModifier {
-  Range() : super("Range", 0, false);
+  Range({int value: 0, bool inherent: false}) : super("Range", value, inherent);
 
   int get spellPoints => rangeTable.valueToOrdinal(_value);
+
+  @override
+  void export(ModifierExporter exporter) {
+    RangeDetail detail = exporter.createRangeDetail();
+    super.exportDetail(detail);
+    exporter.addDetail(detail);
+  }
 }
 
 class Repair extends RitualModifier {
@@ -338,7 +354,7 @@ class SubjectWeight extends RitualModifier {
 
   @override
   void export(ModifierExporter exporter) {
-    SubjectWeightDetail detailExporter = exporter.createSubjectWeight();
+    SubjectWeightDetail detailExporter = exporter.createSubjectWeightDetail();
     super.exportDetail(detailExporter);
     exporter.addDetail(detailExporter);
   }

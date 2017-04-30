@@ -4,7 +4,7 @@ import 'ritual_modifier.dart';
 import 'spell_effect.dart';
 import '../gurps/modifier.dart';
 
-class Spell extends Object with Modifiable {
+class Spell {
   static final List<GurpsDuration> times = [
     const GurpsDuration(minutes: 2), // Placeholder to make index equivalent to number of effects
 
@@ -26,8 +26,8 @@ class Spell extends Object with Modifiable {
   ];
 
   final List<SpellEffect> _effects = new List<SpellEffect>();
-
   final List<RitualModifier> _ritualMods = new List<RitualModifier>();
+  final List<Modifier> _drawbacks = [];
 
   String _name = "";
 
@@ -53,11 +53,11 @@ class Spell extends Object with Modifiable {
   List<RitualModifier> get ritualModifiers => new List.unmodifiable(_ritualMods);
 
   @override
-  void addModifier(String name, String detail, int value) {
+  void addDrawback(String name, String detail, int value) {
     if (value > 0) {
       throw new InputException("only limitations are allowed in Spell");
     }
-    super.addModifier(name, detail, value);
+    _drawbacks.add(new Modifier(name, detail, value));
   }
 
   int get spellPoints {
@@ -80,13 +80,15 @@ class Spell extends Object with Modifiable {
   }
 
   GurpsDuration get castingTime {
-    int effectiveNumberOfEffects = _effects.length + sumOfModifierLevels ~/ 40;
+    int effectiveNumberOfEffects = _effects.length + _sumOfModifierLevels ~/ 40;
     if (effectiveNumberOfEffects < 13) {
       return times[effectiveNumberOfEffects];
     } else {
       return new GurpsDuration(months: effectiveNumberOfEffects - 11);
     }
   }
+
+  int get _sumOfModifierLevels => _drawbacks.map((e) => e.level).fold(0, (a, b) => a + b);
 
   void export(SpellExporter exporter) {
     exporter.name = name;

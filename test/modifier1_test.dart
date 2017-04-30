@@ -186,7 +186,7 @@ void main() {
     Bestows m;
 
     setUp(() async {
-      m = new Bestows();
+      m = new Bestows("Test");
     });
 
     test("has initial state", () {

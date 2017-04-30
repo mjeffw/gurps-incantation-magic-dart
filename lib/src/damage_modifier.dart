@@ -147,4 +147,3 @@ class Damage extends RitualModifier with Modifiable {
     exporter.addDetail(detail);
   }
 }
-

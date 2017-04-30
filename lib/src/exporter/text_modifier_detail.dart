@@ -3,12 +3,7 @@ import '../../units/gurps_duration.dart';
 import '../../gurps/modifier.dart';
 import '../../gurps/die_roll.dart';
 
-class TextModifierDetail implements ModifierDetail {
-  bool inherent;
-  String name;
-  int spellPoints;
-  int value;
-
+abstract class TextModifierDetail implements ModifierDetail {
   @override
   String get typicalText => '${name} (${spellPoints})';
 
@@ -16,9 +11,7 @@ class TextModifierDetail implements ModifierDetail {
   String get summaryText => name;
 }
 
-class TextAfflictionDetail extends TextModifierDetail implements AfflictionDetail {
-  String specialization;
-
+class TextAfflictionDetail extends AfflictionDetail {
   @override
   String get summaryText => '${name}, ${specialization}';
 
@@ -26,10 +19,7 @@ class TextAfflictionDetail extends TextModifierDetail implements AfflictionDetai
   String get typicalText => '${name}, ${specialization} (${spellPoints})';
 }
 
-class TextAreaOfEffectDetail extends TextModifierDetail implements AreaOfEffectDetail {
-  bool includes;
-  int targets;
-
+class TextAreaOfEffectDetail extends AreaOfEffectDetail with TextModifierDetail {
   @override
   String get typicalText {
     List<String> components = [];
@@ -56,7 +46,23 @@ class TextAreaOfEffectDetail extends TextModifierDetail implements AreaOfEffectD
   }
 }
 
-class TextDamageDetail extends TextModifierDetail implements DamageDetail {
+class TextBestowsDetail extends BestowsDetail {
+  @override
+  String get summaryText => 'Bestows a ${_nameCompletionText}, ${specialization}';
+
+  String get _nameCompletionText {
+    String temp = 'Bonus';
+    if (value < 0) {
+      temp = 'Penalty';
+    }
+    return temp;
+  }
+
+  @override
+  String get typicalText => 'Bestows a ${_nameCompletionText}, ${value} to ${specialization} (${spellPoints})';
+}
+
+class TextDamageDetail extends DamageDetail {
   bool direct;
   String type;
   final List<Modifier> enhancers = [];
@@ -94,12 +100,17 @@ class TextDamageDetail extends TextModifierDetail implements DamageDetail {
   }
 }
 
-class TextDurationDetail extends TextModifierDetail implements DurationDetail {
+class TextDurationDetail extends DurationDetail with TextModifierDetail {
   @override
   String get typicalText => '${name}, ${new GurpsDuration(seconds: value).toFormattedString()} (${spellPoints})';
 }
 
-class TextSubjectWeightDetail extends TextModifierDetail implements SubjectWeightDetail {
+class TextRangeDetail extends RangeDetail with TextModifierDetail {
+  @override
+  String get typicalText => '${name}, ${value} yards (${spellPoints})';
+}
+
+class TextSubjectWeightDetail extends SubjectWeightDetail with TextModifierDetail {
   @override
   String get typicalText => '${name}, ${value} pounds (${spellPoints})';
 }

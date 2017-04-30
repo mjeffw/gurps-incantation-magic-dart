@@ -140,7 +140,7 @@ void main() {
     spell.addEffect(new SpellEffect(Effect.Create, Path.Demonology));
     expect(spell.spellPoints, equals(13));
 
-    Bestows bestows = new Bestows();
+    Bestows bestows = new Bestows("Foo");
     bestows.value = 5;
     spell.addRitualModifier(bestows);
 
@@ -157,7 +157,7 @@ void main() {
     spell.addEffect(new SpellEffect(Effect.Sense, Path.Augury));
     spell.addEffect(new SpellEffect(Effect.Control, Path.Arcanum));
     spell.addEffect(new SpellEffect(Effect.Create, Path.Demonology));
-    spell.addRitualModifier(new Bestows(value: 5));
+    spell.addRitualModifier(new Bestows("Bar", value: 5));
     spell.addRitualModifier(new AlteredTraits(value: -15));
     spell.conditional = true;
 

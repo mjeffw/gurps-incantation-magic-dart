@@ -56,19 +56,24 @@ class GurpsDuration {
     int seconds = temp;
 
     StringBuffer sb = new StringBuffer();
-    if (years > 0) sb.write("${years} years ");
-    if (months > 0) sb.write("${months} months ");
-    if (weeks > 0) sb.write("${weeks} weeks ");
-    if (days > 0) sb.write("${days} days ");
-    if (hours > 0) sb.write("${hours} hours ");
-    if (minutes > 0) sb.write("${minutes} minutes ");
-    if (seconds > 0) sb.write("${seconds} seconds");
+    if (years > 0) sb.write('${years} year${_pluralize(years)} ');
+    if (months > 0) sb.write('${months} month${_pluralize(months)} ');
+    if (weeks > 0) sb.write('${weeks} week${_pluralize(weeks)} ');
+    if (days > 0) sb.write('${days} day${_pluralize(days)} ');
+    if (hours > 0) sb.write('${hours} hour${_pluralize(hours)} ');
+    if (minutes > 0) sb.write('${minutes} minute${_pluralize(minutes)} ');
+    if (seconds > 0) sb.write('${seconds} second${_pluralize(seconds)}');
 
     return sb.toString().trim();
   }
 
+  String _pluralize(int number) {
+    if (number > 1) return 's';
+    return '';
+  }
+
   @override
-  String toString() => "GurpsDuration[seconds: ${_duration}]";
+  String toString() => 'GurpsDuration[seconds: ${_duration}]';
 
   @override
   int compareTo(GurpsDuration other) => _duration.compareTo(other._duration);

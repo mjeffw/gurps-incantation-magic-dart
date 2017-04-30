@@ -127,7 +127,7 @@ class TextModifierExporter implements ModifierExporter {
     if (_details.every((f) => !f.inherent)) {
       return "None";
     } else {
-      return _details.map((a) => a.summaryText).join(' + ');
+      return _details.where((a) => a.inherent).map((a) => a.summaryText).join(' + ');
     }
   }
 
@@ -152,7 +152,7 @@ class TextModifierExporter implements ModifierExporter {
   }
 
   @override
-  SubjectWeightDetail createSubjectWeight() {
+  SubjectWeightDetail createSubjectWeightDetail() {
     return new TextSubjectWeightDetail();
   }
 
@@ -164,5 +164,15 @@ class TextModifierExporter implements ModifierExporter {
   @override
   AfflictionDetail createAfflictionDetail() {
     return new TextAfflictionDetail();
+  }
+
+  @override
+  BestowsDetail createBestowsDetail() {
+    return new TextBestowsDetail();
+  }
+
+  @override
+  RangeDetail createRangeDetail() {
+    return new TextRangeDetail();
   }
 }

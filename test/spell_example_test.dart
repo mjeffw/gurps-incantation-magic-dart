@@ -27,7 +27,7 @@ void main() {
     spell.description = _description;
     spell.addEffect(new SpellEffect(Effect.Destroy, Path.Arcanum));
 
-    Bestows bestows = new Bestows(value: 6, inherent: true);
+    Bestows bestows = new Bestows("Test", value: 6, inherent: true);
     bestows.specialization = "Dispelling";
     spell.addRitualModifier(bestows);
 
@@ -165,7 +165,7 @@ void main() {
       Spell spell = new Spell();
       spell.name = 'Bewitchment';
       spell.addEffect(new SpellEffect(Effect.Destroy, Path.Mesmerism));
-      spell.addModifier("Requires eye contact", null, -40);
+      spell.addDrawback("Requires eye contact", null, -40);
       spell.addRitualModifier(new Affliction("Daze", value: 50, inherent: true));
       spell.description = _description;
 
@@ -179,6 +179,7 @@ void main() {
       expect(lines[MODS], equals('Inherent Modifiers: Afflictions, Daze.'));
       expect(lines[PENALTY], equals("Skill Penalty: Path of Mesmerism-1."));
       expect(lines[TIME], equals('Casting Time: 2 minutes.'));
+      // TODO Add a line for Drawbacks?
       expect(lines[GAP2], '');
       expect(lines[DESC], equals(_description));
       expect(lines[GAP3], '');
@@ -188,6 +189,130 @@ void main() {
               'Destroy Mesmerism (5) '
               '+ Afflictions, Daze (10). '
               '15 SP.'));
+    });
+
+    test('Black Blade', () {
+      String _description =
+          "This spell causes a weapon, weighing no more than 10 lbs., to gain a 3d toxic follow-up for the next 10 "
+          "seconds. This spells manifests as a visible halo of black energy around the weapon and is resisted like "
+          "a normal spell. This essentially uses the rules for conjured weaponry (p. 21), but the weapon itself is "
+          "the carrier for the damage.";
+      Spell spell = new Spell();
+      spell.name = 'Black Blade';
+      spell.addEffect(new SpellEffect(Effect.Create, Path.Necromancy));
+      Damage dam = new Damage(type: DamageType.toxic, value: 8, inherent: true);
+      dam.addModifier("Follow-Up", null, 0);
+      spell.addRitualModifier(dam);
+      spell.addRitualModifier(new DurationMod(value: 10));
+      spell.description = _description;
+
+      TextSpellExporter exporter = new TextSpellExporter();
+      spell.export(exporter);
+
+      List<String> lines = exporter.toString().split('\n');
+      expect(lines[NAME], equals('Black Blade'));
+      expect(lines[GAP1], equals(''));
+      expect(lines[EFFECTS], equals("Spell Effects: Create Necromancy."));
+      expect(lines[MODS], equals('Inherent Modifiers: Damage, Direct Toxic (Follow-Up).'));
+      expect(lines[PENALTY], equals("Skill Penalty: Path of Necromancy-1."));
+      expect(lines[TIME], equals('Casting Time: 5 minutes.'));
+      expect(lines[GAP2], '');
+      expect(lines[DESC], equals(_description));
+      expect(lines[GAP3], '');
+      expect(
+          lines[TYPICAL],
+          equals('Typical Casting: '
+              'Create Necromancy (6) '
+              '+ Damage, Direct Toxic 3d (Follow-Up, +0%) (8) '
+              '+ Duration, 10 seconds (1). '
+              '15 SP.'));
+    });
+
+    test('Bond of Servitude for (Demons)', () {
+      String _description =
+          "This spell imposes a magical compulsion on the target (who resists at -2), forcing him to obey all the "
+          "caster's commands for an hour. The target cannot go against a direct command, but may interpret "
+          "commands creatively. This spell doesn't provide any special means of communication or understanding of "
+          "commands. If the subject is ordered to do something suicidal or radically against his nature (e.g., "
+          "attack a co-religionist to whom he has a Sense of Duty) he gets a roll to resist that command by "
+          "rolling Will vs. the caster's effective skill. The caster may not repeat a resisted order, even "
+          "rephrased, if the outcome would be similar! Different orders are still possible; e.g., if \"Throw your "
+          "friend in the lava\" fails, \"Make your friend leave\" may still work, so long as leaving doesn't require "
+          "a lava-swim.";
+      Spell spell = new Spell();
+      spell.name = 'Bond of Servitude for (Demons)';
+      spell.addEffect(new SpellEffect(Effect.Control, Path.Demonology));
+      spell.addRitualModifier(
+          new Bestows("Resistance to Bond of Servitude", range: BestowsRange.single, value: -2, inherent: true));
+      spell.addRitualModifier(new DurationMod(value: new GurpsDuration(hours: 1).inSeconds));
+      spell.addRitualModifier(new Range(value: 20));
+      spell.description = _description;
+
+      TextSpellExporter exporter = new TextSpellExporter();
+      spell.export(exporter);
+
+      List<String> lines = exporter.toString().split('\n');
+      expect(lines[NAME], equals('Bond of Servitude for (Demons)'));
+      expect(lines[GAP1], equals(''));
+      expect(lines[EFFECTS], equals("Spell Effects: Control Demonology."));
+      expect(lines[MODS], equals('Inherent Modifiers: Bestows a Penalty, Resistance to Bond of Servitude.'));
+      expect(lines[PENALTY], equals("Skill Penalty: Path of Demonology-2."));
+      expect(lines[TIME], equals('Casting Time: 5 minutes.'));
+      expect(lines[GAP2], '');
+      expect(lines[DESC], equals(_description));
+      expect(lines[GAP3], '');
+      expect(
+          lines[TYPICAL],
+          equals('Typical Casting: '
+              'Control Demonology (5) '
+              '+ Bestows a Penalty, -2 to Resistance to Bond of Servitude (2) '
+              '+ Duration, 1 hour (7) '
+              '+ Range, 20 yards (6). '
+              '20 SP.'));
+    });
+
+    test('Bulwark', () {
+      String _description =
+          "This spell imposes a magical compulsion on the target (who resists at -2), forcing him to obey all the "
+          "caster's commands for an hour. The target cannot go against a direct command, but may interpret "
+          "commands creatively. This spell doesn't provide any special means of communication or understanding of "
+          "commands. If the subject is ordered to do something suicidal or radically against his nature (e.g., "
+          "attack a co-religionist to whom he has a Sense of Duty) he gets a roll to resist that command by "
+          "rolling Will vs. the caster's effective skill. The caster may not repeat a resisted order, even "
+          "rephrased, if the outcome would be similar! Different orders are still possible; e.g., if \"Throw your "
+          "friend in the lava\" fails, \"Make your friend leave\" may still work, so long as leaving doesn't require "
+          "a lava-swim.";
+      Spell spell = new Spell();
+      spell.name = 'Bulwark';
+      spell.addEffect(new SpellEffect(Effect.Strengthen, Path.Protection));
+//      spell.addRitualModifier(
+//          new AlteredTraits(value: -2, inherent: true));
+//      spell.addRitualModifier(new DurationMod(value: new GurpsDuration(hours: 1).inSeconds));
+//      spell.addRitualModifier(new Range(value: 20));
+//      spell.description = _description;
+
+      TextSpellExporter exporter = new TextSpellExporter();
+      spell.export(exporter);
+
+      List<String> lines = exporter.toString().split('\n');
+      expect(lines[NAME], equals('Bulwark'));
+      expect(lines[GAP1], equals(''));
+      expect(lines[EFFECTS], equals("Spell Effects: Strengthen Protection."));
+      expect(lines[MODS], equals('Inherent Modifiers: Altered Traits, Damage Resistance (Hardened 2; Tough Skin).'));
+//      expect(lines[PENALTY], equals("Skill Penalty: Path of Demonology-2."));
+//      expect(lines[TIME], equals('Casting Time: 5 minutes.'));
+      expect(lines[GAP2], '');
+//      expect(lines[DESC], equals(_description));
+      expect(lines[GAP3], '');
+      expect(
+          lines[TYPICAL],
+          startsWith('Typical Casting: '
+//              'Control Demonology (5) '
+//              '+ Bestows a Penalty, -2 to Resistance to Bond of Servitude (2) '
+//              '+ Duration, 1 hour (7) '
+//              '+ Range, 20 yards (6). '
+//              '20 SP.'
+          ));
     });
   });
 }
