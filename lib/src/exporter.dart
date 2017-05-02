@@ -33,6 +33,7 @@ abstract class ModifierExporter {
   String get typicalText;
 
   AfflictionDetail createAfflictionDetail();
+  AlteredTraitsDetail createAlteredTraitsDetail();
   AreaOfEffectDetail createAreaEffectDetail();
   BestowsDetail createBestowsDetail();
   DamageDetail createDamageDetail();

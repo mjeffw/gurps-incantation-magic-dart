@@ -137,13 +137,31 @@ class TextModifierExporter implements ModifierExporter {
   }
 
   @override
+  void addDetail(ModifierDetail detailExporter) {
+    _details.add(detailExporter);
+  }
+
+  @override
+  AfflictionDetail createAfflictionDetail() {
+    return new TextAfflictionDetail();
+  }
+
+  @override
+  AlteredTraitsDetail createAlteredTraitsDetail() => new TextAlteredTraitsDetail();
+
+  @override
   AreaOfEffectDetail createAreaEffectDetail() {
     return new TextAreaOfEffectDetail();
   }
 
   @override
-  void addDetail(ModifierDetail detailExporter) {
-    _details.add(detailExporter);
+  BestowsDetail createBestowsDetail() {
+    return new TextBestowsDetail();
+  }
+
+  @override
+  DamageDetail createDamageDetail() {
+    return new TextDamageDetail();
   }
 
   @override
@@ -154,21 +172,6 @@ class TextModifierExporter implements ModifierExporter {
   @override
   SubjectWeightDetail createSubjectWeightDetail() {
     return new TextSubjectWeightDetail();
-  }
-
-  @override
-  DamageDetail createDamageDetail() {
-    return new TextDamageDetail();
-  }
-
-  @override
-  AfflictionDetail createAfflictionDetail() {
-    return new TextAfflictionDetail();
-  }
-
-  @override
-  BestowsDetail createBestowsDetail() {
-    return new TextBestowsDetail();
   }
 
   @override

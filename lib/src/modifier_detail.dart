@@ -15,6 +15,13 @@ abstract class AfflictionDetail extends ModifierDetail {
   String specialization;
 }
 
+abstract class AlteredTraitsDetail extends ModifierDetail {
+  String specialization;
+  int specLevel;
+
+  void addModifier(Modifier it);
+}
+
 abstract class AreaOfEffectDetail extends ModifierDetail {
   bool includes;
   int targets;
@@ -30,7 +37,7 @@ abstract class DamageDetail extends ModifierDetail {
   String type;
   bool direct;
 
-  void addEnhancer(Modifier e);
+  void addModifier(Modifier e);
 }
 
 abstract class DurationDetail extends ModifierDetail {}

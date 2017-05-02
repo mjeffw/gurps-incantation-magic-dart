@@ -2,6 +2,7 @@ import '../modifier_detail.dart';
 import '../../units/gurps_duration.dart';
 import '../../gurps/modifier.dart';
 import '../../gurps/die_roll.dart';
+import '../../util/core_utils.dart';
 
 abstract class TextModifierDetail implements ModifierDetail {
   @override
@@ -17,6 +18,36 @@ class TextAfflictionDetail extends AfflictionDetail {
 
   @override
   String get typicalText => '${name}, ${specialization} (${spellPoints})';
+}
+
+class TextAlteredTraitsDetail extends AlteredTraitsDetail with TextModifierDetail {
+  final List<Modifier> modifiers = [];
+
+  @override
+  void addModifier(Modifier e) {
+    modifiers.add(e);
+  }
+
+  @override
+  String get summaryText {
+    String temp = '${name}, ${specialization}';
+    if (modifiers.isNotEmpty) {
+      temp += ' (${modifiers.map((e) => e.summaryText).join('; ')})';
+    }
+    return temp;
+  }
+
+  @override
+  String get typicalText {
+    String temp = '${name}, ${specialization}';
+    if (specLevel != null && specLevel != 0) {
+      temp += ' ${specLevel}';
+    }
+    if (modifiers.isNotEmpty) {
+      temp += ' (${modifiers.map((e) => e.typicalText).join('; ')})';
+    }
+    return temp + ' (${spellPoints})';
+  }
 }
 
 class TextAreaOfEffectDetail extends AreaOfEffectDetail with TextModifierDetail {
@@ -63,16 +94,13 @@ class TextBestowsDetail extends BestowsDetail {
 }
 
 class TextDamageDetail extends DamageDetail {
-  bool direct;
-  String type;
-  final List<Modifier> enhancers = [];
-  DieRoll dieRoll;
+  final List<Modifier> modifiers = [];
 
   @override
   String get summaryText {
     String temp = '${name}, ${_directText} ${type}';
-    if (enhancers.isNotEmpty) {
-      temp += ' (${enhancers.map((e) => e.name).join(', ')})';
+    if (modifiers.isNotEmpty) {
+      temp += ' (${modifiers.map((e) => e.name).join('; ')})';
     }
     return temp;
   }
@@ -88,15 +116,15 @@ class TextDamageDetail extends DamageDetail {
   @override
   String get typicalText {
     String temp = '${name}, ${_directText} ${type} ${dieRoll}';
-    if (enhancers.isNotEmpty) {
-      temp += ' (${enhancers.map((e) => "${e.name}, ${toSignedString(e.level)}%").join(', ')})';
+    if (modifiers.isNotEmpty) {
+      temp += ' (${modifiers.map((e) => "${e.typicalText}").join('; ')})';
     }
     return '${temp} (${spellPoints})';
   }
 
   @override
-  void addEnhancer(Modifier e) {
-    enhancers.add(e);
+  void addModifier(Modifier e) {
+    modifiers.add(e);
   }
 }
 
@@ -113,12 +141,4 @@ class TextRangeDetail extends RangeDetail with TextModifierDetail {
 class TextSubjectWeightDetail extends SubjectWeightDetail with TextModifierDetail {
   @override
   String get typicalText => '${name}, ${value} pounds (${spellPoints})';
-}
-
-String toSignedString(int x) {
-  if (x < 0) {
-    return x.toString();
-  } else {
-    return '+${x}';
-  }
 }

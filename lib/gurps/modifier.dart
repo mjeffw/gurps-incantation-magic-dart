@@ -1,4 +1,5 @@
 import 'dart:mirrors';
+import '../util/core_utils.dart';
 
 typedef bool EnhancerPredicate(Modifier e);
 
@@ -25,6 +26,17 @@ class Modifier {
   int level;
 
   Modifier(this.name, this.detail, this.level);
+
+  String get summaryText {
+    if (detail != null && detail.length > 0) {
+      return '${name}, ${detail}';
+    }
+    return name;
+  }
+
+  String get typicalText {
+    return '${summaryText}, ${toSignedString(level)}%';
+  }
 }
 
 /// Represents a list of GURPS Modifiers, which can be either Enhancements or Limitations.

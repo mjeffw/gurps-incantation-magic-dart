@@ -70,7 +70,7 @@ void main() {
     AlteredTraits m;
 
     setUp(() async {
-      m = new AlteredTraits();
+      m = new AlteredTraits("foo", null);
     });
 
     test("has initial state", () {

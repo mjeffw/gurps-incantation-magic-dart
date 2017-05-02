@@ -119,7 +119,10 @@ class Affliction extends RitualModifier {
 /// every five character points removed. One that adds advantages, reduces or removes disadvantages, or increases
 /// attributes adds +1 SP for every character point added.
 class AlteredTraits extends RitualModifier with Modifiable {
-  AlteredTraits({int value: 0, bool inherent: false})
+  String specialization;
+  int specLevel;
+
+  AlteredTraits(this.specialization, this.specLevel, {int value: 0, bool inherent: false})
       : super.withPredicateNew("Altered Traits", anyValue, value, inherent);
 
   @override
@@ -131,6 +134,16 @@ class AlteredTraits extends RitualModifier with Modifiable {
     } else {
       return _value;
     }
+  }
+
+  @override
+  void export(ModifierExporter exporter) {
+    AlteredTraitsDetail detail = exporter.createAlteredTraitsDetail();
+    super.exportDetail(detail);
+    detail.specialization = specialization;
+    detail.specLevel = specLevel;
+    modifiers.forEach((it) => detail.addModifier(it));
+    exporter.addDetail(detail);
   }
 }
 // ----------------------------------
@@ -194,16 +207,22 @@ class Bestows extends RitualModifier {
       return 0;
     }
 
+    return _spellPointsForRange;
+  }
+
+  int get _spellPointsForRange {
+    int x;
     switch (range) {
       case BestowsRange.single:
-        return _baseSpellPoints(_value.abs());
-
+        x = _baseSpellPoints(_value.abs());
+        break;
       case BestowsRange.moderate:
-        return _baseSpellPoints(_value.abs()) * 2;
-
+        x = _baseSpellPoints(_value.abs()) * 2;
+        break;
       case BestowsRange.broad:
-        return _baseSpellPoints(_value.abs()) * 5;
+        x = _baseSpellPoints(_value.abs()) * 5;
     }
+    return x;
   }
 
   int _baseSpellPoints(int x) {

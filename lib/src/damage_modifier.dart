@@ -142,7 +142,7 @@ class Damage extends RitualModifier with Modifiable {
     super.exportDetail(detail);
     detail.type = damageTypeLabels[type];
     detail.direct = _direct;
-    modifiers.forEach((it) => detail.addEnhancer(it));
+    modifiers.forEach((it) => detail.addModifier(it));
     detail.dieRoll = dice;
     exporter.addDetail(detail);
   }

@@ -185,7 +185,7 @@ void main() {
       expect(lines[GAP3], '');
       expect(
           lines[TYPICAL],
-          startsWith('Typical Casting: '
+          equals('Typical Casting: '
               'Destroy Mesmerism (5) '
               '+ Afflictions, Daze (10). '
               '15 SP.'));
@@ -273,23 +273,18 @@ void main() {
 
     test('Bulwark', () {
       String _description =
-          "This spell imposes a magical compulsion on the target (who resists at -2), forcing him to obey all the "
-          "caster's commands for an hour. The target cannot go against a direct command, but may interpret "
-          "commands creatively. This spell doesn't provide any special means of communication or understanding of "
-          "commands. If the subject is ordered to do something suicidal or radically against his nature (e.g., "
-          "attack a co-religionist to whom he has a Sense of Duty) he gets a roll to resist that command by "
-          "rolling Will vs. the caster's effective skill. The caster may not repeat a resisted order, even "
-          "rephrased, if the outcome would be similar! Different orders are still possible; e.g., if \"Throw your "
-          "friend in the lava\" fails, \"Make your friend leave\" may still work, so long as leaving doesn't require "
-          "a lava-swim.";
+          "This spell grants the subject DR 6 with the Tough Skin and Hardened 2 modifiers. This protection lasts for "
+          "12 minutes.";
       Spell spell = new Spell();
       spell.name = 'Bulwark';
       spell.addEffect(new SpellEffect(Effect.Strengthen, Path.Protection));
-//      spell.addRitualModifier(
-//          new AlteredTraits(value: -2, inherent: true));
-//      spell.addRitualModifier(new DurationMod(value: new GurpsDuration(hours: 1).inSeconds));
-//      spell.addRitualModifier(new Range(value: 20));
-//      spell.description = _description;
+      AlteredTraits alteredTraits = new AlteredTraits("Damage Resistance", 6, value: 30, inherent: true);
+      alteredTraits.addModifier("Hardened 2", null, 40);
+      alteredTraits.addModifier("Tough Skin", null, -40);
+      spell.addRitualModifier(alteredTraits);
+      spell.addRitualModifier(new DurationMod(value: new GurpsDuration(minutes: 12).inSeconds));
+      spell.addRitualModifier(new SubjectWeight(value: 1000));
+      spell.description = _description;
 
       TextSpellExporter exporter = new TextSpellExporter();
       spell.export(exporter);
@@ -299,19 +294,85 @@ void main() {
       expect(lines[GAP1], equals(''));
       expect(lines[EFFECTS], equals("Spell Effects: Strengthen Protection."));
       expect(lines[MODS], equals('Inherent Modifiers: Altered Traits, Damage Resistance (Hardened 2; Tough Skin).'));
-//      expect(lines[PENALTY], equals("Skill Penalty: Path of Demonology-2."));
-//      expect(lines[TIME], equals('Casting Time: 5 minutes.'));
+      expect(lines[PENALTY], equals("Skill Penalty: Path of Protection-4."));
+      expect(lines[TIME], equals('Casting Time: 5 minutes.'));
       expect(lines[GAP2], '');
-//      expect(lines[DESC], equals(_description));
+      expect(lines[DESC], equals(_description));
       expect(lines[GAP3], '');
       expect(
           lines[TYPICAL],
-          startsWith('Typical Casting: '
-//              'Control Demonology (5) '
-//              '+ Bestows a Penalty, -2 to Resistance to Bond of Servitude (2) '
-//              '+ Duration, 1 hour (7) '
-//              '+ Range, 20 yards (6). '
-//              '20 SP.'
+          equals('Typical Casting: '
+              'Strengthen Protection (3) '
+              '+ Altered Traits, Damage Resistance 6 (Hardened 2, +40%; Tough Skin, -40%) (30)'
+              ' + Duration, 12 minutes (6)'
+              ' + Subject Weight, 1000 pounds (4). ' // TODO would like comma-separated values, like '1,000'
+              '43 SP.'));
+    });
+
+    test('Censure', () {
+      String _description =
+          "This spell banishes extradimensional entities, who must make a resistance roll at -6. Failure means "
+          "instant banishment from their non-native reality. Critical success on the resistance roll means they "
+          "cannot be banished by the caster for the next 24 hours!";
+      Spell spell = new Spell();
+      spell.name = 'Censure';
+      spell.addEffect(new SpellEffect(Effect.Control, Path.Protection));
+      spell.addRitualModifier(new Bestows("Resist Censure", value: -6, inherent: true));
+      spell.description = _description;
+
+      TextSpellExporter exporter = new TextSpellExporter();
+      spell.export(exporter);
+
+      List<String> lines = exporter.toString().split('\n');
+      expect(lines[NAME], equals('Censure'));
+      expect(lines[GAP1], equals(''));
+      expect(lines[EFFECTS], equals("Spell Effects: Control Protection."));
+      expect(lines[MODS], equals('Inherent Modifiers: Bestows a Penalty, Resist Censure.'));
+      expect(lines[PENALTY], equals("Skill Penalty: Path of Protection-2."));
+      expect(lines[TIME], equals('Casting Time: 5 minutes.'));
+      expect(lines[GAP2], '');
+      expect(lines[DESC], equals(_description));
+      expect(lines[GAP3], '');
+      expect(
+          lines[TYPICAL],
+          equals('Typical Casting: '
+              'Control Protection (5) '
+              '+ Bestows a Penalty, -6 to Resist Censure (16). '
+              '21 SP.'));
+    });
+
+    test('Cone of Flame', () {
+      String _description =
+          "The caster conjures a cone of fire, emanating from his hands and extending out to a maximum width of five yards and length of 20 "
+           "yards (see Area and Spreading Attacks, p. B413). This cone does 3d burning damage and requires a roll against Innate Attack (Beam) to hit.";
+      Spell spell = new Spell();
+      spell.name = 'Cone of Flame';
+      spell.addEffect(new SpellEffect(Effect.Create, Path.Elementalism));
+      Damage dam = new Damage(type: DamageType.burning, direct: false, inherent: true);
+      dam.addModifier("Cone", "5 yards", 100);
+      dam.addModifier("Reduced Range", "x1/5", -20);
+      spell.addRitualModifier(dam);
+      spell.description = _description;
+
+      TextSpellExporter exporter = new TextSpellExporter();
+      spell.export(exporter);
+
+      List<String> lines = exporter.toString().split('\n');
+      expect(lines[NAME], equals('Cone of Flame'));
+      expect(lines[GAP1], equals(''));
+      expect(lines[EFFECTS], equals("Spell Effects: Create Elementalism."));
+      expect(lines[MODS], equals('Inherent Modifiers: Damage, Indirect Burning (Cone; Reduced Range).'));
+      expect(lines[PENALTY], equals("Skill Penalty: Path of Elementalism-2."));
+      expect(lines[TIME], equals('Casting Time: 5 minutes.'));
+      expect(lines[GAP2], '');
+      expect(lines[DESC], equals(_description));
+      expect(lines[GAP3], '');
+      expect(
+          lines[TYPICAL],
+          equals('Typical Casting: '
+              'Create Elementalism (6) '
+              '+ Damage, Indirect Burning 3d (Cone, 5 yards, +100%; Reduced Range, x1/5, -20%) (16). '
+              '22 SP.'
           ));
     });
   });
