@@ -27,15 +27,10 @@ class Modifier {
 
   Modifier(this.name, this.detail, this.level);
 
-  String get summaryText {
-    if (detail != null && detail.length > 0) {
-      return '${name}, ${detail}';
-    }
-    return name;
-  }
+  String get summaryText => name;
 
   String get typicalText {
-    return '${summaryText}, ${toSignedString(level)}%';
+    return '${name}${detail != null && detail.length > 0 ? ", ${detail}" : ""}, ${toSignedString(level)}%';
   }
 }
 

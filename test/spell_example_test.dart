@@ -575,8 +575,7 @@ void main() {
         equals('Typical Casting: '
             'Create Elementalism (6)'
             ' + Area of Effect, 7 yards (70) + Damage, Indirect Burning 3d (0). '
-            '76 SP.'
-        ));
+            '76 SP.'));
   });
 
   test("Flesh Mask", () {
@@ -611,8 +610,7 @@ void main() {
         equals('Typical Casting: '
             'Transform Transfiguration (8)'
             ' + Bestows a Bonus, +5 to Disguise (12) + Duration, 1 hour (7) + Subject Weight, 300 lbs. (3).'
-            ' 30 SP.'
-        ));
+            ' 30 SP.'));
   });
 
   test("Frozen Bonds", () {
@@ -639,8 +637,7 @@ void main() {
         equals('Typical Casting: '
             'Create Elementalism (6)'
             ' + Bestows a Bonus, +3 to Binding ST (4) + Range, 20 yards (6).'
-            ' 16 SP.'
-        ));
+            ' 16 SP.'));
   });
 
   test("Greater Solidify Spirit", () {
@@ -667,8 +664,7 @@ void main() {
             'Control Necromancy (5) + Strengthen Necromancy (3)'
             ' + Altered Traits, Negated Insubstantiality (16) + Duration, 12 minutes (6)'
             ' + Range, Extradimensional (10).'
-            ' 40 SP.'
-        ));
+            ' 40 SP.'));
   });
 
   test("Greater Solidify Spirit", () {
@@ -688,7 +684,8 @@ void main() {
 
     expect(lines[NAME], equals('Hellfire Aura'));
     expect(lines[EFFECTS], equals("Spell Effects: Create Demonology."));
-    expect(lines[MODS], equals('Inherent Modifiers: Damage, Direct Burning (Aura; Incendiary; Melee Attack, Reach C).'));
+    expect(
+        lines[MODS], equals('Inherent Modifiers: Damage, Direct Burning (Aura; Incendiary; Melee Attack, Reach C).'));
     expect(lines[PENALTY], equals("Skill Penalty: Path of Demonology-2."));
     expect(lines[TIME], equals('Casting Time: 5 minutes.'));
     expect(
@@ -697,8 +694,7 @@ void main() {
             'Create Demonology (6)'
             ' + Damage, Direct Burning 2d (Aura, +80%; Incendiary, +10%; Melee Attack, Reach C, -30%) (16)'
             ' + Duration, 1 minute (3).'
-            ' 25 SP.'
-        ));
+            ' 25 SP.'));
   });
 
   test("Illusion", () {
@@ -722,7 +718,35 @@ void main() {
         startsWith('Typical Casting: '
             'Create Elementalism (6) + Create Mesmerism (6)'
             ' + Duration, 1 hour (7).'
-            ' 19 SP.'
-        ));
+            ' 19 SP.'));
+  });
+
+  test("Invisibility", () {
+    Spell spell = new Spell();
+    spell.name = 'Invisibility';
+    spell.addEffect(new SpellEffect(Effect.Control, Path.Elementalism));
+    AlteredTraits traits = new AlteredTraits("Invisibility", null, value: 40, inherent: true);
+    traits.addModifier("Can Carry Objects", "Heavy Encumbrance", 100);
+    spell.addRitualModifier(traits);
+    spell.addRitualModifier(new DurationMod(value: 60));
+    spell.addRitualModifier(new SubjectWeight(value: 1000));
+
+    TextSpellExporter exporter = new TextSpellExporter();
+    spell.export(exporter);
+    List<String> lines = exporter.toString().split('\n');
+
+    expect(lines[NAME], equals('Invisibility'));
+    expect(lines[EFFECTS], equals("Spell Effects: Control Elementalism."));
+    expect(lines[MODS], equals('Inherent Modifiers: Altered Traits, Invisibility (Can Carry Objects).'));
+    expect(lines[PENALTY], equals("Skill Penalty: Path of Elementalism-9."));
+    expect(lines[TIME], equals('Casting Time: 5 minutes.'));
+    expect(
+        lines[TYPICAL],
+        startsWith('Typical Casting: '
+            'Control Elementalism (5)'
+            ' + Altered Traits, Invisibility (Can Carry Objects, Heavy Encumbrance, +100%) (80)'
+            ' + Duration, 1 minute (3) + Subject Weight, 1000 lbs. (4).'
+            ' 92 SP.'
+            ));
   });
 }
