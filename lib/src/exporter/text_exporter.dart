@@ -30,7 +30,7 @@ class TextSpellExporter implements SpellExporter {
     return sb.toString();
   }
 
-  String get penaltyText => "Skill Penalty: ${effectExporter.penaltyPath}${penalty}.";
+  String get penaltyText => "Skill Penalty: ${effectExporter.penaltyPath(penalty)}.";
 
   String get timeText => "Casting Time: ${time.toFormattedString()}.";
 
@@ -118,11 +118,12 @@ class TextEffectExporter implements EffectExporter {
   }
 
   @override
-  String get penaltyPath {
+  String penaltyPath(int penalty) {
     if (values.length > 0 && values.every((it) => it.path == values[0].path)) {
-      return 'Path of ${values[0].path}';
+      return 'Path of ${values[0].path}${penalty}';
     } else if (values.length > 1) {
-      return "The lower of ${values.map((it) => 'Path of ${it.path}').toSet().reduce((a, b) => a + ' or ' + b)}";
+      return "The lower of ${values.map((it) =>
+        'Path of ${it.path}').toSet().reduce((a, b) => '${a}${penalty} or ${b}${penalty}')}";
     }
     return 'Appropriate Path';
   }
@@ -155,6 +156,7 @@ class TextModifierExporter implements ModifierExporter {
 
   @override
   String get typicalText {
+    _details.sort((a,b) => a.name.compareTo(b.name));
     return _details.map((a) => a.typicalText).join(' + ');
   }
 
@@ -172,32 +174,29 @@ class TextModifierExporter implements ModifierExporter {
   AlteredTraitsDetail createAlteredTraitsDetail() => new TextAlteredTraitsDetail();
 
   @override
-  AreaOfEffectDetail createAreaEffectDetail() {
-    return new TextAreaOfEffectDetail();
-  }
+  AreaOfEffectDetail createAreaEffectDetail() => new TextAreaOfEffectDetail();
 
   @override
-  BestowsDetail createBestowsDetail() {
-    return new TextBestowsDetail();
-  }
+  BestowsDetail createBestowsDetail() => new TextBestowsDetail();
 
   @override
-  DamageDetail createDamageDetail() {
-    return new TextDamageDetail();
-  }
+  DamageDetail createDamageDetail() => new TextDamageDetail();
 
   @override
-  DurationDetail createDurationDetail() {
-    return new TextDurationDetail();
-  }
+  DurationDetail createDurationDetail() => new TextDurationDetail();
 
   @override
-  SubjectWeightDetail createSubjectWeightDetail() {
-    return new TextSubjectWeightDetail();
-  }
+  GirdedDetail createGirdedDetail() => new TextGirdedDetail();
 
   @override
-  RangeDetail createRangeDetail() {
-    return new TextRangeDetail();
-  }
+  RangeDetail createRangeDetail() => new TextRangeDetail();
+
+  @override
+  RangeDimensionalDetail createRangeDimensionalDetail() => new TextRangeDimensionalDetail();
+
+  @override
+  SubjectWeightDetail createSubjectWeightDetail() => new TextSubjectWeightDetail();
+
+  @override
+  SummonedDetail createSummonedDetail() => new TextSummonedDetail();
 }

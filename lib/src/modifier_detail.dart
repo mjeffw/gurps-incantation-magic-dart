@@ -41,5 +41,13 @@ abstract class DamageDetail extends ModifierDetail {
 }
 
 abstract class DurationDetail extends ModifierDetail {}
+
+abstract class GirdedDetail extends ModifierDetail {}
+
 abstract class RangeDetail extends ModifierDetail {}
+
+abstract class RangeDimensionalDetail extends ModifierDetail {}
+
 abstract class SubjectWeightDetail extends ModifierDetail {}
+
+abstract class SummonedDetail extends ModifierDetail {}

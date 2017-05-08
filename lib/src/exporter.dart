@@ -20,7 +20,7 @@ abstract class SpellExporter {
 }
 
 abstract class EffectExporter {
-  String get penaltyPath;
+  String penaltyPath(int penalty);
 
   String get typicalText;
 
@@ -38,6 +38,9 @@ abstract class ModifierExporter {
   BestowsDetail createBestowsDetail();
   DamageDetail createDamageDetail();
   DurationDetail createDurationDetail();
+  GirdedDetail createGirdedDetail();
   RangeDetail createRangeDetail();
+  RangeDimensionalDetail createRangeDimensionalDetail();
   SubjectWeightDetail createSubjectWeightDetail();
+  SummonedDetail createSummonedDetail();
 }

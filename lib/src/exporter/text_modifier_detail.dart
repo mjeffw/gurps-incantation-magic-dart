@@ -1,7 +1,7 @@
 import '../modifier_detail.dart';
 import '../../units/gurps_duration.dart';
+import '../../units/weight.dart';
 import '../../gurps/modifier.dart';
-import '../../gurps/die_roll.dart';
 import '../../util/core_utils.dart';
 
 abstract class TextModifierDetail implements ModifierDetail {
@@ -56,41 +56,20 @@ class TextAreaOfEffectDetail extends AreaOfEffectDetail with TextModifierDetail 
     List<String> components = [];
     components.add(name);
     components.add('${value} yards');
-    components.add(_targetText);
+    if (targets > 0) {
+      components.add('${includes ? 'including' : 'excluding'} ${targets} targets');
+    }
     return '${components.join(', ')} (${spellPoints})';
-  }
-
-  String get _targetText {
-    if (targets == 0) {
-      return '';
-    } else {
-      return '${_includesText} ${targets} targets';
-    }
-  }
-
-  String get _includesText {
-    if (includes) {
-      return 'including';
-    } else {
-      return 'excluding';
-    }
   }
 }
 
 class TextBestowsDetail extends BestowsDetail {
   @override
-  String get summaryText => 'Bestows a ${_nameCompletionText}, ${specialization}';
-
-  String get _nameCompletionText {
-    String temp = 'Bonus';
-    if (value < 0) {
-      temp = 'Penalty';
-    }
-    return temp;
-  }
+  String get summaryText => 'Bestows a ${value < 0? 'Penalty': 'Bonus'}, ${specialization}';
 
   @override
-  String get typicalText => 'Bestows a ${_nameCompletionText}, ${value} to ${specialization} (${spellPoints})';
+  String get typicalText => 'Bestows a ${value < 0 ? 'Penalty' : 'Bonus'}, '
+      '${toSignedString(value)} to ${specialization} (${spellPoints})';
 }
 
 class TextDamageDetail extends DamageDetail {
@@ -98,24 +77,16 @@ class TextDamageDetail extends DamageDetail {
 
   @override
   String get summaryText {
-    String temp = '${name}, ${_directText} ${type}';
+    String temp = '${name}, ${direct ? 'Direct' : 'Indirect'} ${type}';
     if (modifiers.isNotEmpty) {
       temp += ' (${modifiers.map((e) => e.name).join('; ')})';
     }
     return temp;
   }
 
-  String get _directText {
-    if (direct) {
-      return 'Direct';
-    } else {
-      return "Indirect";
-    }
-  }
-
   @override
   String get typicalText {
-    String temp = '${name}, ${_directText} ${type} ${dieRoll}';
+    String temp = '${name}, ${direct ? 'Direct' : 'Indirect'} ${type} ${dieRoll}';
     if (modifiers.isNotEmpty) {
       temp += ' (${modifiers.map((e) => "${e.typicalText}").join('; ')})';
     }
@@ -133,12 +104,24 @@ class TextDurationDetail extends DurationDetail with TextModifierDetail {
   String get typicalText => '${name}, ${new GurpsDuration(seconds: value).toFormattedString()} (${spellPoints})';
 }
 
+class TextGirdedDetail extends GirdedDetail with TextModifierDetail {}
+
 class TextRangeDetail extends RangeDetail with TextModifierDetail {
   @override
   String get typicalText => '${name}, ${value} yards (${spellPoints})';
 }
 
+class TextRangeDimensionalDetail extends RangeDimensionalDetail with TextModifierDetail {
+  @override
+  String get typicalText => '${name}${value == 1 ? "" : ", " + value.toString() + " dimensions"} (${spellPoints})';
+}
+
 class TextSubjectWeightDetail extends SubjectWeightDetail with TextModifierDetail {
   @override
-  String get typicalText => '${name}, ${value} pounds (${spellPoints})';
+  String get typicalText => '${name}, ${Weight.toFormattedString(value)} (${spellPoints})';
+}
+
+class TextSummonedDetail extends SummonedDetail with TextModifierDetail {
+  @override
+  String get typicalText => '${name}, ${value}% of Static Point Total (${spellPoints})';
 }

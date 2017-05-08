@@ -91,7 +91,7 @@ void main() {
         equals('Typical Casting: '
             'Create Arcanum (6) + Control Arcanum (5) '
             '+ Duration, 12 hours (10) '
-            '+ Subject Weight, 100 pounds (2). 23 SP.'));
+            '+ Subject Weight, 100 lbs. (2). 23 SP.'));
   });
 
   test('Arcane Fire', () {
@@ -282,7 +282,7 @@ void main() {
             'Strengthen Protection (3) '
             '+ Altered Traits, Damage Resistance 6 (Hardened 2, +40%; Tough Skin, -40%) (30)'
             ' + Duration, 12 minutes (6)'
-            ' + Subject Weight, 1000 pounds (4). ' // TODO would like comma-separated values, like '1,000'
+            ' + Subject Weight, 1000 lbs. (4). ' // TODO would like comma-separated values, like '1,000'
             '43 SP.'));
   });
 
@@ -356,21 +356,20 @@ void main() {
   test("Create Golem warrior", () {
     String _description =
         "This spell summons a warrior simulacrum (below) to defend you for one hour. You may specify its combat "
-            + "skills when the spell is cast. (The two Create Arcanum effects are for its body and its independent "
-            + "spirit.) The warrior is a dedicated, fanatic guardian who will willingly lay down its life for its "
-            + "master. While it can be ordered to perform various unskilled tasks, it will refuse to be separated from "
-            + "its master, and will abandon all orders to rush to its master���s defense. It has the attitude of a "
-            + "faithful but jealous dog; it does not understand the motivations of the living beyond ���survival,��� and "
-            + "may mistake jokes and harmless social situations for aggression. The warrior is created without armor "
-            + "or weapons; these must be provided via another spell or given to it by hand.";
+        "skills when the spell is cast. (The two Create Arcanum effects are for its body and its independent "
+        "spirit.) The warrior is a dedicated, fanatic guardian who will willingly lay down its life for its "
+        "master. While it can be ordered to perform various unskilled tasks, it will refuse to be separated from "
+        "its master, and will abandon all orders to rush to its master���s defense. It has the attitude of a "
+        "faithful but jealous dog; it does not understand the motivations of the living beyond ���survival,��� and "
+        "may mistake jokes and harmless social situations for aggression. The warrior is created without armor "
+        "or weapons; these must be provided via another spell or given to it by hand.";
     Spell spell = new Spell();
     spell.name = 'Create Golem Warrior';
     spell.addEffect(new SpellEffect(Effect.Create, Path.Arcanum));
     spell.addEffect(new SpellEffect(Effect.Create, Path.Arcanum));
-//    Damage dam = new Damage(type: DamageType.burning, direct: false, inherent: true);
-//    dam.addModifier("Cone", "5 yards", 100);
-//    dam.addModifier("Reduced Range", "x1/5", -20);
-//    spell.addRitualModifier(dam);
+    spell.addRitualModifier(new Summoned(value: 50, inherent: true));
+    spell.addRitualModifier(new DurationMod(value: new GurpsDuration(hours: 1).inSeconds));
+    spell.addRitualModifier(new SubjectWeight(value: 300));
     spell.description = _description;
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -381,17 +380,349 @@ void main() {
     expect(lines[GAP1], equals(''));
     expect(lines[EFFECTS], equals("Spell Effects: Create Arcanum x 2."));
     expect(lines[MODS], equals('Inherent Modifiers: Summoned.'));
-//    expect(lines[PENALTY], equals("Skill Penalty: Path of Arcanum-3."));
-//    expect(lines[TIME], equals('Casting Time: 10 minutes.'));
+    expect(lines[PENALTY], equals("Skill Penalty: Path of Arcanum-3."));
+    expect(lines[TIME], equals('Casting Time: 10 minutes.'));
     expect(lines[GAP2], '');
     expect(lines[DESC], equals(_description));
     expect(lines[GAP3], '');
     expect(
         lines[TYPICAL],
+        equals('Typical Casting: '
+            'Create Arcanum (6) + Create Arcanum (6) '
+            '+ Duration, 1 hour (7) + Subject Weight, 300 lbs. (3) + Summoned, 50% of Static Point Total (8). '
+            '30 SP.'));
+  });
+
+  test("Create Undead Servitor", () {
+    String _description =
+        "You animate a servitor skeleton or zombie (Summoners, pp. 25-26) from a nearby dead body or grave. It "
+        "does your bidding for the next day, after which it crumbles to dust or putrefies.";
+    Spell spell = new Spell();
+    spell.name = 'Create Undead Servitor';
+    spell.addEffect(new SpellEffect(Effect.Control, Path.Necromancy));
+    spell.addEffect(new SpellEffect(Effect.Create, Path.Necromancy));
+    spell.addRitualModifier(new Summoned(value: 25, inherent: true));
+    spell.addRitualModifier(new DurationMod(value: new GurpsDuration(days: 1).inSeconds));
+    spell.addRitualModifier(new SubjectWeight(value: 300));
+    spell.description = _description;
+
+    TextSpellExporter exporter = new TextSpellExporter();
+    spell.export(exporter);
+
+    List<String> lines = exporter.toString().split('\n');
+    expect(lines[NAME], equals('Create Undead Servitor'));
+    expect(lines[GAP1], equals(''));
+    expect(lines[EFFECTS], equals("Spell Effects: Control Necromancy + Create Necromancy."));
+    expect(lines[MODS], equals('Inherent Modifiers: Summoned.'));
+    expect(lines[PENALTY], equals("Skill Penalty: Path of Necromancy-2."));
+    expect(lines[TIME], equals('Casting Time: 10 minutes.'));
+    expect(lines[GAP2], '');
+    expect(lines[DESC], equals(_description));
+    expect(lines[GAP3], '');
+    expect(
+        lines[TYPICAL],
+        equals('Typical Casting: '
+            'Control Necromancy (5) + Create Necromancy (6)'
+            ' + Duration, 1 day (11) + Subject Weight, 300 lbs. (3) + Summoned, 25% of Static Point Total (4). '
+            '29 SP.'));
+  });
+
+  test("Creeping Frost", () {
+    String _description =
+        "This spell slowly freezes anyone or anything caught in the area and weighing five tons or less. For the "
+        "next minute, every target who failed to resist acquires Fragile (Brittle) and any crushing injury he "
+        "receives is doubled. In addition, for the first seven seconds of that minute the subject takes 1d-3 "
+        "burning damage per second that ignores DR. This spell cannot set fires, but subjects may need to make a "
+        "Fright Check, at the GM's discretion./n"
+        "Note that the 3d damage being spread out over multiple turns is a special effect: 1d-3 is effectively "
+        "1.5 points of damage and 1.5 x 7 = 10.5, the average of rolling 3d.";
+    Spell spell = new Spell();
+    spell.name = 'Creeping Frost';
+    spell.addEffect(new SpellEffect(Effect.Create, Path.Elementalism));
+    spell.addRitualModifier(
+        new AlteredTraits("Fragile (Brittle) and Vulnerability (Crushing Attacks x2)", null, value: 9, inherent: true));
+    spell.addRitualModifier(new AreaOfEffect(value: 3, inherent: true));
+    Damage dam = new Damage(type: DamageType.burning, direct: true, value: 8, inherent: true);
+    dam.addModifier("No Incendiary", null, -10);
+    spell.addRitualModifier(dam);
+    spell.addRitualModifier(new Range(value: 20));
+    spell.addRitualModifier(new DurationMod(value: new GurpsDuration(minutes: 1).inSeconds));
+    spell.addRitualModifier(new SubjectWeight(value: 10000));
+    spell.description = _description;
+
+    TextSpellExporter exporter = new TextSpellExporter();
+    spell.export(exporter);
+
+    List<String> lines = exporter.toString().split('\n');
+    expect(lines[NAME], equals('Creeping Frost'));
+    expect(lines[GAP1], equals(''));
+    expect(lines[EFFECTS], equals("Spell Effects: Create Elementalism."));
+    expect(
+        lines[MODS],
+        equals('Inherent Modifiers: Altered Traits, Fragile (Brittle) and Vulnerability (Crushing Attacks x2)'
+            ' + Area of Effect + Damage, Direct Burning (No Incendiary).'));
+    expect(lines[PENALTY], equals("Skill Penalty: Path of Elementalism-6."));
+    expect(lines[TIME], equals('Casting Time: 5 minutes.'));
+    expect(lines[GAP2], '');
+    expect(lines[DESC], equals(_description));
+    expect(lines[GAP3], '');
+    expect(
+        lines[TYPICAL],
+        equals('Typical Casting: '
+            'Create Elementalism (6)'
+            ' + Altered Traits, Fragile (Brittle) and Vulnerability (Crushing Attacks x2) (9)'
+            ' + Area of Effect, 3 yards (30) + Damage, Direct Burning 3d (No Incendiary, -10%) (8)'
+            ' + Duration, 1 minute (3) + Range, 20 yards (6) + Subject Weight, 5 tons (6). '
+            '68 SP.'));
+  });
+
+  test("Dispelling", () {
+    String _description =
+        "This spell cancels any other spell targeted. The caster gets a total of +10 to his Path roll to terminate "
+        "the spell: +4 from the SP total of Dispelling and another +6 from Bestows a Bonus.";
+    Spell spell = new Spell();
+    spell.name = 'Dispelling';
+    spell.addEffect(new SpellEffect(Effect.Destroy, Path.Arcanum));
+    spell.addRitualModifier(new Bestows("Dispelling", range: BestowsRange.single, value: 6, inherent: true));
+    spell.addRitualModifier(new Girded(value: 20, inherent: true));
+    spell.description = _description;
+
+    TextSpellExporter exporter = new TextSpellExporter();
+    spell.export(exporter);
+
+    List<String> lines = exporter.toString().split('\n');
+    expect(lines[NAME], equals('Dispelling'));
+    expect(lines[GAP1], equals(''));
+    expect(lines[EFFECTS], equals("Spell Effects: Destroy Arcanum."));
+    expect(lines[MODS], equals('Inherent Modifiers: Bestows a Bonus, Dispelling + Girded.'));
+    expect(lines[PENALTY], equals("Skill Penalty: Path of Arcanum-4."));
+    expect(lines[TIME], equals('Casting Time: 5 minutes.'));
+    expect(lines[GAP2], '');
+    expect(lines[DESC], equals(_description));
+    expect(lines[GAP3], '');
+    expect(
+        lines[TYPICAL],
+        equals('Typical Casting: '
+            'Destroy Arcanum (5)'
+            ' + Bestows a Bonus, +6 to Dispelling (16) + Girded (20). '
+            '41 SP.'));
+  });
+
+  test("(Elemental) Blast", () {
+    String _description =
+        "This spell allows the caster to conjure a ball of elemental energy or matter which can be thrown using Innate "
+        "Attack or delivered by touch. Unless otherwise noted, it has the following statistics when thrown: Acc 3, RoF "
+        "1, and Rcl 1. Consult the table below for the specifics on a given type of energy; each blast is a separate "
+        "spell.";
+    Spell spell = new Spell();
+    spell.name = '(Elemental) Blast';
+    spell.addEffect(new SpellEffect(Effect.Create, Path.Elementalism));
+    Damage dam = new Damage(type: DamageType.corrosive, direct: false, inherent: true);
+    dam.addModifier("Incendiary", null, 10);
+    dam.addModifier("Increased 1/2D, 5x", null, 10);
+    spell.addRitualModifier(dam);
+    spell.description = _description;
+
+    TextSpellExporter exporter = new TextSpellExporter();
+    spell.export(exporter);
+
+    List<String> lines = exporter.toString().split('\n');
+    expect(lines[NAME], equals('(Elemental) Blast'));
+    expect(lines[GAP1], equals(''));
+    expect(lines[EFFECTS], equals("Spell Effects: Create Elementalism."));
+    expect(lines[MODS], equals('Inherent Modifiers: Damage, Indirect Corrosive (Incendiary; Increased 1/2D, 5x).'));
+    expect(lines[PENALTY], equals("Skill Penalty: Path of Elementalism-1."));
+    expect(lines[TIME], equals('Casting Time: 5 minutes.'));
+    expect(lines[GAP2], '');
+    expect(lines[DESC], equals(_description));
+    expect(lines[GAP3], '');
+    expect(
+        lines[TYPICAL],
+        equals('Typical Casting: '
+            'Create Elementalism (6)'
+            ' + Damage, Indirect Corrosive 3d (Incendiary, +10%; Increased 1/2D, 5x, +10%) (4). '
+            '10 SP.'));
+  });
+
+  test("Firebomb", () {
+    String _description =
+        "This spell allows the caster to conjure a ball of elemental energy or matter which can be thrown using Innate "
+        "Attack or delivered by touch. Unless otherwise noted, it has the following statistics when thrown: Acc 3, RoF "
+        "1, and Rcl 1. Consult the table below for the specifics on a given type of energy; each blast is a separate "
+        "spell.";
+    Spell spell = new Spell();
+    spell.name = 'Firebomb';
+    spell.addEffect(new SpellEffect(Effect.Create, Path.Elementalism));
+    spell.addRitualModifier(new AreaOfEffect(value: 7, inherent: true));
+    spell.addRitualModifier(new Damage(type: DamageType.burning, direct: false, inherent: true));
+    spell.description = _description;
+
+    TextSpellExporter exporter = new TextSpellExporter();
+    spell.export(exporter);
+
+    List<String> lines = exporter.toString().split('\n');
+    expect(lines[NAME], equals('Firebomb'));
+    expect(lines[GAP1], equals(''));
+    expect(lines[EFFECTS], equals("Spell Effects: Create Elementalism."));
+    expect(lines[MODS], equals('Inherent Modifiers: Area of Effect + Damage, Indirect Burning.'));
+    expect(lines[PENALTY], equals("Skill Penalty: Path of Elementalism-7."));
+    expect(lines[TIME], equals('Casting Time: 5 minutes.'));
+    expect(lines[GAP2], '');
+    expect(lines[DESC], equals(_description));
+    expect(lines[GAP3], '');
+    expect(
+        lines[TYPICAL],
+        equals('Typical Casting: '
+            'Create Elementalism (6)'
+            ' + Area of Effect, 7 yards (70) + Damage, Indirect Burning 3d (0). '
+            '76 SP.'
+        ));
+  });
+
+  test("Flesh Mask", () {
+    String _description =
+        "This ritual changes the appearance of the subject. If trying to make a target look like someone else, make "
+        "an IQ roll or Disguise roll at +5. Success means the resemblance is close enough to the original to be "
+        "mistaken for him. Success by 5 or more, or a critical success, gives +2 on all other rolls to emulate the "
+        "target (Acting, Mimicry, etc.). This effect lasts for an hour.";
+    Spell spell = new Spell();
+    spell.name = 'Flesh Mask';
+    spell.addEffect(new SpellEffect(Effect.Transform, Path.Transfiguration));
+    spell.addRitualModifier(new SubjectWeight(value: 300));
+    spell.addRitualModifier(new Bestows("Disguise", range: BestowsRange.single, value: 5, inherent: true));
+    spell.addRitualModifier(new DurationMod(value: 3600));
+    spell.description = _description;
+
+    TextSpellExporter exporter = new TextSpellExporter();
+    spell.export(exporter);
+
+    List<String> lines = exporter.toString().split('\n');
+    expect(lines[NAME], equals('Flesh Mask'));
+    expect(lines[GAP1], equals(''));
+    expect(lines[EFFECTS], equals("Spell Effects: Transform Transfiguration."));
+    expect(lines[MODS], equals('Inherent Modifiers: Bestows a Bonus, Disguise.'));
+    expect(lines[PENALTY], equals("Skill Penalty: Path of Transfiguration-3."));
+    expect(lines[TIME], equals('Casting Time: 5 minutes.'));
+    expect(lines[GAP2], '');
+    expect(lines[DESC], equals(_description));
+    expect(lines[GAP3], '');
+    expect(
+        lines[TYPICAL],
+        equals('Typical Casting: '
+            'Transform Transfiguration (8)'
+            ' + Bestows a Bonus, +5 to Disguise (12) + Duration, 1 hour (7) + Subject Weight, 300 lbs. (3).'
+            ' 30 SP.'
+        ));
+  });
+
+  test("Frozen Bonds", () {
+    Spell spell = new Spell();
+    spell.name = 'Frozen Bonds';
+    spell.addEffect(new SpellEffect(Effect.Create, Path.Elementalism));
+    spell.addRitualModifier(new Bestows("Binding ST", range: BestowsRange.single, value: 3, inherent: true));
+    spell.addRitualModifier(new Range(value: 20));
+
+    TextSpellExporter exporter = new TextSpellExporter();
+    spell.export(exporter);
+
+    List<String> lines = exporter.toString().split('\n');
+    expect(lines[NAME], equals('Frozen Bonds'));
+    expect(lines[GAP1], equals(''));
+    expect(lines[EFFECTS], equals("Spell Effects: Create Elementalism."));
+    expect(lines[MODS], equals('Inherent Modifiers: Bestows a Bonus, Binding ST.'));
+    expect(lines[PENALTY], equals("Skill Penalty: Path of Elementalism-1."));
+    expect(lines[TIME], equals('Casting Time: 5 minutes.'));
+    expect(lines[GAP2], '');
+    expect(lines[GAP3], '');
+    expect(
+        lines[TYPICAL],
+        equals('Typical Casting: '
+            'Create Elementalism (6)'
+            ' + Bestows a Bonus, +3 to Binding ST (4) + Range, 20 yards (6).'
+            ' 16 SP.'
+        ));
+  });
+
+  test("Greater Solidify Spirit", () {
+    Spell spell = new Spell();
+    spell.name = 'Solidify Spirit';
+    spell.addEffect(new SpellEffect(Effect.Control, Path.Necromancy));
+    spell.addEffect(new SpellEffect(Effect.Strengthen, Path.Necromancy));
+    spell.addRitualModifier(new AlteredTraits("Negated Insubstantiality", null, value: 16, inherent: true));
+    spell.addRitualModifier(new DurationMod(value: 720));
+    spell.addRitualModifier(new RangeDimensional(value: 1));
+
+    TextSpellExporter exporter = new TextSpellExporter();
+    spell.export(exporter);
+    List<String> lines = exporter.toString().split('\n');
+
+    expect(lines[NAME], equals('Solidify Spirit'));
+    expect(lines[EFFECTS], equals("Spell Effects: Control Necromancy + Strengthen Necromancy."));
+    expect(lines[MODS], equals('Inherent Modifiers: Altered Traits, Negated Insubstantiality.'));
+    expect(lines[PENALTY], equals("Skill Penalty: Path of Necromancy-4."));
+    expect(lines[TIME], equals('Casting Time: 10 minutes.'));
+    expect(
+        lines[TYPICAL],
+        equals('Typical Casting: '
+            'Control Necromancy (5) + Strengthen Necromancy (3)'
+            ' + Altered Traits, Negated Insubstantiality (16) + Duration, 12 minutes (6)'
+            ' + Range, Extradimensional (10).'
+            ' 40 SP.'
+        ));
+  });
+
+  test("Greater Solidify Spirit", () {
+    Spell spell = new Spell();
+    spell.name = 'Hellfire Aura';
+    spell.addEffect(new SpellEffect(Effect.Create, Path.Demonology));
+    Damage dam = new Damage(type: DamageType.burning, direct: true, value: 4, inherent: true);
+    dam.addModifier("Aura", null, 80);
+    dam.addModifier("Incendiary", null, 10);
+    dam.addModifier("Melee Attack, Reach C", null, -30);
+    spell.addRitualModifier(dam);
+    spell.addRitualModifier(new DurationMod(value: 60));
+
+    TextSpellExporter exporter = new TextSpellExporter();
+    spell.export(exporter);
+    List<String> lines = exporter.toString().split('\n');
+
+    expect(lines[NAME], equals('Hellfire Aura'));
+    expect(lines[EFFECTS], equals("Spell Effects: Create Demonology."));
+    expect(lines[MODS], equals('Inherent Modifiers: Damage, Direct Burning (Aura; Incendiary; Melee Attack, Reach C).'));
+    expect(lines[PENALTY], equals("Skill Penalty: Path of Demonology-2."));
+    expect(lines[TIME], equals('Casting Time: 5 minutes.'));
+    expect(
+        lines[TYPICAL],
         startsWith('Typical Casting: '
-//            'Create Arcanum (6) + Create Arcanum (6) '
-//            '+ Duration, 1 hour (7) + Subject Weight, 300 lbs. (3) + Summoned, 50% of Static Point Total (8). '
-//            '30 SP.'
+            'Create Demonology (6)'
+            ' + Damage, Direct Burning 2d (Aura, +80%; Incendiary, +10%; Melee Attack, Reach C, -30%) (16)'
+            ' + Duration, 1 minute (3).'
+            ' 25 SP.'
+        ));
+  });
+
+  test("Illusion", () {
+    Spell spell = new Spell();
+    spell.name = 'Illusion';
+    spell.addEffect(new SpellEffect(Effect.Create, Path.Elementalism));
+    spell.addEffect(new SpellEffect(Effect.Create, Path.Mesmerism));
+    spell.addRitualModifier(new DurationMod(value: 3600));
+
+    TextSpellExporter exporter = new TextSpellExporter();
+    spell.export(exporter);
+    List<String> lines = exporter.toString().split('\n');
+
+    expect(lines[NAME], equals('Illusion'));
+    expect(lines[EFFECTS], equals("Spell Effects: Create Elementalism + Create Mesmerism."));
+    expect(lines[MODS], equals('Inherent Modifiers: None.'));
+    expect(lines[PENALTY], equals("Skill Penalty: The lower of Path of Elementalism-1 or Path of Mesmerism-1."));
+    expect(lines[TIME], equals('Casting Time: 10 minutes.'));
+    expect(
+        lines[TYPICAL],
+        startsWith('Typical Casting: '
+            'Create Elementalism (6) + Create Mesmerism (6)'
+            ' + Duration, 1 hour (7).'
+            ' 19 SP.'
         ));
   });
 }

@@ -289,6 +289,13 @@ class Girded extends RitualModifier {
 
   @override
   int get spellPoints => _value;
+
+  @override
+  void export(ModifierExporter exporter) {
+    GirdedDetail detail = exporter.createGirdedDetail();
+    super.exportDetail(detail);
+    exporter.addDetail(detail);
+  }
 }
 
 final RepeatingSequenceConverter longDistanceModifiers = new RepeatingSequenceConverter([1, 3]);
@@ -311,11 +318,19 @@ class RangeCrossTime extends RitualModifier {
 }
 
 class RangeDimensional extends RitualModifier {
-  RangeDimensional() : super("Range, Extradimensional", 0, false);
+  RangeDimensional({int value: 0, bool inherent: false}) : super("Range, Extradimensional", value, inherent);
 
   /// Crossing dimensional barriers adds a flat 10 SP per dimension.
   @override
   int get spellPoints => _value * 10;
+
+
+  @override
+  void export(ModifierExporter exporter) {
+    RangeDimensionalDetail detail = exporter.createRangeDimensionalDetail();
+    super.exportDetail(detail);
+    exporter.addDetail(detail);
+  }
 }
 
 /// Range is _value in yards
@@ -380,7 +395,7 @@ class SubjectWeight extends RitualModifier {
 }
 
 class Summoned extends RitualModifier {
-  Summoned() : super("Summoned", 0, false);
+  Summoned({int value: 0, bool inherent: false}) : super("Summoned", value, inherent);
 
   //  | Power                                    | Add SP |
   //  |  25% of Static Point Total (62 points*)  |  +4 SP |
@@ -394,5 +409,12 @@ class Summoned extends RitualModifier {
       return (value / 25.0).ceil() * 4;
     }
     return ((value / 50).ceil() - 1) * 20;
+  }
+
+  @override
+  void export(ModifierExporter exporter) {
+    SummonedDetail detail = exporter.createSummonedDetail();
+    super.exportDetail(detail);
+    exporter.addDetail(detail);
   }
 }
