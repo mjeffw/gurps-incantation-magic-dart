@@ -2,6 +2,7 @@ import '../../units/gurps_duration.dart';
 import '../exporter.dart';
 import '../modifier_detail.dart';
 import 'text_modifier_detail.dart';
+import 'package:quiver/core.dart';
 
 class TextSpellExporter implements SpellExporter {
   String name;
@@ -65,8 +66,11 @@ class _Effect {
     if (other is! _Effect) {
       return false;
     }
-    return (other as _Effect).effect == effect && (other as _Effect).path == path;
+    return ((other as _Effect).effect == effect) && ((other as _Effect).path == path);
   }
+
+  @override
+  int get hashCode => hash2(effect, path);
 
   @override
   String toString() {
@@ -91,8 +95,26 @@ class TextEffectExporter implements EffectExporter {
     if (values.isEmpty) {
       return 'None';
     } else {
-      return values.map((it) => it.summaryText).reduce((a, b) => a + ' + ' + b);
+      // reduce duplicates ...
+      Map<_Effect, int> countMap = {};
+
+      values.forEach((it) {
+        if (countMap.containsKey(it)) {
+          countMap[it] = countMap[it] + 1;
+        } else {
+          countMap[it] = 1;
+        }
+      });
+
+      return countMap.keys.map((it) => _summaryText(it, countMap)).reduce((a, b) => a + ' + ' + b);
     }
+  }
+
+  String _summaryText(_Effect effect, Map<_Effect, int> countMap) {
+    if (countMap[effect] == 1) {
+      return '${effect.summaryText}';
+    }
+    return '${effect.summaryText} x ${countMap[effect]}';
   }
 
   @override
