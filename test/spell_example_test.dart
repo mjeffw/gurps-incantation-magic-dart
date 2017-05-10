@@ -690,7 +690,7 @@ void main() {
     expect(lines[TIME], equals('Casting Time: 5 minutes.'));
     expect(
         lines[TYPICAL],
-        startsWith('Typical Casting: '
+        equals('Typical Casting: '
             'Create Demonology (6)'
             ' + Damage, Direct Burning 2d (Aura, +80%; Incendiary, +10%; Melee Attack, Reach C, -30%) (16)'
             ' + Duration, 1 minute (3).'
@@ -715,7 +715,7 @@ void main() {
     expect(lines[TIME], equals('Casting Time: 10 minutes.'));
     expect(
         lines[TYPICAL],
-        startsWith('Typical Casting: '
+        equals('Typical Casting: '
             'Create Elementalism (6) + Create Mesmerism (6)'
             ' + Duration, 1 hour (7).'
             ' 19 SP.'));
@@ -742,11 +742,67 @@ void main() {
     expect(lines[TIME], equals('Casting Time: 5 minutes.'));
     expect(
         lines[TYPICAL],
-        startsWith('Typical Casting: '
+        equals('Typical Casting: '
             'Control Elementalism (5)'
             ' + Altered Traits, Invisibility (Can Carry Objects, Heavy Encumbrance, +100%) (80)'
             ' + Duration, 1 minute (3) + Subject Weight, 1000 lbs. (4).'
             ' 92 SP.'
             ));
+  });
+
+  test("Jinx", () {
+    Spell spell = new Spell();
+    spell.name = 'Jinx';
+    spell.addEffect(new SpellEffect(Effect.Control, Path.Augury));
+    AreaOfEffect areaOfEffect = new AreaOfEffect(value: 5, inherent: true);
+    areaOfEffect.targets(12, false);
+    spell.addRitualModifier(areaOfEffect);
+    spell.addRitualModifier(new Bestows("critical failure range of all rolls", range: BestowsRange.broad, value: -3, inherent: true));
+    spell.addRitualModifier(new DurationMod(value: 3600));
+
+    TextSpellExporter exporter = new TextSpellExporter();
+    spell.export(exporter);
+    List<String> lines = exporter.toString().split('\n');
+
+    expect(lines[NAME], equals('Jinx'));
+    expect(lines[EFFECTS], equals("Spell Effects: Control Augury."));
+    expect(lines[MODS], equals('Inherent Modifiers: Area of Effect + Bestows a Penalty, critical failure range of all rolls.'));
+    expect(lines[PENALTY], equals("Skill Penalty: Path of Augury-8."));
+    expect(lines[TIME], equals('Casting Time: 5 minutes.'));
+    expect(
+        lines[TYPICAL],
+        equals('Typical Casting: '
+            'Control Augury (5)'
+            ' + Area of Effect, 5 yards, excluding 12 targets (56)'
+            ' + Bestows a Penalty, -3 to critical failure range of all rolls (20)'
+            ' + Duration, 1 hour (7).'
+            ' 88 SP.'
+        ));
+  });
+
+  test("Lesser Solidify Spirit", () {
+    Spell spell = new Spell();
+    spell.name = 'Lesser Solidify Spirit';
+    spell.addEffect(new SpellEffect(Effect.Control, Path.Necromancy));
+    spell.addEffect(new SpellEffect(Effect.Strengthen, Path.Necromancy));
+    spell.addRitualModifier(new DurationMod(value: 720));
+    spell.addRitualModifier(new RangeDimensional(value: 1));
+
+    TextSpellExporter exporter = new TextSpellExporter();
+    spell.export(exporter);
+    List<String> lines = exporter.toString().split('\n');
+
+    expect(lines[NAME], equals('Lesser Solidify Spirit'));
+    expect(lines[EFFECTS], equals("Spell Effects: Control Necromancy + Strengthen Necromancy."));
+    expect(lines[MODS], equals('Inherent Modifiers: None.'));
+    expect(lines[PENALTY], equals("Skill Penalty: Path of Necromancy-2."));
+    expect(lines[TIME], equals('Casting Time: 10 minutes.'));
+    expect(
+        lines[TYPICAL],
+        startsWith('Typical Casting: '
+            'Control Necromancy (5) + Strengthen Necromancy (3)'
+            ' + Duration, 12 minutes (6) + Range, Extradimensional (10).'
+            ' 24 SP.'
+        ));
   });
 }
