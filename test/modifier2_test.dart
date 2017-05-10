@@ -384,7 +384,7 @@ void main() {
     RitualModifier m;
 
     setUp(() async {
-      m = new Repair();
+      m = new Repair("test");
     });
 
     test("has initial state", () {

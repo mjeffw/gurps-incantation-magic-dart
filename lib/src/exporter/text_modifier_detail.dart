@@ -116,6 +116,12 @@ class TextRangeDimensionalDetail extends RangeDimensionalDetail with TextModifie
   String get typicalText => '${name}${value == 1 ? "" : ", " + value.toString() + " dimensions"} (${spellPoints})';
 }
 
+class TextRepairDetail extends RepairDetail with TextModifierDetail {
+  @override
+  String get typicalText =>
+      '${name}${specialization == null ? ' ' : ' ${specialization}'}, ${dieRoll} (${spellPoints})';
+}
+
 class TextSubjectWeightDetail extends SubjectWeightDetail with TextModifierDetail {
   @override
   String get typicalText => '${name}, ${Weight.toFormattedString(value)} (${spellPoints})';

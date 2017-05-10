@@ -6,6 +6,7 @@ import '../util/repeating_sequence.dart';
 import '../gurps/modifier.dart';
 import 'exporter.dart';
 import 'modifier_detail.dart';
+import '../gurps/die_roll.dart';
 
 class InputException implements Exception {
   String message;
@@ -95,14 +96,6 @@ class Affliction extends RitualModifier {
 
   @override
   int get spellPoints => (_value / 5.0).ceil();
-
-  @override
-  List<int> valueRange(int sp) {
-    if (sp <= 0) {
-      return [0, 0];
-    }
-    return [((sp - 1) * 5) + 1, sp * 5];
-  }
 
   void export(ModifierExporter exporter) {
     AfflictionDetail detailExporter = exporter.createAfflictionDetail();
@@ -324,7 +317,6 @@ class RangeDimensional extends RitualModifier {
   @override
   int get spellPoints => _value * 10;
 
-
   @override
   void export(ModifierExporter exporter) {
     RangeDimensionalDetail detail = exporter.createRangeDimensionalDetail();
@@ -368,9 +360,22 @@ class Range extends RitualModifier {
 }
 
 class Repair extends RitualModifier {
-  Repair() : super("Repair", 0, false);
+  String specialization;
+
+  Repair(this.specialization, {int value: 0, bool inherent: false}) : super("Repair", value, inherent);
 
   int get spellPoints => _value;
+
+  DieRoll get dice => new DieRoll(1, value);
+
+  @override
+  void export(ModifierExporter exporter) {
+    RepairDetail detail = exporter.createRepairDetail();
+    super.exportDetail(detail);
+    detail.specialization = specialization;
+    detail.dieRoll = dice;
+    exporter.addDetail(detail);
+  }
 }
 
 class Speed extends RitualModifier {

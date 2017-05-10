@@ -46,6 +46,11 @@ abstract class GirdedDetail extends ModifierDetail {}
 
 abstract class RangeDetail extends ModifierDetail {}
 
+abstract class RepairDetail extends ModifierDetail {
+  String specialization;
+  DieRoll dieRoll;
+}
+
 abstract class RangeDimensionalDetail extends ModifierDetail {}
 
 abstract class SubjectWeightDetail extends ModifierDetail {}

@@ -120,7 +120,7 @@ class TextEffectExporter implements EffectExporter {
   @override
   String penaltyPath(int penalty) {
     if (values.length > 0 && values.every((it) => it.path == values[0].path)) {
-      return 'Path of ${values[0].path}${penalty}';
+      return 'Path of ${values[0].path}-${penalty.abs()}';
     } else if (values.length > 1) {
       return "The lower of ${values.map((it) =>
         'Path of ${it.path}').toSet().reduce((a, b) => '${a}${penalty} or ${b}${penalty}')}";
@@ -147,6 +147,7 @@ class TextModifierExporter implements ModifierExporter {
   }
 
   String get _briefText {
+    _details.sort((a,b) => a.name.compareTo(b.name));
     if (_details.every((f) => !f.inherent)) {
       return "None";
     } else {
@@ -193,6 +194,9 @@ class TextModifierExporter implements ModifierExporter {
 
   @override
   RangeDimensionalDetail createRangeDimensionalDetail() => new TextRangeDimensionalDetail();
+
+  @override
+  RepairDetail createRepairDetail() => new TextRepairDetail();
 
   @override
   SubjectWeightDetail createSubjectWeightDetail() => new TextSubjectWeightDetail();
