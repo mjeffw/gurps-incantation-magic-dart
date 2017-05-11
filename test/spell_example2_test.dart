@@ -154,12 +154,34 @@ void main() {
     expect(lines[PENALTY], equals("Skill Penalty: Path of Necromancy-1."));
     expect(lines[TIME], equals('Casting Time: 5 minutes.'));
     expect(
-        lines[TYPICAL], startsWith("Typical Casting:"
-        " Restore Necromancy (4)"
-        " + Repair undead, 3d (8)"
-        " + Subject Weight, 300 lbs. (3)."
-        " 15 SP."
-    ));
+        lines[TYPICAL],
+        startsWith("Typical Casting:"
+            " Restore Necromancy (4)"
+            " + Repair undead, 3d (8)"
+            " + Subject Weight, 300 lbs. (3)."
+            " 15 SP."));
   });
 
+  test('Safeguard', () {
+    spell.name = 'Red Blade';
+//    spell.addEffect(new SpellEffect(Effect.Create, Path.Necromancy));
+
+    TextSpellExporter exporter = new TextSpellExporter();
+    spell.export(exporter);
+    List<String> lines = exporter.toString().split('\n');
+
+    expect(lines[NAME], equals("Safeguard"));
+//    expect(lines[EFFECTS], equals("Spell Effects: Create Necromancy."));
+//    expect(lines[MODS], equals('Inherent Modifiers: None.'));
+//    expect(lines[PENALTY], equals("Skill Penalty: Path of Transfiguration-0."));
+//    expect(lines[TIME], equals('Casting Time: 5 minutes.'));
+    expect(
+        lines[TYPICAL],
+        startsWith("Typical Casting: "
+//        "Create Necromancy (6)"
+// " + Damage, Direct Damage (Cyclic, 4 additional 1-second cycles, Resistible, +200%) (40*)"
+// " + Duration, 10 seconds (1). "
+//        "47 SP."
+            ));
+  });
 }
