@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import '../units/distance.dart';
+import '../units/gurps_distance.dart';
 import '../units/gurps_duration.dart';
 import '../util/repeating_sequence.dart';
 import '../gurps/modifier.dart';
@@ -339,7 +339,7 @@ class RangeInformational extends RitualModifier {
       return 1;
     }
 
-    var miles = (_value / Distance.YARDS_PER_MILE).ceil();
+    var miles = (_value / GurpsDistance.YARDS_PER_MILE).ceil();
     return longDistanceModifiers.valueToOrdinal(miles) + 2;
   }
 }
@@ -379,9 +379,16 @@ class Repair extends RitualModifier {
 }
 
 class Speed extends RitualModifier {
-  Speed() : super("Speed", 0, false);
+  Speed({ int value: 0, bool inherent: false }) : super("Speed", value, inherent);
 
   int get spellPoints => rangeTable.valueToOrdinal(_value);
+
+  @override
+  void export(ModifierExporter exporter) {
+    SpeedDetail detail = exporter.createSpeedDetail();
+    super.exportDetail(detail);
+    exporter.addDetail(detail);
+  }
 }
 
 class SubjectWeight extends RitualModifier {

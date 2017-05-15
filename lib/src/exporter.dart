@@ -42,6 +42,7 @@ abstract class ModifierExporter {
   RangeDetail createRangeDetail();
   RepairDetail createRepairDetail();
   RangeDimensionalDetail createRangeDimensionalDetail();
+  SpeedDetail createSpeedDetail();
   SubjectWeightDetail createSubjectWeightDetail();
   SummonedDetail createSummonedDetail();
 }

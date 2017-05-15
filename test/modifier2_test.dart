@@ -265,31 +265,31 @@ void main() {
       m.value = 881;
       expect(m.spellPoints, equals(2));
 
-      m.value = new Distance(miles: 1).inYards;
+      m.value = new GurpsDistance(miles: 1).inYards;
       expect(m.spellPoints, equals(2));
 
-      m.value = new Distance(miles: 1).inYards + 1;
+      m.value = new GurpsDistance(miles: 1).inYards + 1;
       expect(m.spellPoints, equals(3));
 
-      m.value = new Distance(miles: 3).inYards;
+      m.value = new GurpsDistance(miles: 3).inYards;
       expect(m.spellPoints, equals(3));
 
-      m.value = new Distance(miles: 10).inYards;
+      m.value = new GurpsDistance(miles: 10).inYards;
       expect(m.spellPoints, equals(4));
 
-      m.value = new Distance(miles: 30).inYards;
+      m.value = new GurpsDistance(miles: 30).inYards;
       expect(m.spellPoints, equals(5));
 
-      m.value = new Distance(miles: 100).inYards;
+      m.value = new GurpsDistance(miles: 100).inYards;
       expect(m.spellPoints, equals(6));
 
-      m.value = new Distance(miles: 300).inYards;
+      m.value = new GurpsDistance(miles: 300).inYards;
       expect(m.spellPoints, equals(7));
 
-      m.value = new Distance(miles: 1000).inYards;
+      m.value = new GurpsDistance(miles: 1000).inYards;
       expect(m.spellPoints, equals(8));
 
-      m.value = new Distance(miles: 3000).inYards;
+      m.value = new GurpsDistance(miles: 3000).inYards;
       expect(m.spellPoints, equals(9));
     });
   });
@@ -318,64 +318,64 @@ void main() {
     });
 
     test("has SpellPoints", () {
-      m.value = new Distance(yards: 0).inYards;
+      m.value = new GurpsDistance(yards: 0).inYards;
       expect(m.spellPoints, equals(0));
 
-      m.value = new Distance(yards: 2).inYards;
+      m.value = new GurpsDistance(yards: 2).inYards;
       expect(m.spellPoints, equals(0));
 
-      m.value = new Distance(yards: 3).inYards;
+      m.value = new GurpsDistance(yards: 3).inYards;
       expect(m.spellPoints, equals(1));
 
-      m.value = new Distance(yards: 4).inYards;
+      m.value = new GurpsDistance(yards: 4).inYards;
       expect(m.spellPoints, equals(2));
 
-      m.value = new Distance(yards: 5).inYards;
+      m.value = new GurpsDistance(yards: 5).inYards;
       expect(m.spellPoints, equals(2));
 
-      m.value = new Distance(yards: 7).inYards;
+      m.value = new GurpsDistance(yards: 7).inYards;
       expect(m.spellPoints, equals(3));
 
-      m.value = new Distance(yards: 10).inYards;
+      m.value = new GurpsDistance(yards: 10).inYards;
       expect(m.spellPoints, equals(4));
 
-      m.value = new Distance(yards: 15).inYards;
+      m.value = new GurpsDistance(yards: 15).inYards;
       expect(m.spellPoints, equals(5));
 
-      m.value = new Distance(yards: 20).inYards;
+      m.value = new GurpsDistance(yards: 20).inYards;
       expect(m.spellPoints, equals(6));
 
-      m.value = new Distance(yards: 30).inYards;
+      m.value = new GurpsDistance(yards: 30).inYards;
       expect(m.spellPoints, equals(7));
 
-      m.value = new Distance(yards: 50).inYards;
+      m.value = new GurpsDistance(yards: 50).inYards;
       expect(m.spellPoints, equals(8));
 
-      m.value = new Distance(yards: 70).inYards;
+      m.value = new GurpsDistance(yards: 70).inYards;
       expect(m.spellPoints, equals(9));
 
-      m.value = new Distance(yards: 100).inYards;
+      m.value = new GurpsDistance(yards: 100).inYards;
       expect(m.spellPoints, equals(10));
 
-      m.value = new Distance(yards: 150).inYards;
+      m.value = new GurpsDistance(yards: 150).inYards;
       expect(m.spellPoints, equals(11));
 
-      m.value = new Distance(yards: 200).inYards;
+      m.value = new GurpsDistance(yards: 200).inYards;
       expect(m.spellPoints, equals(12));
 
-      m.value = new Distance(yards: 300).inYards;
+      m.value = new GurpsDistance(yards: 300).inYards;
       expect(m.spellPoints, equals(13));
 
-      m.value = new Distance(yards: 500).inYards;
+      m.value = new GurpsDistance(yards: 500).inYards;
       expect(m.spellPoints, equals(14));
 
-      m.value = new Distance(yards: 700).inYards;
+      m.value = new GurpsDistance(yards: 700).inYards;
       expect(m.spellPoints, equals(15));
 
-      m.value = new Distance(yards: 1000).inYards;
+      m.value = new GurpsDistance(yards: 1000).inYards;
       expect(m.spellPoints, equals(16));
 
-      m.value = new Distance(yards: 1500).inYards;
+      m.value = new GurpsDistance(yards: 1500).inYards;
       expect(m.spellPoints, equals(17));
     });
   });
@@ -456,46 +456,46 @@ void main() {
     //  |    10 |    4 ||   100 |   10 ||  1000 |   16 |
     //  |    15 |    5 ||   150 |   11 ||  1500 |   17 |
     test("has spellPoints", () {
-      m.value = new Distance(yards: 0).inYards;
+      m.value = new GurpsDistance(yards: 0).inYards;
       expect(m.spellPoints, equals(0));
 
-      m.value = new Distance(yards: 2).inYards;
+      m.value = new GurpsDistance(yards: 2).inYards;
       expect(m.spellPoints, equals(0));
 
-      m.value = new Distance(yards: 3).inYards;
+      m.value = new GurpsDistance(yards: 3).inYards;
       expect(m.spellPoints, equals(1));
 
-      m.value = new Distance(yards: 4).inYards;
+      m.value = new GurpsDistance(yards: 4).inYards;
       expect(m.spellPoints, equals(2));
 
-      m.value = new Distance(yards: 5).inYards;
+      m.value = new GurpsDistance(yards: 5).inYards;
       expect(m.spellPoints, equals(2));
 
-      m.value = new Distance(yards: 7).inYards;
+      m.value = new GurpsDistance(yards: 7).inYards;
       expect(m.spellPoints, equals(3));
 
-      m.value = new Distance(yards: 10).inYards;
+      m.value = new GurpsDistance(yards: 10).inYards;
       expect(m.spellPoints, equals(4));
 
-      m.value = new Distance(yards: 15).inYards;
+      m.value = new GurpsDistance(yards: 15).inYards;
       expect(m.spellPoints, equals(5));
 
-      m.value = new Distance(yards: 20).inYards;
+      m.value = new GurpsDistance(yards: 20).inYards;
       expect(m.spellPoints, equals(6));
 
-      m.value = new Distance(yards: 30).inYards;
+      m.value = new GurpsDistance(yards: 30).inYards;
       expect(m.spellPoints, equals(7));
 
-      m.value = new Distance(yards: 50).inYards;
+      m.value = new GurpsDistance(yards: 50).inYards;
       expect(m.spellPoints, equals(8));
 
-      m.value = new Distance(yards: 70).inYards;
+      m.value = new GurpsDistance(yards: 70).inYards;
       expect(m.spellPoints, equals(9));
 
-      m.value = new Distance(yards: 100).inYards;
+      m.value = new GurpsDistance(yards: 100).inYards;
       expect(m.spellPoints, equals(10));
 
-      m.value = new Distance(yards: 150).inYards;
+      m.value = new GurpsDistance(yards: 150).inYards;
       expect(m.spellPoints, equals(11));
     });
   });

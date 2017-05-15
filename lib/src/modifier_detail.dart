@@ -53,6 +53,8 @@ abstract class RepairDetail extends ModifierDetail {
 
 abstract class RangeDimensionalDetail extends ModifierDetail {}
 
+abstract class SpeedDetail extends ModifierDetail {}
+
 abstract class SubjectWeightDetail extends ModifierDetail {}
 
 abstract class SummonedDetail extends ModifierDetail {}

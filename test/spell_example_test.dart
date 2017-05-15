@@ -368,7 +368,7 @@ void main() {
     List<String> lines = exporter.toString().split('\n');
     expect(lines[NAME], equals('Create Golem Warrior'));
     expect(lines[GAP1], equals(''));
-    expect(lines[EFFECTS], equals("Spell Effects: Create Arcanum x 2."));
+    expect(lines[EFFECTS], equals("Spell Effects: Create Arcanum x2."));
     expect(lines[MODS], equals('Inherent Modifiers: Summoned.'));
     expect(lines[PENALTY], equals("Skill Penalty: Path of Arcanum-3."));
     expect(lines[TIME], equals('Casting Time: 10 minutes.'));

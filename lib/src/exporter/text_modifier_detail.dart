@@ -1,5 +1,6 @@
 import '../modifier_detail.dart';
 import '../../units/gurps_duration.dart';
+import '../../units/gurps_distance.dart';
 import '../../units/weight.dart';
 import '../../gurps/modifier.dart';
 import '../../util/core_utils.dart';
@@ -108,7 +109,7 @@ class TextGirdedDetail extends GirdedDetail with TextModifierDetail {}
 
 class TextRangeDetail extends RangeDetail with TextModifierDetail {
   @override
-  String get typicalText => '${name}, ${value} yards (${spellPoints})';
+  String get typicalText => '${name}, ${new GurpsDistance(yards: value).toFormattedString()} (${spellPoints})';
 }
 
 class TextRangeDimensionalDetail extends RangeDimensionalDetail with TextModifierDetail {
@@ -120,6 +121,11 @@ class TextRepairDetail extends RepairDetail with TextModifierDetail {
   @override
   String get typicalText =>
       '${name}${specialization == null ? ' ' : ' ${specialization}'}, ${dieRoll} (${spellPoints})';
+}
+
+class TextSpeedDetail extends SpeedDetail with TextModifierDetail {
+  @override
+  String get typicalText => '${name}, ${new GurpsDistance(yards: value).toFormattedString()}/second (${spellPoints})';
 }
 
 class TextSubjectWeightDetail extends SubjectWeightDetail with TextModifierDetail {

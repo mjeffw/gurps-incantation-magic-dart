@@ -114,7 +114,7 @@ class TextEffectExporter implements EffectExporter {
     if (countMap[effect] == 1) {
       return '${effect.summaryText}';
     }
-    return '${effect.summaryText} x ${countMap[effect]}';
+    return '${effect.summaryText} x${countMap[effect]}';
   }
 
   @override
@@ -197,6 +197,9 @@ class TextModifierExporter implements ModifierExporter {
 
   @override
   RepairDetail createRepairDetail() => new TextRepairDetail();
+
+  @override
+  SpeedDetail createSpeedDetail() => new TextSpeedDetail();
 
   @override
   SubjectWeightDetail createSubjectWeightDetail() => new TextSubjectWeightDetail();
