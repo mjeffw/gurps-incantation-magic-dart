@@ -127,7 +127,7 @@ void main() {
     test("has initial state", () {
       expect(m.inherent, equals(false));
       expect(m.value, equals(0));
-      expect(m.name, equals("Range, Cross-Time"));
+      expect(m.name, equals("Range (Cross-Time)"));
       expect(m.spellPoints, equals(0));
     });
 

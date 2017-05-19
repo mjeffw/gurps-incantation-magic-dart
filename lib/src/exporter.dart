@@ -3,20 +3,13 @@ import 'modifier_detail.dart';
 
 abstract class SpellExporter {
   set spellPoints(int spellPoints);
-
   set name(String name);
-
-  EffectExporter get effectExporter;
-
-  ModifierExporter get modifierExporter;
-
   set penalty(int skillPenalty);
-
   set time(GurpsDuration time);
-
   set description(String description);
-
   set conditional(bool conditional);
+  EffectExporter get effectExporter;
+  ModifierExporter get modifierExporter;
 }
 
 abstract class EffectExporter {
@@ -32,17 +25,19 @@ abstract class ModifierExporter {
 
   String get typicalText;
 
-  AfflictionDetail createAfflictionDetail();
-  AlteredTraitsDetail createAlteredTraitsDetail();
-  AreaOfEffectDetail createAreaEffectDetail();
-  BestowsDetail createBestowsDetail();
-  DamageDetail createDamageDetail();
-  DurationDetail createDurationDetail();
-  GirdedDetail createGirdedDetail();
-  RangeDetail createRangeDetail();
-  RepairDetail createRepairDetail();
-  RangeDimensionalDetail createRangeDimensionalDetail();
-  SpeedDetail createSpeedDetail();
-  SubjectWeightDetail createSubjectWeightDetail();
-  SummonedDetail createSummonedDetail();
+  ModifierDetail createAfflictionDetail();
+  ModifierDetail createAfflictionStunDetail();
+  ModifierDetail createAlteredTraitsDetail();
+  ModifierDetail createAreaEffectDetail();
+  ModifierDetail createBestowsDetail();
+  ModifierDetail createDamageDetail();
+  ModifierDetail createDurationDetail();
+  ModifierDetail createGirdedDetail();
+  ModifierDetail createRangeDetail();
+  ModifierDetail createRepairDetail();
+  ModifierDetail createRangeDimensionalDetail();
+  ModifierDetail createRangeTimeDetail();
+  ModifierDetail createSpeedDetail();
+  ModifierDetail createSubjectWeightDetail();
+  ModifierDetail createSummonedDetail();
 }

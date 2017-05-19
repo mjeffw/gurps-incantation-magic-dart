@@ -4,8 +4,14 @@ import '../../units/gurps_distance.dart';
 import '../../units/weight.dart';
 import '../../gurps/modifier.dart';
 import '../../util/core_utils.dart';
+import 'package:gurps_incantation_magic_model/gurps/die_roll.dart';
 
-abstract class TextModifierDetail implements ModifierDetail {
+class TextModifierDetail extends ModifierDetail {
+  String name;
+  bool inherent;
+  int value;
+  int spellPoints;
+
   @override
   String get typicalText => '${name} (${spellPoints})';
 
@@ -13,7 +19,9 @@ abstract class TextModifierDetail implements ModifierDetail {
   String get summaryText => name;
 }
 
-class TextAfflictionDetail extends AfflictionDetail {
+class TextAfflictionDetail extends TextModifierDetail implements AfflictionDetail {
+  String specialization;
+
   @override
   String get summaryText => '${name}, ${specialization}';
 
@@ -21,13 +29,17 @@ class TextAfflictionDetail extends AfflictionDetail {
   String get typicalText => '${name}, ${specialization} (${spellPoints})';
 }
 
-class TextAlteredTraitsDetail extends AlteredTraitsDetail with TextModifierDetail {
+class TextAlteredTraitsDetail extends TextModifierDetail implements AlteredTraitsDetail {
   final List<Modifier> modifiers = [];
 
   @override
-  void addModifier(Modifier e) {
-    modifiers.add(e);
-  }
+  int specLevel;
+
+  @override
+  String specialization;
+
+  @override
+  void addModifier(Modifier e) => modifiers.add(e);
 
   @override
   String get summaryText {
@@ -51,7 +63,13 @@ class TextAlteredTraitsDetail extends AlteredTraitsDetail with TextModifierDetai
   }
 }
 
-class TextAreaOfEffectDetail extends AreaOfEffectDetail with TextModifierDetail {
+class TextAreaOfEffectDetail extends TextModifierDetail implements AreaOfEffectDetail {
+  @override
+  bool includes;
+
+  @override
+  int targets;
+
   @override
   String get typicalText {
     List<String> components = [];
@@ -64,7 +82,10 @@ class TextAreaOfEffectDetail extends AreaOfEffectDetail with TextModifierDetail 
   }
 }
 
-class TextBestowsDetail extends BestowsDetail {
+class TextBestowsDetail extends TextModifierDetail implements BestowsDetail {
+  String specialization;
+  String range;
+
   @override
   String get summaryText => 'Bestows a ${value < 0? 'Penalty': 'Bonus'}, ${specialization}';
 
@@ -73,7 +94,11 @@ class TextBestowsDetail extends BestowsDetail {
       '${toSignedString(value)} to ${specialization} (${spellPoints})';
 }
 
-class TextDamageDetail extends DamageDetail {
+class TextDamageDetail extends TextModifierDetail implements DamageDetail {
+  DieRoll dieRoll;
+  String type;
+  bool direct;
+
   final List<Modifier> modifiers = [];
 
   @override
@@ -100,40 +125,57 @@ class TextDamageDetail extends DamageDetail {
   }
 }
 
-class TextDurationDetail extends DurationDetail with TextModifierDetail {
+class TextDurationDetail extends TextModifierDetail {
   @override
   String get typicalText => '${name}, ${new GurpsDuration(seconds: value).toFormattedString()} (${spellPoints})';
 }
 
-class TextGirdedDetail extends GirdedDetail with TextModifierDetail {}
-
-class TextRangeDetail extends RangeDetail with TextModifierDetail {
+class TextRangeDetail extends TextModifierDetail {
   @override
   String get typicalText => '${name}, ${new GurpsDistance(yards: value).toFormattedString()} (${spellPoints})';
 }
 
-class TextRangeDimensionalDetail extends RangeDimensionalDetail with TextModifierDetail {
+class TextRangeDimensionalDetail extends TextModifierDetail {
   @override
   String get typicalText => '${name}${value == 1 ? "" : ", " + value.toString() + " dimensions"} (${spellPoints})';
 }
 
-class TextRepairDetail extends RepairDetail with TextModifierDetail {
+class TextRangeTimeDetail extends TextModifierDetail {
+  @override
+  String get typicalText => '${name}, ${_valueText} (${spellPoints})';
+
+  String get _valueText {
+    if (value == 0) {
+      return new GurpsDuration(hours: 2).toFormattedString();
+    } else {
+      return new GurpsDuration(hours: value).toFormattedString();
+    }
+  }
+}
+
+class TextRepairDetail extends TextModifierDetail implements RepairDetail {
+  @override
+  DieRoll dieRoll;
+
+  @override
+  String specialization;
+
   @override
   String get typicalText =>
       '${name}${specialization == null ? ' ' : ' ${specialization}'}, ${dieRoll} (${spellPoints})';
 }
 
-class TextSpeedDetail extends SpeedDetail with TextModifierDetail {
+class TextSpeedDetail extends TextModifierDetail {
   @override
   String get typicalText => '${name}, ${new GurpsDistance(yards: value).toFormattedString()}/second (${spellPoints})';
 }
 
-class TextSubjectWeightDetail extends SubjectWeightDetail with TextModifierDetail {
+class TextSubjectWeightDetail extends TextModifierDetail {
   @override
   String get typicalText => '${name}, ${Weight.toFormattedString(value)} (${spellPoints})';
 }
 
-class TextSummonedDetail extends SummonedDetail with TextModifierDetail {
+class TextSummonedDetail extends TextModifierDetail {
   @override
   String get typicalText => '${name}, ${value}% of Static Point Total (${spellPoints})';
 }

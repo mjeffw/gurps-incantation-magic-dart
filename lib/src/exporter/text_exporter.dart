@@ -43,12 +43,7 @@ class TextSpellExporter implements SpellExporter {
     return 'Typical Casting: ${components.join(' + ')}. ${spellPoints} SP.';
   }
 
-  String get _conditionalText {
-    if (conditional) {
-      return 'Conditional Spell (5)';
-    }
-    return '';
-  }
+  String get _conditionalText => (conditional) ? 'Conditional Spell (5)' : '';
 }
 
 class _Effect {
@@ -73,9 +68,7 @@ class _Effect {
   int get hashCode => hash2(effect, path);
 
   @override
-  String toString() {
-    return '_Effect:[effect=${effect}, path=${path}]';
-  }
+  String toString() => '_Effect:[effect=${effect}, path=${path}]';
 }
 
 class TextEffectExporter implements EffectExporter {
@@ -87,9 +80,7 @@ class TextEffectExporter implements EffectExporter {
   }
 
   @override
-  String toString() {
-    return "Spell Effects: ${_text}.";
-  }
+  String toString() => "Spell Effects: ${_text}.";
 
   String get _text {
     if (values.isEmpty) {
@@ -110,12 +101,8 @@ class TextEffectExporter implements EffectExporter {
     }
   }
 
-  String _summaryText(_Effect effect, Map<_Effect, int> countMap) {
-    if (countMap[effect] == 1) {
-      return '${effect.summaryText}';
-    }
-    return '${effect.summaryText} x${countMap[effect]}';
-  }
+  String _summaryText(_Effect effect, Map<_Effect, int> countMap) =>
+      (countMap[effect] == 1) ? '${effect.summaryText}' : '${effect.summaryText} x${countMap[effect]}';
 
   @override
   String penaltyPath(int penalty) {
@@ -129,25 +116,18 @@ class TextEffectExporter implements EffectExporter {
   }
 
   @override
-  String get typicalText {
-    if (values.isEmpty) {
-      return 'None.';
-    } else {
-      return values.map((it) => it.typicalCastingText).reduce((a, b) => a + ' + ' + b);
-    }
-  }
+  String get typicalText =>
+      (values.isEmpty) ? 'None.' : values.map((it) => it.typicalCastingText).reduce((a, b) => a + ' + ' + b);
 }
 
 class TextModifierExporter implements ModifierExporter {
-  final List<ModifierDetail> _details = [];
+  final List<TextModifierDetail> _details = [];
 
   @override
-  String toString() {
-    return "Inherent Modifiers: ${_briefText}.";
-  }
+  String toString() => "Inherent Modifiers: ${_briefText}.";
 
   String get _briefText {
-    _details.sort((a,b) => a.name.compareTo(b.name));
+    _details.sort((a, b) => a.name.compareTo(b.name));
     if (_details.every((f) => !f.inherent)) {
       return "None";
     } else {
@@ -157,53 +137,57 @@ class TextModifierExporter implements ModifierExporter {
 
   @override
   String get typicalText {
-    _details.sort((a,b) => a.name.compareTo(b.name));
+    _details.sort((a, b) => a.name.compareTo(b.name));
     return _details.map((a) => a.typicalText).join(' + ');
   }
 
   @override
   void addDetail(ModifierDetail detailExporter) {
-    _details.add(detailExporter);
+    _details.add(detailExporter as TextModifierDetail);
   }
 
   @override
-  AfflictionDetail createAfflictionDetail() {
-    return new TextAfflictionDetail();
-  }
+  ModifierDetail createAfflictionDetail() => new TextAfflictionDetail();
 
   @override
-  AlteredTraitsDetail createAlteredTraitsDetail() => new TextAlteredTraitsDetail();
+  ModifierDetail createAfflictionStunDetail() => new TextModifierDetail();
 
   @override
-  AreaOfEffectDetail createAreaEffectDetail() => new TextAreaOfEffectDetail();
+  ModifierDetail createAlteredTraitsDetail() => new TextAlteredTraitsDetail();
 
   @override
-  BestowsDetail createBestowsDetail() => new TextBestowsDetail();
+  ModifierDetail createAreaEffectDetail() => new TextAreaOfEffectDetail();
 
   @override
-  DamageDetail createDamageDetail() => new TextDamageDetail();
+  ModifierDetail createBestowsDetail() => new TextBestowsDetail();
 
   @override
-  DurationDetail createDurationDetail() => new TextDurationDetail();
+  ModifierDetail createDamageDetail() => new TextDamageDetail();
 
   @override
-  GirdedDetail createGirdedDetail() => new TextGirdedDetail();
+  ModifierDetail createDurationDetail() => new TextDurationDetail();
 
   @override
-  RangeDetail createRangeDetail() => new TextRangeDetail();
+  ModifierDetail createGirdedDetail() => new TextModifierDetail();
 
   @override
-  RangeDimensionalDetail createRangeDimensionalDetail() => new TextRangeDimensionalDetail();
+  ModifierDetail createRangeDetail() => new TextRangeDetail();
 
   @override
-  RepairDetail createRepairDetail() => new TextRepairDetail();
+  ModifierDetail createRangeDimensionalDetail() => new TextRangeDimensionalDetail();
 
   @override
-  SpeedDetail createSpeedDetail() => new TextSpeedDetail();
+  ModifierDetail createRangeTimeDetail() => new TextRangeTimeDetail();
 
   @override
-  SubjectWeightDetail createSubjectWeightDetail() => new TextSubjectWeightDetail();
+  ModifierDetail createRepairDetail() => new TextRepairDetail();
 
   @override
-  SummonedDetail createSummonedDetail() => new TextSummonedDetail();
+  ModifierDetail createSpeedDetail() => new TextSpeedDetail();
+
+  @override
+  ModifierDetail createSubjectWeightDetail() => new TextSubjectWeightDetail();
+
+  @override
+  ModifierDetail createSummonedDetail() => new TextSummonedDetail();
 }

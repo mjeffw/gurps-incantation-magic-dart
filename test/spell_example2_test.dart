@@ -246,10 +246,11 @@ void main() {
     expect(lines[MODS], equals('Inherent Modifiers: Summoned.'));
     expect(lines[PENALTY], equals("Skill Penalty: Path of Demonology-3."));
     expect(lines[TIME], equals('Casting Time: 5 minutes.'));
-    expect(lines[TYPICAL], equals("Typical Casting:"
-        " Control Demonology (5) + Duration, 1 minute (3) + Range, Extradimensional (10)"
-        " + Summoned, 100% of Static Point Total (20). 38 SP."
-    ));
+    expect(
+        lines[TYPICAL],
+        equals("Typical Casting:"
+            " Control Demonology (5) + Duration, 1 minute (3) + Range, Extradimensional (10)"
+            " + Summoned, 100% of Static Point Total (20). 38 SP."));
   });
 
   test('Twist of Fate', () {
@@ -267,9 +268,10 @@ void main() {
     expect(lines[MODS], equals('Inherent Modifiers: Altered Traits, Destiny.'));
     expect(lines[PENALTY], equals("Skill Penalty: Path of Augury-2."));
     expect(lines[TIME], equals('Casting Time: 5 minutes.'));
-    expect(lines[TYPICAL], equals("Typical Casting:"
-        " Transform Augury (8) + Altered Traits, Destiny (5) + Duration, 1 hour (7). 20 SP."
-    ));
+    expect(
+        lines[TYPICAL],
+        equals("Typical Casting:"
+            " Transform Augury (8) + Altered Traits, Destiny (5) + Duration, 1 hour (7). 20 SP."));
   });
 
   test('Ward for Augury', () {
@@ -288,11 +290,12 @@ void main() {
     expect(lines[MODS], equals("Inherent Modifiers: Area of Effect + Bestows a Bonus, Ward’s Power."));
     expect(lines[PENALTY], equals("Skill Penalty: Path of Augury-6."));
     expect(lines[TIME], equals('Casting Time: 5 minutes.'));
-    expect(lines[TYPICAL], equals("Typical Casting:"
-        " Control Augury (5)"
-        " + Area of Effect, 5 yards (50) + Bestows a Bonus, +2 to Ward’s Power (4) + Duration, 1 hour (7)."
-        " 66 SP."
-    ));
+    expect(
+        lines[TYPICAL],
+        equals("Typical Casting:"
+            " Control Augury (5)"
+            " + Area of Effect, 5 yards (50) + Bestows a Bonus, +2 to Ward’s Power (4) + Duration, 1 hour (7)."
+            " 66 SP."));
   });
 
   test('Whiplash', () {
@@ -310,30 +313,87 @@ void main() {
     expect(lines[MODS], equals("Inherent Modifiers: Afflictions, Seizure + Damage, Direct Crushing."));
     expect(lines[PENALTY], equals("Skill Penalty: Path of Mesmerism-2."));
     expect(lines[TIME], equals('Casting Time: 5 minutes.'));
-    expect(lines[TYPICAL], equals("Typical Casting:"
-        " Control Mesmerism (5)"
-        " + Afflictions, Seizure (20)"
-        " + Damage, Direct Crushing 1d+1 (1). 26 SP."
-    ));
+    expect(
+        lines[TYPICAL],
+        equals("Typical Casting:"
+            " Control Mesmerism (5)"
+            " + Afflictions, Seizure (20)"
+            " + Damage, Direct Crushing 1d+1 (1). 26 SP."));
   });
 
-    test('Wrathchild', () {
-      spell.name = 'Whiplash';
-//      spell.addEffect(new SpellEffect(Effect.Control, Path.Mesmerism));
-//      spell.addRitualModifier(new Affliction("Seizure", value: 100, inherent: true));
-//      spell.addRitualModifier(new Damage(value: 1, inherent: true));
+  test('Wrathchild', () {
+    spell.name = 'Wrathchild';
+    spell.addEffect(new SpellEffect(Effect.Control, Path.Mesmerism));
+    spell.addEffect(new SpellEffect(Effect.Strengthen, Path.Transfiguration));
+    spell.addRitualModifier(new AlteredTraits("ST +5 and Berserk (N/A)", null, value: 55, inherent: true));
+    spell.addRitualModifier(
+        new Bestows("HT rolls to remain conscious or alive", range: BestowsRange.single, value: 2, inherent: true));
+    spell.addRitualModifier(new DurationMod(value: 30));
+    TextSpellExporter exporter = new TextSpellExporter();
+    spell.export(exporter);
+    List<String> lines = exporter.toString().split('\n');
 
-      TextSpellExporter exporter = new TextSpellExporter();
-      spell.export(exporter);
-      List<String> lines = exporter.toString().split('\n');
+    expect(lines[NAME], equals("Wrathchild"));
+    expect(lines[EFFECTS], equals("Spell Effects: Control Mesmerism + Strengthen Transfiguration."));
+    expect(
+        lines[MODS],
+        equals("Inherent Modifiers: Altered Traits, ST +5 and Berserk (N/A)"
+            " + Bestows a Bonus, HT rolls to remain conscious or alive."));
+    expect(lines[PENALTY], equals("Skill Penalty: The lower of Path of Mesmerism-6 or Path of Transfiguration-6."));
+    expect(lines[TIME], equals('Casting Time: 10 minutes.'));
+    expect(
+        lines[TYPICAL],
+        equals("Typical Casting:"
+            " Control Mesmerism (5) + Strengthen Transfiguration (3)"
+            " + Altered Traits, ST +5 and Berserk (N/A) (55)"
+            " + Bestows a Bonus, +2 to HT rolls to remain conscious or alive (2)"
+            " + Duration, 30 seconds (2). 67 SP."));
+  });
 
-      expect(lines[NAME], equals("Wrathchild"));
-//      expect(lines[EFFECTS], equals("Spell Effects: Control Mesmerism."));
-//      expect(lines[MODS], equals("Inherent Modifiers: Afflictions, Seizure + Damage, Direct Crushing."));
-//      expect(lines[PENALTY], equals("Skill Penalty: Path of Mesmerism-2."));
-//      expect(lines[TIME], equals('Casting Time: 5 minutes.'));
-      expect(lines[TYPICAL], startsWith("Typical Casting:"
-//          " Control Mesmerism (5) + Strengthen Trans guration (3) + Altered Traits, ST +5 and Berserk (N/A) (55) + Bestows a Bonus, +2 to HT rolls to remain conscious or alive (2) + Duration, 30 seconds (2). 67 SP."
-      ));
+  test('Track Traveler', () {
+    spell.name = 'Track Traveler';
+    spell.addEffect(new SpellEffect(Effect.Sense, Path.Arcanum));
+    spell.addRitualModifier(new RangeCrossTime(value: 24));
+    TextSpellExporter exporter = new TextSpellExporter();
+
+    spell.export(exporter);
+    List<String> lines = exporter.toString().split('\n');
+
+    expect(lines[NAME], equals("Track Traveler"));
+    expect(lines[EFFECTS], equals("Spell Effects: Sense Arcanum."));
+    expect(lines[MODS], equals("Inherent Modifiers: None."));
+    expect(lines[PENALTY], equals("Skill Penalty: Path of Arcanum-0."));
+    expect(lines[TIME], equals('Casting Time: 5 minutes.'));
+    expect(
+        lines[TYPICAL],
+        equals("Typical Casting:"
+            " Sense Arcanum (2)"
+            " + Range (Cross-Time), 1 day (2). 4 SP."
+        ));
+  });
+
+  test('Death Vison', () {
+    spell.name = 'Death Vision';
+    spell.addEffect(new SpellEffect(Effect.Sense, Path.Augury));
+    spell.addEffect(new SpellEffect(Effect.Destroy, Path.Mesmerism));
+    spell.addRitualModifier(new AfflictionStun(inherent: true));
+    spell.addRitualModifier(new Range(value: 10));
+
+    TextSpellExporter exporter = new TextSpellExporter();
+    spell.export(exporter);
+    List<String> lines = exporter.toString().split('\n');
+
+    expect(lines[NAME], equals("Death Vision"));
+    expect(lines[EFFECTS], equals("Spell Effects: Sense Augury + Destroy Mesmerism."));
+    expect(lines[MODS], equals("Inherent Modifiers: Affliction, Stunning."));
+    expect(lines[PENALTY], equals("Skill Penalty: The lower of Path of Augury-1 or Path of Mesmerism-1."));
+    expect(lines[TIME], equals('Casting Time: 10 minutes.'));
+    expect(
+        lines[TYPICAL],
+        equals("Typical Casting:"
+            " Sense Augury (2) + Destroy Mesmerism (5)"
+            " + Affliction, Stunning (0) + Range, 10 yards (4)."
+            " 11 SP."
+        ));
   });
 }

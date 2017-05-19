@@ -1,12 +1,12 @@
 import 'dart:math';
 
+import '../util/repeating_sequence.dart';
 import '../units/gurps_distance.dart';
 import '../units/gurps_duration.dart';
-import '../util/repeating_sequence.dart';
 import '../gurps/modifier.dart';
+import '../gurps/die_roll.dart';
 import 'exporter.dart';
 import 'modifier_detail.dart';
-import '../gurps/die_roll.dart';
 
 class InputException implements Exception {
   String message;
@@ -82,7 +82,13 @@ abstract class RitualModifier {
 ///
 /// A spell effect to stun a foe requires no additional SP.
 class AfflictionStun extends RitualModifier {
-  AfflictionStun({bool inherent: false}) : super.withPredicate("Affliction, Stun", zeroOnly, inherent: inherent);
+  AfflictionStun({bool inherent: false}) : super.withPredicate("Affliction, Stunning", zeroOnly, inherent: inherent);
+
+  void export(ModifierExporter exporter) {
+    ModifierDetail detail = exporter.createAfflictionStunDetail();
+    super.exportDetail(detail);
+    exporter.addDetail(detail);
+  }
 }
 // ----------------------------------
 
@@ -98,10 +104,10 @@ class Affliction extends RitualModifier {
   int get spellPoints => (_value / 5.0).ceil();
 
   void export(ModifierExporter exporter) {
-    AfflictionDetail detailExporter = exporter.createAfflictionDetail();
-    super.exportDetail(detailExporter);
-    detailExporter.specialization = specialization;
-    exporter.addDetail(detailExporter);
+    AfflictionDetail detail = exporter.createAfflictionDetail() as AfflictionDetail;
+    super.exportDetail(detail);
+    detail.specialization = specialization;
+    exporter.addDetail(detail);
   }
 }
 // ----------------------------------
@@ -119,19 +125,13 @@ class AlteredTraits extends RitualModifier with Modifiable {
       : super.withPredicateNew("Altered Traits", anyValue, value, inherent);
 
   @override
-  int get spellPoints => _baseSpellPoints() + adjustmentForModifiers(_baseSpellPoints());
+  int get spellPoints => _baseSpellPoints + adjustmentForModifiers(_baseSpellPoints);
 
-  int _baseSpellPoints() {
-    if (_value < 0) {
-      return (_value.abs() / 5.0).ceil();
-    } else {
-      return _value;
-    }
-  }
+  int get _baseSpellPoints => (_value < 0) ? (_value.abs() / 5.0).ceil() : _value;
 
   @override
   void export(ModifierExporter exporter) {
-    AlteredTraitsDetail detail = exporter.createAlteredTraitsDetail();
+    AlteredTraitsDetail detail = exporter.createAlteredTraitsDetail() as AlteredTraitsDetail;
     super.exportDetail(detail);
     detail.specialization = specialization;
     detail.specLevel = specLevel;
@@ -170,11 +170,11 @@ class AreaOfEffect extends RitualModifier {
 
   @override
   void export(ModifierExporter exporter) {
-    AreaOfEffectDetail detailExporter = exporter.createAreaEffectDetail();
-    super.exportDetail(detailExporter);
-    detailExporter.targets = _targets;
-    detailExporter.includes = _includes;
-    exporter.addDetail(detailExporter);
+    AreaOfEffectDetail detail = exporter.createAreaEffectDetail() as AreaOfEffectDetail;
+    super.exportDetail(detail);
+    detail.targets = _targets;
+    detail.includes = _includes;
+    exporter.addDetail(detail);
   }
 }
 // ----------------------------------
@@ -187,7 +187,6 @@ enum BestowsRange { single, moderate, broad }
 /// Adds a bonus or penalty to skills or attributes.
 class Bestows extends RitualModifier {
   BestowsRange range = BestowsRange.single;
-
   String specialization;
 
   Bestows(this.specialization, {BestowsRange range: BestowsRange.single, int value: 0, bool inherent: false})
@@ -195,13 +194,7 @@ class Bestows extends RitualModifier {
         super.withPredicateNew("Bestows a (Bonus or Penalty)", anyValue, value, inherent);
 
   @override
-  int get spellPoints {
-    if (_value == 0) {
-      return 0;
-    }
-
-    return _spellPointsForRange;
-  }
+  int get spellPoints => (_value == 0) ? 0 : _spellPointsForRange;
 
   int get _spellPointsForRange {
     int x;
@@ -218,16 +211,11 @@ class Bestows extends RitualModifier {
     return x;
   }
 
-  int _baseSpellPoints(int x) {
-    if (x < 5) {
-      return pow(2, x - 1).toInt();
-    }
-    return 12 + ((x - 5) * 4);
-  }
+  int _baseSpellPoints(int x) => (x < 5) ? pow(2, x - 1).toInt() : 12 + ((x - 5) * 4);
 
   @override
   void export(ModifierExporter exporter) {
-    BestowsDetail detail = exporter.createBestowsDetail();
+    BestowsDetail detail = exporter.createBestowsDetail() as BestowsDetail;
     super.exportDetail(detail);
     detail.specialization = specialization;
     detail.range = range.toString();
@@ -262,16 +250,11 @@ class DurationMod extends RitualModifier {
       : super.withPredicate("Duration", validDuration, value: value, inherent: inherent);
 
   @override
-  int get spellPoints {
-    if (_value == 0) {
-      return 0;
-    }
-    return array.indexOf(array.lastWhere((d) => d.inSeconds < _value)) + 1;
-  }
+  int get spellPoints => (_value == 0) ? 0 : array.indexOf(array.lastWhere((d) => d.inSeconds < _value)) + 1;
 
   @override
   void export(ModifierExporter exporter) {
-    DurationDetail detailExporter = exporter.createDurationDetail();
+    ModifierDetail detailExporter = exporter.createDurationDetail();
     super.exportDetail(detailExporter);
     exporter.addDetail(detailExporter);
   }
@@ -285,7 +268,7 @@ class Girded extends RitualModifier {
 
   @override
   void export(ModifierExporter exporter) {
-    GirdedDetail detail = exporter.createGirdedDetail();
+    ModifierDetail detail = exporter.createGirdedDetail();
     super.exportDetail(detail);
     exporter.addDetail(detail);
   }
@@ -295,7 +278,7 @@ final RepeatingSequenceConverter longDistanceModifiers = new RepeatingSequenceCo
 
 /// Value is in hours.
 class RangeCrossTime extends RitualModifier {
-  RangeCrossTime() : super("Range, Cross-Time", 0, false);
+  RangeCrossTime({int value: 0, bool inherent: false}) : super("Range (Cross-Time)", value, inherent);
 
   @override
   int get spellPoints {
@@ -308,6 +291,13 @@ class RangeCrossTime extends RitualModifier {
     var days = (_value / 24).ceil();
     return longDistanceModifiers.valueToOrdinal(days) + 2;
   }
+
+  @override
+  void export(ModifierExporter exporter) {
+    ModifierDetail detail = exporter.createRangeTimeDetail();
+    super.exportDetail(detail);
+    exporter.addDetail(detail);
+  }
 }
 
 class RangeDimensional extends RitualModifier {
@@ -319,7 +309,7 @@ class RangeDimensional extends RitualModifier {
 
   @override
   void export(ModifierExporter exporter) {
-    RangeDimensionalDetail detail = exporter.createRangeDimensionalDetail();
+    ModifierDetail detail = exporter.createRangeDimensionalDetail();
     super.exportDetail(detail);
     exporter.addDetail(detail);
   }
@@ -353,7 +343,7 @@ class Range extends RitualModifier {
 
   @override
   void export(ModifierExporter exporter) {
-    RangeDetail detail = exporter.createRangeDetail();
+    ModifierDetail detail = exporter.createRangeDetail();
     super.exportDetail(detail);
     exporter.addDetail(detail);
   }
@@ -370,7 +360,7 @@ class Repair extends RitualModifier {
 
   @override
   void export(ModifierExporter exporter) {
-    RepairDetail detail = exporter.createRepairDetail();
+    RepairDetail detail = exporter.createRepairDetail() as RepairDetail;
     super.exportDetail(detail);
     detail.specialization = specialization;
     detail.dieRoll = dice;
@@ -379,13 +369,13 @@ class Repair extends RitualModifier {
 }
 
 class Speed extends RitualModifier {
-  Speed({ int value: 0, bool inherent: false }) : super("Speed", value, inherent);
+  Speed({int value: 0, bool inherent: false}) : super("Speed", value, inherent);
 
   int get spellPoints => rangeTable.valueToOrdinal(_value);
 
   @override
   void export(ModifierExporter exporter) {
-    SpeedDetail detail = exporter.createSpeedDetail();
+    ModifierDetail detail = exporter.createSpeedDetail();
     super.exportDetail(detail);
     exporter.addDetail(detail);
   }
@@ -400,7 +390,7 @@ class SubjectWeight extends RitualModifier {
 
   @override
   void export(ModifierExporter exporter) {
-    SubjectWeightDetail detailExporter = exporter.createSubjectWeightDetail();
+    ModifierDetail detailExporter = exporter.createSubjectWeightDetail();
     super.exportDetail(detailExporter);
     exporter.addDetail(detailExporter);
   }
@@ -416,16 +406,11 @@ class Summoned extends RitualModifier {
   //  | 100% of Static Point Total (250 points*) | +20 SP |
   //  | 150% of Static Point Total (375 points*) | +40 SP |
   //  | +50% of Static Point Total (+125 points*)| +20 SP |
-  int get spellPoints {
-    if (_value <= 75) {
-      return (value / 25.0).ceil() * 4;
-    }
-    return ((value / 50).ceil() - 1) * 20;
-  }
+  int get spellPoints => (_value <= 75) ? (value / 25).ceil() * 4 : ((value / 50).ceil() - 1) * 20;
 
   @override
   void export(ModifierExporter exporter) {
-    SummonedDetail detail = exporter.createSummonedDetail();
+    ModifierDetail detail = exporter.createSummonedDetail();
     super.exportDetail(detail);
     exporter.addDetail(detail);
   }

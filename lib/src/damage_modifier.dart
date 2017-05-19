@@ -138,7 +138,7 @@ class Damage extends RitualModifier with Modifiable {
 
   @override
   void export(ModifierExporter exporter) {
-    DamageDetail detail = exporter.createDamageDetail();
+    DamageDetail detail = exporter.createDamageDetail() as DamageDetail;
     super.exportDetail(detail);
     detail.type = damageTypeLabels[type];
     detail.direct = _direct;

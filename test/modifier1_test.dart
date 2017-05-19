@@ -13,7 +13,7 @@ void main() {
     test("has initial state", () {
       expect(m.inherent, equals(false));
       expect(m.value, equals(0));
-      expect(m.name, equals("Affliction, Stun"));
+      expect(m.name, equals("Affliction, Stunning"));
       expect(m.spellPoints, equals(0));
     });
 

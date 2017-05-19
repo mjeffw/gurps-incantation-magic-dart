@@ -2,17 +2,17 @@ import '../gurps/modifier.dart';
 import '../gurps/die_roll.dart';
 
 abstract class ModifierDetail {
-  String name;
-  int spellPoints;
-  bool inherent;
-  int value;
+  set name(String name);
+  set spellPoints(int sp);
+  set inherent(bool inherent);
+  set value(int value);
 
   String get typicalText;
   String get summaryText;
 }
 
 abstract class AfflictionDetail extends ModifierDetail {
-  String specialization;
+  set specialization(String spec);
 }
 
 abstract class AlteredTraitsDetail extends ModifierDetail {
@@ -28,33 +28,19 @@ abstract class AreaOfEffectDetail extends ModifierDetail {
 }
 
 abstract class BestowsDetail extends ModifierDetail {
-  String specialization;
-  String range;
+  set specialization(String spec);
+  set range(String range);
 }
 
 abstract class DamageDetail extends ModifierDetail {
-  DieRoll dieRoll;
-  String type;
-  bool direct;
+  set dieRoll(DieRoll d);
+  set type(String type);
+  set direct(bool direct);
 
   void addModifier(Modifier e);
 }
 
-abstract class DurationDetail extends ModifierDetail {}
-
-abstract class GirdedDetail extends ModifierDetail {}
-
-abstract class RangeDetail extends ModifierDetail {}
-
 abstract class RepairDetail extends ModifierDetail {
-  String specialization;
-  DieRoll dieRoll;
+  set specialization(String spec);
+  set dieRoll(DieRoll die);
 }
-
-abstract class RangeDimensionalDetail extends ModifierDetail {}
-
-abstract class SpeedDetail extends ModifierDetail {}
-
-abstract class SubjectWeightDetail extends ModifierDetail {}
-
-abstract class SummonedDetail extends ModifierDetail {}
