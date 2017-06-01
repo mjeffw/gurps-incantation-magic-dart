@@ -177,6 +177,9 @@ class TextModifierExporter implements ModifierExporter {
   ModifierDetail createRangeDimensionalDetail() => new TextRangeDimensionalDetail();
 
   @override
+  ModifierDetail createRangeInformationalDetail() => new TextRangeInformationalDetail();
+
+  @override
   ModifierDetail createRangeTimeDetail() => new TextRangeTimeDetail();
 
   @override

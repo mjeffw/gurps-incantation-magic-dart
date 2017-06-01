@@ -140,6 +140,11 @@ class TextRangeDimensionalDetail extends TextModifierDetail {
   String get typicalText => '${name}${value == 1 ? "" : ", " + value.toString() + " dimensions"} (${spellPoints})';
 }
 
+class TextRangeInformationalDetail extends TextModifierDetail {
+  @override
+  String get typicalText => 'Range, ${new GurpsDistance(yards: value).toFormattedString()} (${spellPoints})';
+}
+
 class TextRangeTimeDetail extends TextModifierDetail {
   @override
   String get typicalText => '${name}, ${_valueText} (${spellPoints})';

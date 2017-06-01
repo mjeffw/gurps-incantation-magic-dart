@@ -196,7 +196,7 @@ void main() {
     spell.addEffect(new SpellEffect(Effect.Strengthen, Path.Augury));
     spell.addRitualModifier(new Speed(value: 20000, inherent: true));
     spell.addRitualModifier(new DurationMod(value: 10800));
-    spell.addRitualModifier(new Range(value: 200000));
+    spell.addRitualModifier(new RangeInformational(value: 200000));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -205,18 +205,19 @@ void main() {
     expect(lines[NAME], equals("Scry"));
     expect(lines[EFFECTS], equals("Spell Effects: Strengthen Augury."));
     expect(lines[MODS], equals('Inherent Modifiers: Speed.'));
-    expect(lines[PENALTY], equals("Skill Penalty: Path of Augury-6."));
+    expect(lines[PENALTY], equals("Skill Penalty: Path of Augury-4."));
     expect(lines[TIME], equals('Casting Time: 5 minutes.'));
     expect(
         lines[TYPICAL],
         equals("Typical Casting: "
-            "Strengthen Augury (3) + Duration, 3 hours (8) + Range, 100 miles (30)"
-            " + Speed, 10 miles/second (24). 65 SP."));
+            "Strengthen Augury (3) + Duration, 3 hours (8) + Range, 100 miles (6)"
+            " + Speed, 10 miles/second (24). 41 SP."));
   });
 
   test('Seek Treasure', () {
     spell.name = 'Seek Treasure';
     spell.addEffect(new SpellEffect(Effect.Sense, Path.Augury));
+    spell.addRitualModifier(new RangeInformational(value: new GurpsDistance(miles: 100).inYards));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -227,7 +228,7 @@ void main() {
     expect(lines[MODS], equals('Inherent Modifiers: None.'));
     expect(lines[PENALTY], equals("Skill Penalty: Path of Augury-0."));
     expect(lines[TIME], equals('Casting Time: 5 minutes.'));
-    expect(lines[TYPICAL], equals("Typical Casting: Sense Augury (2). 2 SP."));
+    expect(lines[TYPICAL], equals("Typical Casting: Sense Augury (2) + Range, 100 miles (6). 8 SP."));
   });
 
   test('Summon Flaming Skull', () {

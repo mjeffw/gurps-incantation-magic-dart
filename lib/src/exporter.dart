@@ -36,6 +36,7 @@ abstract class ModifierExporter {
   ModifierDetail createRangeDetail();
   ModifierDetail createRepairDetail();
   ModifierDetail createRangeDimensionalDetail();
+  ModifierDetail createRangeInformationalDetail();
   ModifierDetail createRangeTimeDetail();
   ModifierDetail createSpeedDetail();
   ModifierDetail createSubjectWeightDetail();

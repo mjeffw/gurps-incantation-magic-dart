@@ -317,7 +317,7 @@ class RangeDimensional extends RitualModifier {
 
 /// Range is _value in yards
 class RangeInformational extends RitualModifier {
-  RangeInformational() : super("Range, Informational", 0, false);
+  RangeInformational({int value: 0, bool inherent: false}) : super("Range, Informational", value, inherent);
 
   /// For information spells (e.g., Seek Treasure), consult Long-Distance Modifiers (p. B241) and apply the penalty
   /// (inverted) as additional SP; e.g., +2 SP for one mile.
@@ -331,6 +331,13 @@ class RangeInformational extends RitualModifier {
 
     var miles = (_value / GurpsDistance.YARDS_PER_MILE).ceil();
     return longDistanceModifiers.valueToOrdinal(miles) + 2;
+  }
+
+  @override
+  void export(ModifierExporter exporter) {
+    ModifierDetail detail = exporter.createRangeInformationalDetail();
+    super.exportDetail(detail);
+    exporter.addDetail(detail);
   }
 }
 
