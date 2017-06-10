@@ -2,13 +2,12 @@ abstract class Effect {
   final String name;
 
   String get description;
-
   int get spellPoints;
 
   const Effect(this.name);
 
   static Effect fromString(String name) {
-    return _list.where((Effect e) => e.name == name).first;
+    return values.where((Effect e) => e.name == name).first;
   }
 
   static const Effect Sense = const _Sense();
@@ -19,7 +18,7 @@ abstract class Effect {
   static const Effect Create = const _Create();
   static const Effect Transform = const _Transform();
 
-  static const List<Effect> _list = const [Sense, Strengthen, Restore, Control, Destroy, Create, Transform];
+  static const List<Effect> values = const [Sense, Strengthen, Restore, Control, Destroy, Create, Transform];
 }
 
 class _Sense extends Effect {
