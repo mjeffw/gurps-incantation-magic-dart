@@ -10,3 +10,5 @@ export 'src/ritual_modifier.dart';
 export 'src/path.dart';
 export 'src/spell.dart';
 export 'src/spell_effect.dart';
+export 'src/exporter.dart';
+export 'src/modifier_detail.dart';

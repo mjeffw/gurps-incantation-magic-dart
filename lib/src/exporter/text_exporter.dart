@@ -147,6 +147,9 @@ class TextModifierExporter implements ModifierExporter {
   }
 
   @override
+  List<ModifierDetail> get details => _details;
+
+  @override
   ModifierDetail createAfflictionDetail() => new TextAfflictionDetail();
 
   @override

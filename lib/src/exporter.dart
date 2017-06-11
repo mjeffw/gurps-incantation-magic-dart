@@ -21,6 +21,8 @@ abstract class EffectExporter {
 }
 
 abstract class ModifierExporter {
+  List<ModifierDetail> get details;
+
   void addDetail(ModifierDetail detailExporter);
 
   String get typicalText;

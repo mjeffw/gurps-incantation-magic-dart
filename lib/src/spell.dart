@@ -90,7 +90,7 @@ class Spell {
 
   int get _sumOfModifierLevels => _drawbacks.map((e) => e.level).fold(0, (a, b) => a + b);
 
-  void export(SpellExporter exporter) {
+  SpellExporter export(SpellExporter exporter) {
     exporter.name = name;
 
     EffectExporter effectExporter = exporter.effectExporter;
@@ -104,5 +104,7 @@ class Spell {
     exporter.description = description;
     exporter.conditional = conditional;
     exporter.spellPoints = spellPoints;
+
+    return exporter;
   }
 }

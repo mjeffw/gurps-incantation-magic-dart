@@ -137,7 +137,7 @@ class Damage extends RitualModifier with Modifiable {
   }
 
   @override
-  void export(ModifierExporter exporter) {
+  ModifierExporter export(ModifierExporter exporter) {
     DamageDetail detail = exporter.createDamageDetail() as DamageDetail;
     super.exportDetail(detail);
     detail.type = damageTypeLabels[type];
@@ -145,5 +145,6 @@ class Damage extends RitualModifier with Modifiable {
     modifiers.forEach((it) => detail.addModifier(it));
     detail.dieRoll = dice;
     exporter.addDetail(detail);
+    return exporter;
   }
 }

@@ -8,7 +8,7 @@ abstract class Path {
   static const Path Protection = const _Protection();
   static const Path Transfiguration = const _Transfiguration();
 
-  static const List<Path> _list = const [
+  static const List<Path> values = const [
     Arcanum,
     Augury,
     Demonology,
@@ -25,7 +25,7 @@ abstract class Path {
   const Path(this.name, this.aspect);
 
   factory Path.fromString(String name) {
-    return _list.where((Path e) => e.name == name).first;
+    return values.where((Path e) => e.name == name).first;
   }
 }
 
