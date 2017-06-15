@@ -27,23 +27,23 @@ void main() {
   });
 
   test("contains SpellEffects", () {
-    spell.addEffect(const SpellEffect(Effect.Sense, Path.Augury));
+    spell.addEffect(new SpellEffect(Effect.Sense, Path.Augury));
     expect(spell.spellPoints, equals(2));
     expect(spell.effects.length, equals(1));
-    expect(spell.effects, contains(const SpellEffect(Effect.Sense, Path.Augury)));
+    expect(spell.effects, contains(new SpellEffect(Effect.Sense, Path.Augury)));
 
-    spell.addEffect(const SpellEffect(Effect.Control, Path.Arcanum));
+    spell.addEffect(new SpellEffect(Effect.Control, Path.Arcanum));
     expect(spell.spellPoints, equals(7));
     expect(spell.effects.length, equals(2));
-    expect(spell.effects, contains(const SpellEffect(Effect.Sense, Path.Augury)));
-    expect(spell.effects, contains(const SpellEffect(Effect.Control, Path.Arcanum)));
+    expect(spell.effects, contains(new SpellEffect(Effect.Sense, Path.Augury)));
+    expect(spell.effects, contains(new SpellEffect(Effect.Control, Path.Arcanum)));
 
-    spell.addEffect(const SpellEffect(Effect.Create, Path.Elementalism));
+    spell.addEffect(new SpellEffect(Effect.Create, Path.Elementalism));
     expect(spell.spellPoints, equals(13));
     expect(spell.effects.length, equals(3));
-    expect(spell.effects, contains(const SpellEffect(Effect.Sense, Path.Augury)));
-    expect(spell.effects, contains(const SpellEffect(Effect.Control, Path.Arcanum)));
-    expect(spell.effects, contains(const SpellEffect(Effect.Create, Path.Elementalism)));
+    expect(spell.effects, contains(new SpellEffect(Effect.Sense, Path.Augury)));
+    expect(spell.effects, contains(new SpellEffect(Effect.Control, Path.Arcanum)));
+    expect(spell.effects, contains(new SpellEffect(Effect.Create, Path.Elementalism)));
   });
 
   test("contains Modifiers", () {

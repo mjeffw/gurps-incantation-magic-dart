@@ -6,6 +6,9 @@ abstract class Effect {
 
   const Effect(this.name);
 
+  @override
+  String toString() => name;
+
   static Effect fromString(String name) {
     return values.where((Effect e) => e.name == name).first;
   }

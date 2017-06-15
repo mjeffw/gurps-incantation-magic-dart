@@ -44,6 +44,10 @@ class Spell {
 
   void addEffect(SpellEffect effect) => _effects.add(effect);
 
+  SpellEffect removeEffect(int index) => _effects.removeAt(index);
+
+  SpellEffect setEffect(int index, SpellEffect n) =>  _effects[index] = n;
+
   List<SpellEffect> get effects => new List.unmodifiable(_effects);
 
   void addRitualModifier(RitualModifier mod) => _ritualMods.add(mod);

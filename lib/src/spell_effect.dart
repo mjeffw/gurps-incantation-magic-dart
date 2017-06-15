@@ -5,10 +5,10 @@ import 'path.dart';
 typedef String toSpellEffectText();
 
 class SpellEffect {
-  final Effect effect;
-  final Path path;
+  Effect effect;
+  Path path;
 
-  const SpellEffect(this.effect, this.path);
+  SpellEffect(this.effect, this.path);
 
   int get spellPoints => effect?.spellPoints ?? 0;
 

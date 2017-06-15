@@ -27,6 +27,9 @@ abstract class Path {
   factory Path.fromString(String name) {
     return values.where((Path e) => e.name == name).first;
   }
+
+  @override
+  String toString() => name;
 }
 
 class _Arcanum extends Path {
