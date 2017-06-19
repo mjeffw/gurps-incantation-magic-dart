@@ -3,14 +3,10 @@ import "package:test/test.dart";
 
 void main() {
   final int NAME = 0;
-  final int GAP1 = 1;
   final int EFFECTS = 2;
   final int MODS = 3;
   final int PENALTY = 4;
   final int TIME = 5;
-  final int GAP2 = 6;
-  final int DESC = 7;
-  final int GAP3 = 8;
   final int TYPICAL = 9;
 
   Spell spell;

@@ -75,7 +75,6 @@ class GurpsDuration {
   @override
   String toString() => 'GurpsDuration[seconds: ${_duration}]';
 
-  @override
   int compareTo(GurpsDuration other) => _duration.compareTo(other._duration);
 
   @override

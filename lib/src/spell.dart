@@ -25,7 +25,7 @@ class Spell {
     const GurpsDuration(months: 1)
   ];
 
-  final List<SpellEffect> _effects = new List<SpellEffect>();
+  final List<SpellEffect> effects = new List<SpellEffect>();
   final List<RitualModifier> _ritualMods = new List<RitualModifier>();
   final List<Modifier> _drawbacks = [];
 
@@ -42,13 +42,11 @@ class Spell {
   /// by the Spell Penalty Table.
   int get skillPenalty => (spellPoints / -10).ceil();
 
-  void addEffect(SpellEffect effect) => _effects.add(effect);
+  void addEffect(SpellEffect effect) => effects.add(effect);
 
-  SpellEffect removeEffect(int index) => _effects.removeAt(index);
+  SpellEffect removeEffect(int index) => effects.removeAt(index);
 
-  SpellEffect setEffect(int index, SpellEffect n) =>  _effects[index] = n;
-
-  List<SpellEffect> get effects => new List.unmodifiable(_effects);
+  SpellEffect setEffect(int index, SpellEffect n) =>  effects[index] = n;
 
   void addRitualModifier(RitualModifier mod) => _ritualMods.add(mod);
 
@@ -56,7 +54,6 @@ class Spell {
 
   List<RitualModifier> get ritualModifiers => new List.unmodifiable(_ritualMods);
 
-  @override
   void addDrawback(String name, String detail, int value) {
     if (value > 0) {
       throw new InputException("only limitations are allowed in Spell");
@@ -65,7 +62,7 @@ class Spell {
   }
 
   int get spellPoints {
-    int effectCost = _effects.map((it) => it.spellPoints).fold(0, (a, b) => a + b);
+    int effectCost = effects.map((it) => it.spellPoints).fold(0, (a, b) => a + b);
     int conditionalCost = _addForConditional();
     int modifierCost = _addForModifiers();
     return effectCost + conditionalCost + modifierCost;
@@ -84,7 +81,7 @@ class Spell {
   }
 
   GurpsDuration get castingTime {
-    int effectiveNumberOfEffects = _effects.length + _sumOfModifierLevels ~/ 40;
+    int effectiveNumberOfEffects = effects.length + _sumOfModifierLevels ~/ 40;
     if (effectiveNumberOfEffects < 13) {
       return times[effectiveNumberOfEffects];
     } else {
@@ -98,7 +95,7 @@ class Spell {
     exporter.name = name;
 
     EffectExporter effectExporter = exporter.effectExporter;
-    _effects.forEach((it) => it.export(effectExporter));
+    effects.forEach((it) => it.export(effectExporter));
 
     ModifierExporter modifierExporter = exporter.modifierExporter;
     _ritualMods.forEach((it) => it.export(modifierExporter));
