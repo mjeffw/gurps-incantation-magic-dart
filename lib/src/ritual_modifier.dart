@@ -67,11 +67,12 @@ abstract class RitualModifier {
 
   ModifierExporter export(ModifierExporter exporter);
 
-  void exportDetail(ModifierDetail exporter) {
+  ModifierDetail exportDetail(ModifierDetail exporter) {
     exporter.name = name;
     exporter.spellPoints = spellPoints;
     exporter.inherent = inherent;
     exporter.value = _value;
+    return exporter;
   }
 }
 // ----------------------------------
