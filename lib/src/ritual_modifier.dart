@@ -43,8 +43,8 @@ abstract class RitualModifier {
 
   Predicate _predicate = nonNegative;
 
-  /// the current value of this modifier - depends on the modifier, it could represent character points, a time unit,
-  /// distance unit, a percentage modifier, etc.
+  // the current value of this modifier - depends on the modifier, it could represent character points, a time unit,
+  // distance unit, a percentage modifier, etc.
   int _value = 0;
 
   RitualModifier(this.name, this._value, this.inherent);
