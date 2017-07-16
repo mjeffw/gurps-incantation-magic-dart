@@ -5,7 +5,7 @@ import '../units/gurps_distance.dart';
 import '../units/gurps_duration.dart';
 import '../gurps/modifier.dart';
 import '../gurps/die_roll.dart';
-import 'exporter.dart';
+import 'spell_exporter.dart';
 import 'modifier_detail.dart';
 
 class InputException implements Exception {
@@ -73,6 +73,18 @@ abstract class RitualModifier {
     exporter.inherent = inherent;
     exporter.value = _value;
     return exporter;
+  }
+
+  void incrementSpellPoints() {
+    if (_predicate(value + 1)) {
+      _value++;
+    }
+  }
+
+  void decrementSpellPoints() {
+    if (_predicate(value - 1)) {
+      _value--;
+    }
   }
 }
 // ----------------------------------
@@ -196,7 +208,7 @@ class Bestows extends RitualModifier {
 
   Bestows(this.specialization, {BestowsRange range: BestowsRange.single, int value: 0, bool inherent: false})
       : this.range = range,
-        super.withPredicateNew("Bestows a (Bonus or Penalty)", anyValue, value, inherent);
+        super.withPredicate("Bestows a (Bonus or Penalty)", anyValue, value: value, inherent: inherent);
 
   @override
   int get spellPoints => (_value == 0) ? 0 : _spellPointsForRange;
@@ -257,6 +269,20 @@ class DurationMod extends RitualModifier {
 
   @override
   int get spellPoints => (_value == 0) ? 0 : array.indexOf(array.lastWhere((d) => d.inSeconds < _value)) + 1;
+
+  @override
+  void incrementSpellPoints() {
+    if (spellPoints < array.length - 1) {
+      this._value = array[spellPoints + 1].inSeconds;
+    }
+  }
+
+  @override
+  void decrementSpellPoints() {
+    if (spellPoints > 0) {
+      this._value = array[spellPoints - 1].inSeconds;
+    }
+  }
 
   @override
   ModifierExporter export(ModifierExporter exporter) {
@@ -415,6 +441,29 @@ class SubjectWeight extends RitualModifier {
     super.exportDetail(detailExporter);
     exporter.addDetail(detailExporter);
     return exporter;
+  }
+
+  @override
+  void incrementSpellPoints() {
+    int currentIndex = sequence.valueToOrdinal(_value);
+    int newValue = sequence.ordinalToValue(currentIndex + 1);
+
+    if (_predicate(newValue)) {
+      _value = newValue;
+    }
+  }
+
+  @override
+  void decrementSpellPoints() {
+    if (spellPoints == 0) {
+      return;
+    }
+    int currentIndex = sequence.valueToOrdinal(_value);
+    int newValue = sequence.ordinalToValue(currentIndex - 1);
+
+    if (_predicate(newValue)) {
+      _value = newValue;
+    }
   }
 }
 

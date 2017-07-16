@@ -1,5 +1,5 @@
 import '../../units/gurps_duration.dart';
-import '../exporter.dart';
+import '../spell_exporter.dart';
 import '../modifier_detail.dart';
 import 'text_modifier_detail.dart';
 import 'package:quiver/core.dart';
@@ -32,7 +32,7 @@ class TextSpellExporter implements SpellExporter {
 
   String get penaltyText => "Skill Penalty: ${effectExporter.penaltyPath(penalty)}.";
 
-  String get timeText => "Casting Time: ${time.toFormattedString()}.";
+  String get timeText => "Casting Time: ${GurpsDuration.toFormattedString(time.inSeconds)}.";
 
   String get typicalText {
     List<String> components = [];

@@ -1,7 +1,7 @@
 import '../gurps/die_roll.dart';
 import '../gurps/modifier.dart';
 import 'ritual_modifier.dart';
-import 'exporter.dart';
+import 'spell_exporter.dart';
 import 'modifier_detail.dart';
 
 /// Damage types

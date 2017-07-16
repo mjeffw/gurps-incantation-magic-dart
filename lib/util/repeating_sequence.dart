@@ -6,8 +6,17 @@ class RepeatingSequenceConverter {
 
   RepeatingSequenceConverter(this._pattern);
 
+  // assume pattern = [10, 30], 100, 300, 1000, 3000, ...
+  // if index = 5, then the result should be:
+  // int x = index % pattern.length = 1
+  // int y = floor(index / pattern.length) = 2
+  // return pattern[x] * 10^y = 30 * 100 = 3000
   int ordinalToValue(int index) {
-    return (index % _pattern.length) * (pow(_base, index / _pattern.length).toInt());
+    int i = (index % _pattern.length);
+    int exponent = index ~/ _pattern.length;
+    int other = (pow(_base, exponent).toInt());
+    int j = _pattern[i] * other;
+    return j;
   }
 
   int valueToOrdinal(int value) {
@@ -17,7 +26,6 @@ class RepeatingSequenceConverter {
 
     int arrayValue = _smallestTableValueGreaterThanOrEqualTo(val);
     return _pattern.indexOf(arrayValue) + (loops * _pattern.length);
-//    return _pattern.firstWhere((i) => i == arrayValue) + (loops * _pattern.length);
   }
 
   int _smallestTableValueGreaterThanOrEqualTo(double val) {

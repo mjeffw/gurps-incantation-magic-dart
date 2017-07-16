@@ -1,5 +1,5 @@
 import '../units/gurps_duration.dart';
-import 'exporter.dart';
+import 'spell_exporter.dart';
 import 'ritual_modifier.dart';
 import 'spell_effect.dart';
 import '../gurps/modifier.dart';

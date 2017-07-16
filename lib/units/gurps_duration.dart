@@ -40,9 +40,9 @@ class GurpsDuration {
 
   bool operator >=(GurpsDuration other) => _duration >= other._duration;
 
-  String toFormattedString() {
-    int years = _duration ~/ SECONDS_PER_YEAR;
-    int temp = _duration - (years * SECONDS_PER_YEAR);
+  static String toFormattedString(int duration) {
+    int years = duration ~/ SECONDS_PER_YEAR;
+    int temp = duration - (years * SECONDS_PER_YEAR);
     int months = temp ~/ SECONDS_PER_MONTH;
     temp -= (months * SECONDS_PER_MONTH);
     int weeks = temp ~/ SECONDS_PER_WEEK;
@@ -67,7 +67,7 @@ class GurpsDuration {
     return sb.toString().trim();
   }
 
-  String _pluralize(int number) {
+  static String _pluralize(int number) {
     if (number > 1) return 's';
     return '';
   }

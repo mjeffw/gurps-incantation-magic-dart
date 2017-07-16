@@ -127,7 +127,7 @@ class TextDamageDetail extends TextModifierDetail implements DamageDetail {
 
 class TextDurationDetail extends TextModifierDetail {
   @override
-  String get typicalText => '${name}, ${new GurpsDuration(seconds: value).toFormattedString()} (${spellPoints})';
+  String get typicalText => '${name}, ${GurpsDuration.toFormattedString(value)} (${spellPoints})';
 }
 
 class TextRangeDetail extends TextModifierDetail {
@@ -151,9 +151,9 @@ class TextRangeTimeDetail extends TextModifierDetail {
 
   String get _valueText {
     if (value == 0) {
-      return new GurpsDuration(hours: 2).toFormattedString();
+      return GurpsDuration.toFormattedString(new GurpsDuration(hours: 2).inSeconds);
     } else {
-      return new GurpsDuration(hours: value).toFormattedString();
+      return GurpsDuration.toFormattedString(new GurpsDuration(hours: value).inSeconds);
     }
   }
 }

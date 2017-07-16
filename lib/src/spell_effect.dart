@@ -1,5 +1,5 @@
 import 'effect.dart';
-import 'exporter.dart';
+import 'spell_exporter.dart';
 import 'path.dart';
 
 typedef String toSpellEffectText();
