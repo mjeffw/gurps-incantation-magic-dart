@@ -486,4 +486,30 @@ class Summoned extends RitualModifier {
     exporter.addDetail(detail);
     return exporter;
   }
+
+  int _valueForSpellPoints(int sp) {
+    if (sp <= 12) {
+      int sp1 = (sp / 4).ceil().toInt();
+      return sp1 * 25;
+    } else {
+      int sp1 = (sp / 20).ceil().toInt();
+      return 50 + sp1 * 50;
+    }
+  }
+
+  @override
+  void incrementSpellPoints() {
+    int value = (spellPoints <= 12) ? _valueForSpellPoints(spellPoints) + 25 : _valueForSpellPoints(spellPoints) + 50;
+    if (_predicate(value)) {
+      _value = value;
+    }
+  }
+
+  @override
+  void decrementSpellPoints() {
+    int value = (spellPoints <= 20) ? _valueForSpellPoints(spellPoints) - 25 : _valueForSpellPoints(spellPoints) - 50;
+    if (_predicate(value)) {
+      _value = value;
+    }
+  }
 }
