@@ -11,3 +11,4 @@
 .pub/bin/test/test.dart.snapshot
 gurps-incantation-magic-dart.iml
 pubspec.lock
+.idea/codeStyleSettings.xml
