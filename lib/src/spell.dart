@@ -25,35 +25,28 @@ class Spell {
     const GurpsDuration(months: 1)
   ];
 
-  final List<SpellEffect> effects = new List<SpellEffect>();
-  final List<RitualModifier> _ritualMods = new List<RitualModifier>();
-  final List<Modifier> _drawbacks = [];
-
+  // each spell has a name
   String _name = "";
-
-  bool conditional = false;
-
-  String description;
-
   String get name => _name;
   set name(String name) => _name = name ?? "";
 
-  /// The final SP total determines the penalty to Path skill to cast the spell; this is -(SP/10), rounded up, as shown
-  /// by the Spell Penalty Table.
-  int get skillPenalty => (spellPoints / -10).ceil();
+  // spells have a description
+  String description;
 
+  // spells have SpellEffects - the combination of a Path and an Effect ("Control Demonology", for example)
+  final List<SpellEffect> effects = new List<SpellEffect>();
   void addEffect(SpellEffect effect) => effects.add(effect);
-
   SpellEffect removeEffect(int index) => effects.removeAt(index);
-
   SpellEffect setEffect(int index, SpellEffect n) =>  effects[index] = n;
 
+  // spells have modifiers, to deliver specific effects at a cost
+  final List<RitualModifier> _ritualMods = new List<RitualModifier>();
   void addRitualModifier(RitualModifier mod) => _ritualMods.add(mod);
-
   List<RitualModifier> get inherentModifiers => new List.unmodifiable(_ritualMods.where((it) => it.inherent == true));
-
   List<RitualModifier> get ritualModifiers => new List.unmodifiable(_ritualMods);
 
+  /// Drawbacks can be added to spells to reduce the spell points needed
+  final List<Modifier> _drawbacks = [];
   void addDrawback(String name, String detail, int value) {
     if (value > 0) {
       throw new InputException("only limitations are allowed in Spell");
@@ -61,12 +54,19 @@ class Spell {
     _drawbacks.add(new Modifier(name, detail, value));
   }
 
+  // spells may be conditional - this means there is a specific "trigger" that causes the spell to activate
+  bool conditional = false;
+
   int get spellPoints {
     int effectCost = effects.map((it) => it.spellPoints).fold(0, (a, b) => a + b);
     int conditionalCost = _addForConditional();
     int modifierCost = _addForModifiers();
     return effectCost + conditionalCost + modifierCost;
   }
+
+  /// The final SP total determines the penalty to Path skill to cast the spell; this is -(SP/10), rounded up, as shown
+  /// by the Spell Penalty Table.
+  int get skillPenalty => (spellPoints / -10).ceil();
 
   int _addForConditional() {
     if (conditional) {
@@ -80,6 +80,7 @@ class Spell {
     return _ritualMods.map((it) => it.spellPoints).fold(0, (int a, int b) => a + b);
   }
 
+  /// The time required to cast a spell depends exclusively on how many spell effects it has.
   GurpsDuration get castingTime {
     int effectiveNumberOfEffects = effects.length + _sumOfModifierLevels ~/ 40;
     if (effectiveNumberOfEffects < 13) {
