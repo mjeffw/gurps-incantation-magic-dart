@@ -426,6 +426,29 @@ class Speed extends RitualModifier {
     exporter.addDetail(detail);
     return exporter;
   }
+
+  @override
+  void incrementSpellPoints() {
+    int currentIndex = rangeTable.valueToOrdinal(_value);
+    int newValue = rangeTable.ordinalToValue(currentIndex + 1);
+
+    if (_predicate(newValue)) {
+      _value = newValue;
+    }
+  }
+
+  @override
+  void decrementSpellPoints() {
+    if (spellPoints == 0) {
+      return;
+    }
+    int currentIndex = rangeTable.valueToOrdinal(_value);
+    int newValue = rangeTable.ordinalToValue(currentIndex - 1);
+
+    if (_predicate(newValue)) {
+      _value = newValue;
+    }
+  }
 }
 
 class SubjectWeight extends RitualModifier {

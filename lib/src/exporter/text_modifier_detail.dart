@@ -132,7 +132,7 @@ class TextDurationDetail extends TextModifierDetail {
 
 class TextRangeDetail extends TextModifierDetail {
   @override
-  String get typicalText => '${name}, ${new GurpsDistance(yards: value).toFormattedString()} (${spellPoints})';
+  String get typicalText => '${name}, ${GurpsDistance.toFormattedString(value)} (${spellPoints})';
 }
 
 class TextRangeDimensionalDetail extends TextModifierDetail {
@@ -142,7 +142,7 @@ class TextRangeDimensionalDetail extends TextModifierDetail {
 
 class TextRangeInformationalDetail extends TextModifierDetail {
   @override
-  String get typicalText => 'Range, ${new GurpsDistance(yards: value).toFormattedString()} (${spellPoints})';
+  String get typicalText => 'Range, ${GurpsDistance.toFormattedString(value)} (${spellPoints})';
 }
 
 class TextRangeTimeDetail extends TextModifierDetail {
@@ -172,7 +172,7 @@ class TextRepairDetail extends TextModifierDetail implements RepairDetail {
 
 class TextSpeedDetail extends TextModifierDetail {
   @override
-  String get typicalText => '${name}, ${new GurpsDistance(yards: value).toFormattedString()}/second (${spellPoints})';
+  String get typicalText => '${name}, ${GurpsDistance.toFormattedString(value)}/second (${spellPoints})';
 }
 
 class TextSubjectWeightDetail extends TextModifierDetail {
