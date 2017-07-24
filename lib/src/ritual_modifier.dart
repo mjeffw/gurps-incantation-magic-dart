@@ -376,6 +376,39 @@ class RangeInformational extends RitualModifier {
     exporter.addDetail(detail);
     return exporter;
   }
+
+  @override
+  void incrementSpellPoints() {
+    if (spellPoints == 0) {
+      _value = 880;
+    } else if (spellPoints == 1) {
+      _value = GurpsDistance.YARDS_PER_MILE;
+    } else {
+      int currentIndex = longDistanceModifiers.valueToOrdinal((_value / GurpsDistance.YARDS_PER_MILE).ceil());
+      int newValue = longDistanceModifiers.ordinalToValue(currentIndex + 1) * GurpsDistance.YARDS_PER_MILE;
+      if (_predicate(newValue)) {
+        _value = newValue;
+      }
+    }
+  }
+
+  @override
+  void decrementSpellPoints() {
+    if (spellPoints == 0) {
+      return;
+    } else if (spellPoints == 1) {
+      _value = 200;
+    } else if (spellPoints == 2) {
+      _value = 880;
+    } else {
+      int currentIndex = longDistanceModifiers.valueToOrdinal((_value / GurpsDistance.YARDS_PER_MILE).ceil());
+      int newValue = longDistanceModifiers.ordinalToValue(currentIndex - 1) * GurpsDistance.YARDS_PER_MILE;
+
+      if (_predicate(newValue)) {
+        _value = newValue;
+      }
+    }
+  }
 }
 
 final RepeatingSequenceConverter rangeTable = new RepeatingSequenceConverter([2, 3, 5, 7, 10, 15]);
@@ -391,6 +424,29 @@ class Range extends RitualModifier {
     super.exportDetail(detail);
     exporter.addDetail(detail);
     return exporter;
+  }
+
+  @override
+  void incrementSpellPoints() {
+    int currentIndex = rangeTable.valueToOrdinal(_value);
+    int newValue = rangeTable.ordinalToValue(currentIndex + 1);
+
+    if (_predicate(newValue)) {
+      _value = newValue;
+    }
+  }
+
+  @override
+  void decrementSpellPoints() {
+    if (spellPoints == 0) {
+      return;
+    }
+    int currentIndex = rangeTable.valueToOrdinal(_value);
+    int newValue = rangeTable.ordinalToValue(currentIndex - 1);
+
+    if (_predicate(newValue)) {
+      _value = newValue;
+    }
   }
 }
 
