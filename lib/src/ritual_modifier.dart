@@ -333,6 +333,39 @@ class RangeCrossTime extends RitualModifier {
     exporter.addDetail(detail);
     return exporter;
   }
+
+  @override
+  void incrementSpellPoints() {
+    if (spellPoints == 0) {
+      _value = 12;
+    } else if (spellPoints == 1) {
+      _value = 24;
+    } else {
+      int currentIndex = longDistanceModifiers.valueToOrdinal((_value / 24).ceil());
+      int newValue = longDistanceModifiers.ordinalToValue(currentIndex + 1) * 24;
+      if (_predicate(newValue)) {
+        _value = newValue;
+      }
+    }
+  }
+
+  @override
+  void decrementSpellPoints() {
+    if (spellPoints == 0) {
+      return;
+    } else if (spellPoints == 1) {
+      _value = 2;
+    } else if (spellPoints == 2) {
+      _value = 12;
+    } else {
+      int currentIndex = longDistanceModifiers.valueToOrdinal((_value / 24).ceil());
+      int newValue = longDistanceModifiers.ordinalToValue(currentIndex - 1) * 24;
+
+      if (_predicate(newValue)) {
+        _value = newValue;
+      }
+    }
+  }
 }
 
 class RangeDimensional extends RitualModifier {
