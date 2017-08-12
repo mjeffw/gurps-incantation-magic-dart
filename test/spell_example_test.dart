@@ -31,7 +31,7 @@ void main() {
     spell.name = "Alarm";
     spell.conditional = true;
     spell.addEffect(new SpellEffect(Effect.Create, Path.Arcanum));
-    AreaOfEffect m = new AreaOfEffect(value: 5, inherent: true)..targets(6, true);
+    AreaOfEffect m = new AreaOfEffect(value: 5, inherent: true)..setTargetInfo(6, true);
     spell.addRitualModifier(m);
     spell.description = _description;
 
@@ -732,7 +732,7 @@ void main() {
     spell.name = 'Jinx';
     spell.addEffect(new SpellEffect(Effect.Control, Path.Augury));
     AreaOfEffect areaOfEffect = new AreaOfEffect(value: 5, inherent: true);
-    areaOfEffect.targets(12, false);
+    areaOfEffect.setTargetInfo(12, false);
     spell.addRitualModifier(areaOfEffect);
     spell.addRitualModifier(
         new Bestows("critical failure range of all rolls", range: BestowsRange.broad, value: -3, inherent: true));

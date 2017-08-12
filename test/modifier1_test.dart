@@ -169,11 +169,11 @@ void main() {
     test("add +1 SP for every two specific subjects not affected", () {
       m.value = 4;
       expect(m.spellPoints, equals(40));
-      m.targets(2, false);
+      m.setTargetInfo(2, false);
       expect(m.spellPoints, equals(41));
-      m.targets(6, false);
+      m.setTargetInfo(6, false);
       expect(m.spellPoints, equals(43));
-      m.targets(7, true);
+      m.setTargetInfo(7, true);
       expect(m.spellPoints, equals(44));
     });
 

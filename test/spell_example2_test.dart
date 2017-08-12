@@ -113,7 +113,7 @@ void main() {
     spell.addRitualModifier(new SubjectWeight(value: 30));
     spell.addRitualModifier(new DurationMod(value: 3600));
     AreaOfEffect areaOfEffect = new AreaOfEffect(value: 4, inherent: true);
-    areaOfEffect.targets(6, false);
+    areaOfEffect.setTargetInfo(6, false);
     spell.addRitualModifier(areaOfEffect);
     spell.addRitualModifier(new AlteredTraits("Defense Bonus", 2, value: 60, inherent: true));
     TextSpellExporter exporter = new TextSpellExporter();

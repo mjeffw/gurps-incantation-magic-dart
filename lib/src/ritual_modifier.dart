@@ -165,7 +165,10 @@ class AlteredTraits extends RitualModifier with Modifiable {
 /// two specific subjects
 class AreaOfEffect extends RitualModifier {
   int _targets = 0;
-  bool _includes = false; // ignore: unused_field
+  int get targets => _targets;
+  set targets(int targets) => _targets = max(targets, 0);
+
+  bool includes = false;
 
   AreaOfEffect({int value: 0, bool inherent: false}) : super("Area of Effect", value, inherent);
 
@@ -173,23 +176,23 @@ class AreaOfEffect extends RitualModifier {
   /// Add another +1 SP for every two specific subjects in the area that won’t be affected by the spell, or
   /// +1 per two subjects included in the spell, if excluding everyone except specific targets.
   @override
-  int get spellPoints => _value * 10 + (_targets / 2).ceil();
+  int get spellPoints => _value * 10 + (targets / 2).ceil();
 
   /// Excluding potential targets is possible -- alternately, you can exclude everyone except specific targets.
   ///
   /// Number is the number of targets to exclude (or include); set includes = true to indicate includes, false
   /// for excludes.
-  void targets(int number, bool includes) {
-    _targets = number;
-    _includes = includes;
+  void setTargetInfo(int number, bool includes) {
+    targets = number;
+    this.includes = includes;
   }
 
   @override
   ModifierExporter export(ModifierExporter exporter) {
     AreaOfEffectDetail detail = exporter.createAreaEffectDetail() as AreaOfEffectDetail;
     super.exportDetail(detail);
-    detail.targets = _targets;
-    detail.includes = _includes;
+    detail.targets = targets;
+    detail.includes = includes;
     exporter.addDetail(detail);
     return exporter;
   }
