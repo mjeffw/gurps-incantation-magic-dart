@@ -30,9 +30,9 @@ void main() {
 
     spell.name = "Alarm";
     spell.conditional = true;
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Arcanum));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Arcanum));
     AreaOfEffect m = new AreaOfEffect(value: 5, inherent: true)..setTargetInfo(6, true);
-    spell.addRitualModifier(m);
+    spell.ritualModifiers.add(m);
     spell.description = _description;
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -65,10 +65,10 @@ void main() {
         'Many casters will customize this spell, using Bestows a Bonus (p. 15) to give higher skills or '
         'attributes. Botches usually produce an animated object with creative and hostile intent!';
     spell.name = "Animate Object";
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Arcanum));
-    spell.addEffect(new SpellEffect(Effect.Control, Path.Arcanum));
-    spell.addRitualModifier(new DurationMod(value: new GurpsDuration(hours: 12).inSeconds));
-    spell.addRitualModifier(new SubjectWeight(value: 100));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Arcanum));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.Arcanum));
+    spell.ritualModifiers.add(new DurationMod(value: new GurpsDuration(hours: 12).inSeconds));
+    spell.ritualModifiers.add(new SubjectWeight(value: 100));
     spell.description = _description;
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -101,10 +101,10 @@ void main() {
         "Susceptibility per point by which he failed his roll (maximum of five). These effects last for (20 - HT) "
         "minutes, minimum of one minute.";
     spell.name = 'Arcane Fire';
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Arcanum));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Arcanum));
     Damage dam = new Damage(type: DamageType.burning, value: 4, inherent: true, direct: false);
     dam.addModifier("Alternative Enhancements", null, 77);
-    spell.addRitualModifier(dam);
+    spell.ritualModifiers.add(dam);
     spell.description = _description;
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -137,9 +137,9 @@ void main() {
         "(The short casting time is due to this drawback; see Limited Spells, p. 15.) This is often cast as a "
         "'blocking' spell (p. 20) at the usual -10 to skill.";
     spell.name = 'Bewitchment';
-    spell.addEffect(new SpellEffect(Effect.Destroy, Path.Mesmerism));
+    spell.effects.add(new SpellEffect(Effect.Destroy, Path.Mesmerism));
     spell.addDrawback("Requires eye contact", null, -40);
-    spell.addRitualModifier(new Affliction("Daze", value: 50, inherent: true));
+    spell.ritualModifiers.add(new Affliction("Daze", value: 50, inherent: true));
     spell.description = _description;
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -171,11 +171,11 @@ void main() {
         "a normal spell. This essentially uses the rules for conjured weaponry (p. 21), but the weapon itself is "
         "the carrier for the damage.";
     spell.name = 'Black Blade';
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Necromancy));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Necromancy));
     Damage dam = new Damage(type: DamageType.toxic, value: 8, inherent: true);
     dam.addModifier("Follow-Up", null, 0);
-    spell.addRitualModifier(dam);
-    spell.addRitualModifier(new DurationMod(value: 10));
+    spell.ritualModifiers.add(dam);
+    spell.ritualModifiers.add(new DurationMod(value: 10));
     spell.description = _description;
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -212,11 +212,11 @@ void main() {
         "friend in the lava\" fails, \"Make your friend leave\" may still work, so long as leaving doesn't require "
         "a lava-swim.";
     spell.name = 'Bond of Servitude for (Demons)';
-    spell.addEffect(new SpellEffect(Effect.Control, Path.Demonology));
-    spell.addRitualModifier(
+    spell.effects.add(new SpellEffect(Effect.Control, Path.Demonology));
+    spell.ritualModifiers.add(
         new Bestows("Resistance to Bond of Servitude", range: BestowsRange.single, value: -2, inherent: true));
-    spell.addRitualModifier(new DurationMod(value: new GurpsDuration(hours: 1).inSeconds));
-    spell.addRitualModifier(new Range(value: 20));
+    spell.ritualModifiers.add(new DurationMod(value: new GurpsDuration(hours: 1).inSeconds));
+    spell.ritualModifiers.add(new Range(value: 20));
     spell.description = _description;
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -247,13 +247,13 @@ void main() {
         "This spell grants the subject DR 6 with the Tough Skin and Hardened 2 modifiers. This protection lasts for "
         "12 minutes.";
     spell.name = 'Bulwark';
-    spell.addEffect(new SpellEffect(Effect.Strengthen, Path.Protection));
+    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Protection));
     AlteredTraits alteredTraits = new AlteredTraits("Damage Resistance", 6, value: 30, inherent: true);
     alteredTraits.addModifier("Hardened 2", null, 40);
     alteredTraits.addModifier("Tough Skin", null, -40);
-    spell.addRitualModifier(alteredTraits);
-    spell.addRitualModifier(new DurationMod(value: new GurpsDuration(minutes: 12).inSeconds));
-    spell.addRitualModifier(new SubjectWeight(value: 1000));
+    spell.ritualModifiers.add(alteredTraits);
+    spell.ritualModifiers.add(new DurationMod(value: new GurpsDuration(minutes: 12).inSeconds));
+    spell.ritualModifiers.add(new SubjectWeight(value: 1000));
     spell.description = _description;
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -285,8 +285,8 @@ void main() {
         "instant banishment from their non-native reality. Critical success on the resistance roll means they "
         "cannot be banished by the caster for the next 24 hours!";
     spell.name = 'Censure';
-    spell.addEffect(new SpellEffect(Effect.Control, Path.Protection));
-    spell.addRitualModifier(new Bestows("Resist Censure", value: -6, inherent: true));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.Protection));
+    spell.ritualModifiers.add(new Bestows("Resist Censure", value: -6, inherent: true));
     spell.description = _description;
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -316,11 +316,11 @@ void main() {
         "yards and length of 20 yards (see Area and Spreading Attacks, p. B413). This cone does 3d burning damage and "
         "requires a roll against Innate Attack (Beam) to hit.";
     spell.name = 'Cone of Flame';
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Elementalism));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Elementalism));
     Damage dam = new Damage(type: DamageType.burning, direct: false, inherent: true);
     dam.addModifier("Cone", "5 yards", 100);
     dam.addModifier("Reduced Range", "x1/5", -20);
-    spell.addRitualModifier(dam);
+    spell.ritualModifiers.add(dam);
     spell.description = _description;
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -355,11 +355,11 @@ void main() {
         "may mistake jokes and harmless social situations for aggression. The warrior is created without armor "
         "or weapons; these must be provided via another spell or given to it by hand.";
     spell.name = 'Create Golem Warrior';
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Arcanum));
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Arcanum));
-    spell.addRitualModifier(new Summoned(value: 50, inherent: true));
-    spell.addRitualModifier(new DurationMod(value: new GurpsDuration(hours: 1).inSeconds));
-    spell.addRitualModifier(new SubjectWeight(value: 300));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Arcanum));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Arcanum));
+    spell.ritualModifiers.add(new Summoned(value: 50, inherent: true));
+    spell.ritualModifiers.add(new DurationMod(value: new GurpsDuration(hours: 1).inSeconds));
+    spell.ritualModifiers.add(new SubjectWeight(value: 300));
     spell.description = _description;
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -388,11 +388,11 @@ void main() {
         "You animate a servitor skeleton or zombie (Summoners, pp. 25-26) from a nearby dead body or grave. It "
         "does your bidding for the next day, after which it crumbles to dust or putrefies.";
     spell.name = 'Create Undead Servitor';
-    spell.addEffect(new SpellEffect(Effect.Control, Path.Necromancy));
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Necromancy));
-    spell.addRitualModifier(new Summoned(value: 25, inherent: true));
-    spell.addRitualModifier(new DurationMod(value: new GurpsDuration(days: 1).inSeconds));
-    spell.addRitualModifier(new SubjectWeight(value: 300));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.Necromancy));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Necromancy));
+    spell.ritualModifiers.add(new Summoned(value: 25, inherent: true));
+    spell.ritualModifiers.add(new DurationMod(value: new GurpsDuration(days: 1).inSeconds));
+    spell.ritualModifiers.add(new SubjectWeight(value: 300));
     spell.description = _description;
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -426,16 +426,16 @@ void main() {
         "Note that the 3d damage being spread out over multiple turns is a special effect: 1d-3 is effectively "
         "1.5 points of damage and 1.5 x 7 = 10.5, the average of rolling 3d.";
     spell.name = 'Creeping Frost';
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Elementalism));
-    spell.addRitualModifier(
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Elementalism));
+    spell.ritualModifiers.add(
         new AlteredTraits("Fragile (Brittle) and Vulnerability (Crushing Attacks x2)", null, value: 9, inherent: true));
-    spell.addRitualModifier(new AreaOfEffect(value: 3, inherent: true));
+    spell.ritualModifiers.add(new AreaOfEffect(value: 3, inherent: true));
     Damage dam = new Damage(type: DamageType.burning, direct: true, value: 8, inherent: true);
     dam.addModifier("No Incendiary", null, -10);
-    spell.addRitualModifier(dam);
-    spell.addRitualModifier(new Range(value: 20));
-    spell.addRitualModifier(new DurationMod(value: new GurpsDuration(minutes: 1).inSeconds));
-    spell.addRitualModifier(new SubjectWeight(value: 10000));
+    spell.ritualModifiers.add(dam);
+    spell.ritualModifiers.add(new Range(value: 20));
+    spell.ritualModifiers.add(new DurationMod(value: new GurpsDuration(minutes: 1).inSeconds));
+    spell.ritualModifiers.add(new SubjectWeight(value: 10000));
     spell.description = _description;
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -469,9 +469,9 @@ void main() {
         "This spell cancels any other spell targeted. The caster gets a total of +10 to his Path roll to terminate "
         "the spell: +4 from the SP total of Dispelling and another +6 from Bestows a Bonus.";
     spell.name = 'Dispelling';
-    spell.addEffect(new SpellEffect(Effect.Destroy, Path.Arcanum));
-    spell.addRitualModifier(new Bestows("Dispelling", range: BestowsRange.single, value: 6, inherent: true));
-    spell.addRitualModifier(new Girded(value: 20, inherent: true));
+    spell.effects.add(new SpellEffect(Effect.Destroy, Path.Arcanum));
+    spell.ritualModifiers.add(new Bestows("Dispelling", range: BestowsRange.single, value: 6, inherent: true));
+    spell.ritualModifiers.add(new Girded(value: 20, inherent: true));
     spell.description = _description;
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -502,11 +502,11 @@ void main() {
         "1, and Rcl 1. Consult the table below for the specifics on a given type of energy; each blast is a separate "
         "spell.";
     spell.name = '(Elemental) Blast';
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Elementalism));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Elementalism));
     Damage dam = new Damage(type: DamageType.corrosive, direct: false, inherent: true);
     dam.addModifier("Incendiary", null, 10);
     dam.addModifier("Increased 1/2D, 5x", null, 10);
-    spell.addRitualModifier(dam);
+    spell.ritualModifiers.add(dam);
     spell.description = _description;
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -537,9 +537,9 @@ void main() {
         "1, and Rcl 1. Consult the table below for the specifics on a given type of energy; each blast is a separate "
         "spell.";
     spell.name = 'Firebomb';
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Elementalism));
-    spell.addRitualModifier(new AreaOfEffect(value: 7, inherent: true));
-    spell.addRitualModifier(new Damage(type: DamageType.burning, direct: false, inherent: true));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Elementalism));
+    spell.ritualModifiers.add(new AreaOfEffect(value: 7, inherent: true));
+    spell.ritualModifiers.add(new Damage(type: DamageType.burning, direct: false, inherent: true));
     spell.description = _description;
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -570,10 +570,10 @@ void main() {
         "mistaken for him. Success by 5 or more, or a critical success, gives +2 on all other rolls to emulate the "
         "target (Acting, Mimicry, etc.). This effect lasts for an hour.";
     spell.name = 'Flesh Mask';
-    spell.addEffect(new SpellEffect(Effect.Transform, Path.Transfiguration));
-    spell.addRitualModifier(new SubjectWeight(value: 300));
-    spell.addRitualModifier(new Bestows("Disguise", range: BestowsRange.single, value: 5, inherent: true));
-    spell.addRitualModifier(new DurationMod(value: 3600));
+    spell.effects.add(new SpellEffect(Effect.Transform, Path.Transfiguration));
+    spell.ritualModifiers.add(new SubjectWeight(value: 300));
+    spell.ritualModifiers.add(new Bestows("Disguise", range: BestowsRange.single, value: 5, inherent: true));
+    spell.ritualModifiers.add(new DurationMod(value: 3600));
     spell.description = _description;
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -599,9 +599,9 @@ void main() {
 
   test("Frozen Bonds", () {
     spell.name = 'Frozen Bonds';
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Elementalism));
-    spell.addRitualModifier(new Bestows("Binding ST", range: BestowsRange.single, value: 3, inherent: true));
-    spell.addRitualModifier(new Range(value: 20));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Elementalism));
+    spell.ritualModifiers.add(new Bestows("Binding ST", range: BestowsRange.single, value: 3, inherent: true));
+    spell.ritualModifiers.add(new Range(value: 20));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -625,11 +625,11 @@ void main() {
 
   test("Greater Solidify Spirit", () {
     spell.name = 'Solidify Spirit';
-    spell.addEffect(new SpellEffect(Effect.Control, Path.Necromancy));
-    spell.addEffect(new SpellEffect(Effect.Strengthen, Path.Necromancy));
-    spell.addRitualModifier(new AlteredTraits("Negated Insubstantiality", null, value: 16, inherent: true));
-    spell.addRitualModifier(new DurationMod(value: 720));
-    spell.addRitualModifier(new RangeDimensional(value: 1));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.Necromancy));
+    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Necromancy));
+    spell.ritualModifiers.add(new AlteredTraits("Negated Insubstantiality", null, value: 16, inherent: true));
+    spell.ritualModifiers.add(new DurationMod(value: 720));
+    spell.ritualModifiers.add(new RangeDimensional(value: 1));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -651,13 +651,13 @@ void main() {
 
   test("Greater Solidify Spirit", () {
     spell.name = 'Hellfire Aura';
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Demonology));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Demonology));
     Damage dam = new Damage(type: DamageType.burning, direct: true, value: 4, inherent: true);
     dam.addModifier("Aura", null, 80);
     dam.addModifier("Incendiary", null, 10);
     dam.addModifier("Melee Attack, Reach C", null, -30);
-    spell.addRitualModifier(dam);
-    spell.addRitualModifier(new DurationMod(value: 60));
+    spell.ritualModifiers.add(dam);
+    spell.ritualModifiers.add(new DurationMod(value: 60));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -680,9 +680,9 @@ void main() {
 
   test("Illusion", () {
     spell.name = 'Illusion';
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Elementalism));
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Mesmerism));
-    spell.addRitualModifier(new DurationMod(value: 3600));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Elementalism));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Mesmerism));
+    spell.ritualModifiers.add(new DurationMod(value: 3600));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -703,12 +703,12 @@ void main() {
 
   test("Invisibility", () {
     spell.name = 'Invisibility';
-    spell.addEffect(new SpellEffect(Effect.Control, Path.Elementalism));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.Elementalism));
     AlteredTraits traits = new AlteredTraits("Invisibility", null, value: 40, inherent: true);
     traits.addModifier("Can Carry Objects", "Heavy Encumbrance", 100);
-    spell.addRitualModifier(traits);
-    spell.addRitualModifier(new DurationMod(value: 60));
-    spell.addRitualModifier(new SubjectWeight(value: 1000));
+    spell.ritualModifiers.add(traits);
+    spell.ritualModifiers.add(new DurationMod(value: 60));
+    spell.ritualModifiers.add(new SubjectWeight(value: 1000));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -730,13 +730,13 @@ void main() {
 
   test("Jinx", () {
     spell.name = 'Jinx';
-    spell.addEffect(new SpellEffect(Effect.Control, Path.Augury));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.Augury));
     AreaOfEffect areaOfEffect = new AreaOfEffect(value: 5, inherent: true);
     areaOfEffect.setTargetInfo(12, false);
-    spell.addRitualModifier(areaOfEffect);
-    spell.addRitualModifier(
+    spell.ritualModifiers.add(areaOfEffect);
+    spell.ritualModifiers.add(
         new Bestows("critical failure range of all rolls", range: BestowsRange.broad, value: -3, inherent: true));
-    spell.addRitualModifier(new DurationMod(value: 3600));
+    spell.ritualModifiers.add(new DurationMod(value: 3600));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -760,10 +760,10 @@ void main() {
 
   test("Lesser Solidify Spirit", () {
     spell.name = 'Lesser Solidify Spirit';
-    spell.addEffect(new SpellEffect(Effect.Control, Path.Necromancy));
-    spell.addEffect(new SpellEffect(Effect.Strengthen, Path.Necromancy));
-    spell.addRitualModifier(new DurationMod(value: 720));
-    spell.addRitualModifier(new RangeDimensional(value: 1));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.Necromancy));
+    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Necromancy));
+    spell.ritualModifiers.add(new DurationMod(value: 720));
+    spell.ritualModifiers.add(new RangeDimensional(value: 1));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);

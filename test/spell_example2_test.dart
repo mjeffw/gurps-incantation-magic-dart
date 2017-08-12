@@ -17,10 +17,10 @@ void main() {
 
   test('Mule’s Strength', () {
     spell.name = "Mule's Strength";
-    spell.addEffect(new SpellEffect(Effect.Strengthen, Path.Transfiguration));
-    spell.addRitualModifier(new AlteredTraits("Lifting ST", 5, value: 15, inherent: true));
-    spell.addRitualModifier(new DurationMod(value: new GurpsDuration(days: 1).inSeconds));
-    spell.addRitualModifier(new SubjectWeight(value: 1000));
+    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Transfiguration));
+    spell.ritualModifiers.add(new AlteredTraits("Lifting ST", 5, value: 15, inherent: true));
+    spell.ritualModifiers.add(new DurationMod(value: new GurpsDuration(days: 1).inSeconds));
+    spell.ritualModifiers.add(new SubjectWeight(value: 1000));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -41,8 +41,8 @@ void main() {
 
   test('Occultus Oculus', () {
     spell.name = 'Occultus Oculus';
-    spell.addEffect(new SpellEffect(Effect.Sense, Path.Augury));
-    spell.addRitualModifier(new Bestows("Recognition", range: BestowsRange.single, value: 6, inherent: true));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.Augury));
+    spell.ritualModifiers.add(new Bestows("Recognition", range: BestowsRange.single, value: 6, inherent: true));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -63,12 +63,12 @@ void main() {
 
   test('Partial Shapeshifting (Bat Wings)', () {
     spell.name = 'Partial Shapeshifting (Bat Wings)';
-    spell.addEffect(new SpellEffect(Effect.Transform, Path.Transfiguration));
+    spell.effects.add(new SpellEffect(Effect.Transform, Path.Transfiguration));
     AlteredTraits t = new AlteredTraits("Flight", null, value: 40, inherent: true);
     t.addModifier("Winged", null, -25);
-    spell.addRitualModifier(t);
-    spell.addRitualModifier(new DurationMod(value: 3600));
-    spell.addRitualModifier(new SubjectWeight(value: 1000));
+    spell.ritualModifiers.add(t);
+    spell.ritualModifiers.add(new DurationMod(value: 3600));
+    spell.ritualModifiers.add(new SubjectWeight(value: 1000));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -91,8 +91,8 @@ void main() {
 
   test('Peel Back the Skin', () {
     spell.name = 'Peel Back the Skin';
-    spell.addEffect(new SpellEffect(Effect.Destroy, Path.Transfiguration));
-    spell.addRitualModifier(new SubjectWeight(value: 300));
+    spell.effects.add(new SpellEffect(Effect.Destroy, Path.Transfiguration));
+    spell.ritualModifiers.add(new SubjectWeight(value: 300));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -109,13 +109,13 @@ void main() {
 
   test('Radiant Shield', () {
     spell.name = 'Radiant Shield';
-    spell.addEffect(new SpellEffect(Effect.Strengthen, Path.Protection));
-    spell.addRitualModifier(new SubjectWeight(value: 30));
-    spell.addRitualModifier(new DurationMod(value: 3600));
+    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Protection));
+    spell.ritualModifiers.add(new SubjectWeight(value: 30));
+    spell.ritualModifiers.add(new DurationMod(value: 3600));
     AreaOfEffect areaOfEffect = new AreaOfEffect(value: 4, inherent: true);
     areaOfEffect.setTargetInfo(6, false);
-    spell.addRitualModifier(areaOfEffect);
-    spell.addRitualModifier(new AlteredTraits("Defense Bonus", 2, value: 60, inherent: true));
+    spell.ritualModifiers.add(areaOfEffect);
+    spell.ritualModifiers.add(new AlteredTraits("Defense Bonus", 2, value: 60, inherent: true));
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
     List<String> lines = exporter.toString().split('\n');
@@ -136,9 +136,9 @@ void main() {
 
   test('Repair Undead', () {
     spell.name = 'Repair Undead';
-    spell.addEffect(new SpellEffect(Effect.Restore, Path.Necromancy));
-    spell.addRitualModifier(new Repair("undead", value: 8, inherent: true));
-    spell.addRitualModifier(new SubjectWeight(value: 300));
+    spell.effects.add(new SpellEffect(Effect.Restore, Path.Necromancy));
+    spell.ritualModifiers.add(new Repair("undead", value: 8, inherent: true));
+    spell.ritualModifiers.add(new SubjectWeight(value: 300));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -160,11 +160,11 @@ void main() {
 
   test('Safeguard', () {
     spell.name = 'Safeguard';
-    spell.addEffect(new SpellEffect(Effect.Strengthen, Path.Protection));
-    spell.addEffect(new SpellEffect(Effect.Strengthen, Path.Protection));
-    spell.addRitualModifier(new AlteredTraits("Modified Altered Time Rate", 1, value: 60, inherent: true));
-    spell.addRitualModifier(new Bestows("Active Defense rolls", range: BestowsRange.broad, value: 2, inherent: true));
-    spell.addRitualModifier(new DurationMod(value: 10));
+    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Protection));
+    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Protection));
+    spell.ritualModifiers.add(new AlteredTraits("Modified Altered Time Rate", 1, value: 60, inherent: true));
+    spell.ritualModifiers.add(new Bestows("Active Defense rolls", range: BestowsRange.broad, value: 2, inherent: true));
+    spell.ritualModifiers.add(new DurationMod(value: 10));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -189,10 +189,10 @@ void main() {
 
   test('Scry', () {
     spell.name = 'Scry';
-    spell.addEffect(new SpellEffect(Effect.Strengthen, Path.Augury));
-    spell.addRitualModifier(new Speed(value: 20000, inherent: true));
-    spell.addRitualModifier(new DurationMod(value: 10800));
-    spell.addRitualModifier(new RangeInformational(value: 200000));
+    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Augury));
+    spell.ritualModifiers.add(new Speed(value: 20000, inherent: true));
+    spell.ritualModifiers.add(new DurationMod(value: 10800));
+    spell.ritualModifiers.add(new RangeInformational(value: 200000));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -212,8 +212,8 @@ void main() {
 
   test('Seek Treasure', () {
     spell.name = 'Seek Treasure';
-    spell.addEffect(new SpellEffect(Effect.Sense, Path.Augury));
-    spell.addRitualModifier(new RangeInformational(value: new GurpsDistance(miles: 100).inYards));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.Augury));
+    spell.ritualModifiers.add(new RangeInformational(value: new GurpsDistance(miles: 100).inYards));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -229,10 +229,10 @@ void main() {
 
   test('Summon Flaming Skull', () {
     spell.name = 'Summon Flaming Skull';
-    spell.addEffect(new SpellEffect(Effect.Control, Path.Demonology));
-    spell.addRitualModifier(new DurationMod(value: 60));
-    spell.addRitualModifier(new RangeDimensional(value: 1));
-    spell.addRitualModifier(new Summoned(value: 100, inherent: true));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.Demonology));
+    spell.ritualModifiers.add(new DurationMod(value: 60));
+    spell.ritualModifiers.add(new RangeDimensional(value: 1));
+    spell.ritualModifiers.add(new Summoned(value: 100, inherent: true));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -252,9 +252,9 @@ void main() {
 
   test('Twist of Fate', () {
     spell.name = 'Twist of Fate';
-    spell.addEffect(new SpellEffect(Effect.Transform, Path.Augury));
-    spell.addRitualModifier(new AlteredTraits("Destiny", null, value: 5, inherent: true));
-    spell.addRitualModifier(new DurationMod(value: 3600));
+    spell.effects.add(new SpellEffect(Effect.Transform, Path.Augury));
+    spell.ritualModifiers.add(new AlteredTraits("Destiny", null, value: 5, inherent: true));
+    spell.ritualModifiers.add(new DurationMod(value: 3600));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -273,10 +273,10 @@ void main() {
 
   test('Ward for Augury', () {
     spell.name = 'Ward for Augury';
-    spell.addEffect(new SpellEffect(Effect.Control, Path.Augury));
-    spell.addRitualModifier(new DurationMod(value: 3600));
-    spell.addRitualModifier(new AreaOfEffect(value: 5, inherent: true));
-    spell.addRitualModifier(new Bestows("Ward’s Power", range: BestowsRange.moderate, value: 2, inherent: true));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.Augury));
+    spell.ritualModifiers.add(new DurationMod(value: 3600));
+    spell.ritualModifiers.add(new AreaOfEffect(value: 5, inherent: true));
+    spell.ritualModifiers.add(new Bestows("Ward’s Power", range: BestowsRange.moderate, value: 2, inherent: true));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -297,9 +297,9 @@ void main() {
 
   test('Whiplash', () {
     spell.name = 'Whiplash';
-    spell.addEffect(new SpellEffect(Effect.Control, Path.Mesmerism));
-    spell.addRitualModifier(new Affliction("Seizure", value: 100, inherent: true));
-    spell.addRitualModifier(new Damage(value: 1, inherent: true));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.Mesmerism));
+    spell.ritualModifiers.add(new Affliction("Seizure", value: 100, inherent: true));
+    spell.ritualModifiers.add(new Damage(value: 1, inherent: true));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -320,12 +320,12 @@ void main() {
 
   test('Wrathchild', () {
     spell.name = 'Wrathchild';
-    spell.addEffect(new SpellEffect(Effect.Control, Path.Mesmerism));
-    spell.addEffect(new SpellEffect(Effect.Strengthen, Path.Transfiguration));
-    spell.addRitualModifier(new AlteredTraits("ST +5 and Berserk (N/A)", null, value: 55, inherent: true));
-    spell.addRitualModifier(
+    spell.effects.add(new SpellEffect(Effect.Control, Path.Mesmerism));
+    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Transfiguration));
+    spell.ritualModifiers.add(new AlteredTraits("ST +5 and Berserk (N/A)", null, value: 55, inherent: true));
+    spell.ritualModifiers.add(
         new Bestows("HT rolls to remain conscious or alive", range: BestowsRange.single, value: 2, inherent: true));
-    spell.addRitualModifier(new DurationMod(value: 30));
+    spell.ritualModifiers.add(new DurationMod(value: 30));
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
     List<String> lines = exporter.toString().split('\n');
@@ -349,8 +349,8 @@ void main() {
 
   test('Track Traveler', () {
     spell.name = 'Track Traveler';
-    spell.addEffect(new SpellEffect(Effect.Sense, Path.Arcanum));
-    spell.addRitualModifier(new RangeCrossTime(value: 24));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.Arcanum));
+    spell.ritualModifiers.add(new RangeCrossTime(value: 24));
     TextSpellExporter exporter = new TextSpellExporter();
 
     spell.export(exporter);
@@ -371,10 +371,10 @@ void main() {
 
   test('Death Vison', () {
     spell.name = 'Death Vision';
-    spell.addEffect(new SpellEffect(Effect.Sense, Path.Augury));
-    spell.addEffect(new SpellEffect(Effect.Destroy, Path.Mesmerism));
-    spell.addRitualModifier(new AfflictionStun(inherent: true));
-    spell.addRitualModifier(new Range(value: 10));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.Augury));
+    spell.effects.add(new SpellEffect(Effect.Destroy, Path.Mesmerism));
+    spell.ritualModifiers.add(new AfflictionStun(inherent: true));
+    spell.ritualModifiers.add(new Range(value: 10));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);

@@ -27,18 +27,18 @@ void main() {
   });
 
   test("contains SpellEffects", () {
-    spell.addEffect(new SpellEffect(Effect.Sense, Path.Augury));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.Augury));
     expect(spell.spellPoints, equals(2));
     expect(spell.effects.length, equals(1));
     expect(spell.effects, contains(new SpellEffect(Effect.Sense, Path.Augury)));
 
-    spell.addEffect(new SpellEffect(Effect.Control, Path.Arcanum));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.Arcanum));
     expect(spell.spellPoints, equals(7));
     expect(spell.effects.length, equals(2));
     expect(spell.effects, contains(new SpellEffect(Effect.Sense, Path.Augury)));
     expect(spell.effects, contains(new SpellEffect(Effect.Control, Path.Arcanum)));
 
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Elementalism));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Elementalism));
     expect(spell.spellPoints, equals(13));
     expect(spell.effects.length, equals(3));
     expect(spell.effects, contains(new SpellEffect(Effect.Sense, Path.Augury)));
@@ -48,13 +48,13 @@ void main() {
 
   test("contains Modifiers", () {
     AfflictionStun afflictionStun = new AfflictionStun();
-    spell.addRitualModifier(afflictionStun);
+    spell.ritualModifiers.add(afflictionStun);
     expect(spell.inherentModifiers, isEmpty);
     expect(spell.ritualModifiers.length, equals(1));
     expect(spell.ritualModifiers, contains(afflictionStun));
 
     Range range = new Range();
-    spell.addRitualModifier(range);
+    spell.ritualModifiers.add(range);
     expect(spell.inherentModifiers, isEmpty);
     expect(spell.ritualModifiers.length, equals(2));
     expect(spell.ritualModifiers, contains(afflictionStun));
@@ -63,15 +63,15 @@ void main() {
 
   test("contains inherent Modifiers", () {
     AfflictionStun afflictionStun = new AfflictionStun(inherent: true);
-    spell.addRitualModifier(afflictionStun);
+    spell.ritualModifiers.add(afflictionStun);
     Range range = new Range();
-    spell.addRitualModifier(range);
+    spell.ritualModifiers.add(range);
 
     expect(spell.inherentModifiers.length, equals(1));
     expect(spell.inherentModifiers, contains(afflictionStun));
 
     DurationMod dur = new DurationMod(inherent: true);
-    spell.addRitualModifier(dur);
+    spell.ritualModifiers.add(dur);
 
     expect(spell.inherentModifiers.length, equals(2));
     expect(spell.inherentModifiers, contains(afflictionStun));
@@ -79,55 +79,55 @@ void main() {
   });
 
   test("should have casting time", () {
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Arcanum));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Arcanum));
     expect(spell.castingTime, equals(const GurpsDuration(minutes: 5)));
 
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Augury));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Augury));
     expect(spell.castingTime, equals(const GurpsDuration(minutes: 10)));
 
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Demonology));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Demonology));
     expect(spell.castingTime, equals(const GurpsDuration(minutes: 30)));
 
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Elementalism));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Elementalism));
     expect(spell.castingTime, equals(const GurpsDuration(hours: 1)));
 
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Mesmerism));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Mesmerism));
     expect(spell.castingTime, equals(const GurpsDuration(hours: 3)));
 
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Necromancy));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Necromancy));
     expect(spell.castingTime, equals(const GurpsDuration(hours: 6)));
 
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Protection));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Protection));
     expect(spell.castingTime, equals(const GurpsDuration(hours: 12)));
 
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Transfiguration));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Transfiguration));
     expect(spell.castingTime, equals(const GurpsDuration(hours: 24)));
     expect(spell.castingTime, equals(const GurpsDuration(days: 1)));
 
-    spell.addEffect(new SpellEffect(Effect.Sense, Path.Arcanum));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.Arcanum));
     expect(spell.castingTime, equals(const GurpsDuration(days: 3)));
 
-    spell.addEffect(new SpellEffect(Effect.Sense, Path.Augury));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.Augury));
     expect(spell.castingTime, equals(const GurpsDuration(days: 7)));
     expect(spell.castingTime, equals(const GurpsDuration(weeks: 1)));
 
-    spell.addEffect(new SpellEffect(Effect.Sense, Path.Demonology));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.Demonology));
     expect(spell.castingTime, equals(const GurpsDuration(weeks: 2)));
 
-    spell.addEffect(new SpellEffect(Effect.Sense, Path.Elementalism));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.Elementalism));
     expect(spell.castingTime, equals(const GurpsDuration(months: 1)));
 
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Mesmerism));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Mesmerism));
     expect(spell.castingTime, equals(const GurpsDuration(months: 2)));
 
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Necromancy));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Necromancy));
     expect(spell.castingTime, equals(const GurpsDuration(months: 3)));
   });
 
   test("conditional spells require an additional +5 SP", () {
-    spell.addEffect(new SpellEffect(Effect.Sense, Path.Augury));
-    spell.addEffect(new SpellEffect(Effect.Control, Path.Arcanum));
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Demonology));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.Augury));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.Arcanum));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Demonology));
     expect(spell.spellPoints, equals(13));
 
     spell.conditional = true;
@@ -135,30 +135,30 @@ void main() {
   });
 
   test("should add Modifier cost to spellPoints", () {
-    spell.addEffect(new SpellEffect(Effect.Sense, Path.Augury));
-    spell.addEffect(new SpellEffect(Effect.Control, Path.Arcanum));
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Demonology));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.Augury));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.Arcanum));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Demonology));
     expect(spell.spellPoints, equals(13));
 
     Bestows bestows = new Bestows("Foo");
     bestows.value = 5;
-    spell.addRitualModifier(bestows);
+    spell.ritualModifiers.add(bestows);
 
     expect(spell.spellPoints, equals(25));
 
     AlteredTraits traits = new AlteredTraits("bar", null);
     traits.value = -15;
-    spell.addRitualModifier(traits);
+    spell.ritualModifiers.add(traits);
 
     expect(spell.spellPoints, equals(28));
   });
 
   test("skill penalty", () {
-    spell.addEffect(new SpellEffect(Effect.Sense, Path.Augury));
-    spell.addEffect(new SpellEffect(Effect.Control, Path.Arcanum));
-    spell.addEffect(new SpellEffect(Effect.Create, Path.Demonology));
-    spell.addRitualModifier(new Bestows("Bar", value: 5));
-    spell.addRitualModifier(new AlteredTraits("baz", 0, value: -15));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.Augury));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.Arcanum));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.Demonology));
+    spell.ritualModifiers.add(new Bestows("Bar", value: 5));
+    spell.ritualModifiers.add(new AlteredTraits("baz", 0, value: -15));
     spell.conditional = true;
 
     expect(spell.skillPenalty, equals(-3));

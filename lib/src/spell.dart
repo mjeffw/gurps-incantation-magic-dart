@@ -34,24 +34,19 @@ class Spell {
   String description;
 
   // spells have SpellEffects - the combination of a Path and an Effect ("Control Demonology", for example)
-  final List<SpellEffect> effects = new List<SpellEffect>();
-  void addEffect(SpellEffect effect) => effects.add(effect);
-  SpellEffect removeEffect(int index) => effects.removeAt(index);
-  SpellEffect setEffect(int index, SpellEffect n) =>  effects[index] = n;
+  final List<SpellEffect> effects = [];
 
   // spells have modifiers, to deliver specific effects at a cost
-  final List<RitualModifier> _ritualMods = new List<RitualModifier>();
-  void addRitualModifier(RitualModifier mod) => _ritualMods.add(mod);
-  List<RitualModifier> get inherentModifiers => new List.unmodifiable(_ritualMods.where((it) => it.inherent == true));
-  List<RitualModifier> get ritualModifiers => new List.unmodifiable(_ritualMods);
+  final List<RitualModifier> ritualModifiers = [];
+  List<RitualModifier> get inherentModifiers => new List.unmodifiable(ritualModifiers.where((it) => it.inherent == true));
 
   /// Drawbacks can be added to spells to reduce the spell points needed
-  final List<Modifier> _drawbacks = [];
+  final List<Modifier> drawbacks = [];
   void addDrawback(String name, String detail, int value) {
     if (value > 0) {
       throw new InputException("only limitations are allowed in Spell");
     }
-    _drawbacks.add(new Modifier(name, detail, value));
+    drawbacks.add(new Modifier(name, detail, value));
   }
 
   // spells may be conditional - this means there is a specific "trigger" that causes the spell to activate
@@ -77,12 +72,12 @@ class Spell {
   }
 
   int _addForModifiers() {
-    return _ritualMods.map((it) => it.spellPoints).fold(0, (int a, int b) => a + b);
+    return ritualModifiers.map((it) => it.spellPoints).fold(0, (int a, int b) => a + b);
   }
 
   /// The time required to cast a spell depends exclusively on how many spell effects it has.
   GurpsDuration get castingTime {
-    int effectiveNumberOfEffects = effects.length + _sumOfModifierLevels ~/ 40;
+    int effectiveNumberOfEffects = effects.length + _sumOfDrawbackModifierLevels ~/ 40;
     if (effectiveNumberOfEffects < 13) {
       return times[effectiveNumberOfEffects];
     } else {
@@ -90,7 +85,7 @@ class Spell {
     }
   }
 
-  int get _sumOfModifierLevels => _drawbacks.map((e) => e.level).fold(0, (a, b) => a + b);
+  int get _sumOfDrawbackModifierLevels => drawbacks.map((e) => e.level).fold(0, (a, b) => a + b);
 
   SpellExporter export(SpellExporter exporter) {
     exporter.name = name;
@@ -99,7 +94,7 @@ class Spell {
     effects.forEach((it) => it.export(effectExporter));
 
     ModifierExporter modifierExporter = exporter.modifierExporter;
-    _ritualMods.forEach((it) => it.export(modifierExporter));
+    ritualModifiers.forEach((it) => it.export(modifierExporter));
 
     exporter.penalty = skillPenalty;
     exporter.time = castingTime;
