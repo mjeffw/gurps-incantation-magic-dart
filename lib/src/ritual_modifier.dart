@@ -124,6 +124,17 @@ class Affliction extends RitualModifier {
     exporter.addDetail(detail);
     return exporter;
   }
+
+  @override
+  void incrementSpellPoints() {
+    this.value = (spellPoints + 1) * 5;
+  }
+
+  @override
+  void decrementSpellPoints() {
+    if (spellPoints == 0) return;
+    this.value = (spellPoints - 1) * 5;
+  }
 }
 // ----------------------------------
 
