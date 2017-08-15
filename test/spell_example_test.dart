@@ -103,7 +103,7 @@ void main() {
     spell.name = 'Arcane Fire';
     spell.effects.add(new SpellEffect(Effect.Create, Path.Arcanum));
     Damage dam = new Damage(type: DamageType.burning, value: 4, inherent: true, direct: false);
-    dam.addModifier("Alternative Enhancements", null, 77);
+    dam.addTraitModifier("Alternative Enhancements", null, 77);
     spell.ritualModifiers.add(dam);
     spell.description = _description;
 
@@ -173,7 +173,7 @@ void main() {
     spell.name = 'Black Blade';
     spell.effects.add(new SpellEffect(Effect.Create, Path.Necromancy));
     Damage dam = new Damage(type: DamageType.toxic, value: 8, inherent: true);
-    dam.addModifier("Follow-Up", null, 0);
+    dam.addTraitModifier("Follow-Up", null, 0);
     spell.ritualModifiers.add(dam);
     spell.ritualModifiers.add(new DurationMod(value: 10));
     spell.description = _description;
@@ -249,8 +249,8 @@ void main() {
     spell.name = 'Bulwark';
     spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Protection));
     AlteredTraits alteredTraits = new AlteredTraits("Damage Resistance", 6, value: 30, inherent: true);
-    alteredTraits.addModifier("Hardened 2", null, 40);
-    alteredTraits.addModifier("Tough Skin", null, -40);
+    alteredTraits.addTraitModifier("Hardened 2", null, 40);
+    alteredTraits.addTraitModifier("Tough Skin", null, -40);
     spell.ritualModifiers.add(alteredTraits);
     spell.ritualModifiers.add(new DurationMod(value: new GurpsDuration(minutes: 12).inSeconds));
     spell.ritualModifiers.add(new SubjectWeight(value: 1000));
@@ -318,8 +318,8 @@ void main() {
     spell.name = 'Cone of Flame';
     spell.effects.add(new SpellEffect(Effect.Create, Path.Elementalism));
     Damage dam = new Damage(type: DamageType.burning, direct: false, inherent: true);
-    dam.addModifier("Cone", "5 yards", 100);
-    dam.addModifier("Reduced Range", "x1/5", -20);
+    dam.addTraitModifier("Cone", "5 yards", 100);
+    dam.addTraitModifier("Reduced Range", "x1/5", -20);
     spell.ritualModifiers.add(dam);
     spell.description = _description;
 
@@ -431,7 +431,7 @@ void main() {
         new AlteredTraits("Fragile (Brittle) and Vulnerability (Crushing Attacks x2)", null, value: 9, inherent: true));
     spell.ritualModifiers.add(new AreaOfEffect(value: 3, inherent: true));
     Damage dam = new Damage(type: DamageType.burning, direct: true, value: 8, inherent: true);
-    dam.addModifier("No Incendiary", null, -10);
+    dam.addTraitModifier("No Incendiary", null, -10);
     spell.ritualModifiers.add(dam);
     spell.ritualModifiers.add(new Range(value: 20));
     spell.ritualModifiers.add(new DurationMod(value: new GurpsDuration(minutes: 1).inSeconds));
@@ -504,8 +504,8 @@ void main() {
     spell.name = '(Elemental) Blast';
     spell.effects.add(new SpellEffect(Effect.Create, Path.Elementalism));
     Damage dam = new Damage(type: DamageType.corrosive, direct: false, inherent: true);
-    dam.addModifier("Incendiary", null, 10);
-    dam.addModifier("Increased 1/2D, 5x", null, 10);
+    dam.addTraitModifier("Incendiary", null, 10);
+    dam.addTraitModifier("Increased 1/2D, 5x", null, 10);
     spell.ritualModifiers.add(dam);
     spell.description = _description;
 
@@ -653,9 +653,9 @@ void main() {
     spell.name = 'Hellfire Aura';
     spell.effects.add(new SpellEffect(Effect.Create, Path.Demonology));
     Damage dam = new Damage(type: DamageType.burning, direct: true, value: 4, inherent: true);
-    dam.addModifier("Aura", null, 80);
-    dam.addModifier("Incendiary", null, 10);
-    dam.addModifier("Melee Attack, Reach C", null, -30);
+    dam.addTraitModifier("Aura", null, 80);
+    dam.addTraitModifier("Incendiary", null, 10);
+    dam.addTraitModifier("Melee Attack, Reach C", null, -30);
     spell.ritualModifiers.add(dam);
     spell.ritualModifiers.add(new DurationMod(value: 60));
 
@@ -705,7 +705,7 @@ void main() {
     spell.name = 'Invisibility';
     spell.effects.add(new SpellEffect(Effect.Control, Path.Elementalism));
     AlteredTraits traits = new AlteredTraits("Invisibility", null, value: 40, inherent: true);
-    traits.addModifier("Can Carry Objects", "Heavy Encumbrance", 100);
+    traits.addTraitModifier("Can Carry Objects", "Heavy Encumbrance", 100);
     spell.ritualModifiers.add(traits);
     spell.ritualModifiers.add(new DurationMod(value: 60));
     spell.ritualModifiers.add(new SubjectWeight(value: 1000));

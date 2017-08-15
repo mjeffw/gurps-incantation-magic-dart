@@ -3,7 +3,7 @@ import 'dart:math';
 import '../util/repeating_sequence.dart';
 import '../units/gurps_distance.dart';
 import '../units/gurps_duration.dart';
-import '../gurps/modifier.dart';
+import '../gurps/trait_modifier.dart';
 import '../gurps/die_roll.dart';
 import 'spell_exporter.dart';
 import 'modifier_detail.dart';
@@ -143,7 +143,7 @@ class Affliction extends RitualModifier {
 /// Any spell that adds disadvantages, reduces attributes, or reduces or removes advantages adds +1 SP for
 /// every five character points removed. One that adds advantages, reduces or removes disadvantages, or increases
 /// attributes adds +1 SP for every character point added.
-class AlteredTraits extends RitualModifier with Modifiable {
+class AlteredTraits extends RitualModifier with TraitModifiable {
   String specialization;
   int specLevel;
 
@@ -151,7 +151,7 @@ class AlteredTraits extends RitualModifier with Modifiable {
       : super.withPredicateNew("Altered Traits", anyValue, value, inherent);
 
   @override
-  int get spellPoints => _baseSpellPoints + adjustmentForModifiers(_baseSpellPoints);
+  int get spellPoints => _baseSpellPoints + adjustmentForTraitModifiers(_baseSpellPoints);
 
   int get _baseSpellPoints => (_value < 0) ? (_value.abs() / 5.0).ceil() : _value;
 
@@ -161,7 +161,7 @@ class AlteredTraits extends RitualModifier with Modifiable {
     super.exportDetail(detail);
     detail.specialization = specialization;
     detail.specLevel = specLevel;
-    modifiers.forEach((it) => detail.addModifier(it));
+    traitModifiers.forEach((it) => detail.addModifier(it));
     exporter.addDetail(detail);
     return exporter;
   }

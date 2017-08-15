@@ -2,7 +2,7 @@ import '../modifier_detail.dart';
 import '../../units/gurps_duration.dart';
 import '../../units/gurps_distance.dart';
 import '../../units/weight.dart';
-import '../../gurps/modifier.dart';
+import '../../gurps/trait_modifier.dart';
 import '../../util/core_utils.dart';
 import 'package:gurps_incantation_magic_model/gurps/die_roll.dart';
 
@@ -30,7 +30,7 @@ class TextAfflictionDetail extends TextModifierDetail implements AfflictionDetai
 }
 
 class TextAlteredTraitsDetail extends TextModifierDetail implements AlteredTraitsDetail {
-  final List<Modifier> modifiers = [];
+  final List<TraitModifier> modifiers = [];
 
   @override
   int specLevel;
@@ -39,7 +39,7 @@ class TextAlteredTraitsDetail extends TextModifierDetail implements AlteredTrait
   String specialization;
 
   @override
-  void addModifier(Modifier e) => modifiers.add(e);
+  void addModifier(TraitModifier e) => modifiers.add(e);
 
   @override
   String get summaryText {
@@ -99,7 +99,7 @@ class TextDamageDetail extends TextModifierDetail implements DamageDetail {
   String type;
   bool direct;
 
-  final List<Modifier> modifiers = [];
+  final List<TraitModifier> modifiers = [];
 
   @override
   String get summaryText {
@@ -120,7 +120,7 @@ class TextDamageDetail extends TextModifierDetail implements DamageDetail {
   }
 
   @override
-  void addModifier(Modifier e) {
+  void addModifier(TraitModifier e) {
     modifiers.add(e);
   }
 }

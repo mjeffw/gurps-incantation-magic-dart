@@ -1,5 +1,5 @@
 import '../gurps/die_roll.dart';
-import '../gurps/modifier.dart';
+import '../gurps/trait_modifier.dart';
 import 'ritual_modifier.dart';
 import 'spell_exporter.dart';
 import 'modifier_detail.dart';
@@ -48,7 +48,7 @@ final List<DamageType> cuttingTypes = [DamageType.cutting, DamageType.largePierc
 /// on what type of damage is being done.
 ///
 /// To convert from value to DieRoll: DieRoll dieRoll = new DieRoll(1, value);
-class Damage extends RitualModifier with Modifiable {
+class Damage extends RitualModifier with TraitModifiable {
   DamageType type = DamageType.crushing;
   bool _direct = true;
   bool _explosive = false;
@@ -82,18 +82,18 @@ class Damage extends RitualModifier with Modifiable {
   // Enhancements may be added to Damage.
   int _adjustmentForEnhancements(int sp) {
     // Added limitations reduce this surcharge, but will never provide a net SP discount.
-    if (sumOfModifierLevels < 0) {
+    if (sumOfTraitModifierLevels < 0) {
       return 0;
     }
 
     // If Damage costs 21 SP or more, apply the enhancement percentage to the SP cost for Damage only (not to the cost
     // of the whole spell); round up
     if (sp > 20) {
-      return sumOfModifierLevels;
+      return sumOfTraitModifierLevels;
     }
 
     // Each +5% adds 1 SP if the base cost for Damage is 20 SP or less.
-    return (sumOfModifierLevels / 5).ceil();
+    return (sumOfTraitModifierLevels / 5).ceil();
   }
 
   int get _vampiricFactor {
@@ -142,7 +142,7 @@ class Damage extends RitualModifier with Modifiable {
     super.exportDetail(detail);
     detail.type = damageTypeLabels[type];
     detail.direct = _direct;
-    modifiers.forEach((it) => detail.addModifier(it));
+    traitModifiers.forEach((it) => detail.addModifier(it));
     detail.dieRoll = dice;
     exporter.addDetail(detail);
     return exporter;

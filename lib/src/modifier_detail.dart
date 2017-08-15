@@ -1,4 +1,4 @@
-import '../gurps/modifier.dart';
+import '../gurps/trait_modifier.dart';
 import '../gurps/die_roll.dart';
 
 abstract class ModifierDetail {
@@ -19,7 +19,7 @@ abstract class AlteredTraitsDetail extends ModifierDetail {
   String specialization;
   int specLevel;
 
-  void addModifier(Modifier it);
+  void addModifier(TraitModifier it);
 }
 
 abstract class AreaOfEffectDetail extends ModifierDetail {
@@ -37,7 +37,7 @@ abstract class DamageDetail extends ModifierDetail {
   set type(String type);
   set direct(bool direct);
 
-  void addModifier(Modifier e);
+  void addModifier(TraitModifier e);
 }
 
 abstract class RepairDetail extends ModifierDetail {

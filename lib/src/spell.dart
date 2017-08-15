@@ -2,7 +2,7 @@ import '../units/gurps_duration.dart';
 import 'spell_exporter.dart';
 import 'ritual_modifier.dart';
 import 'spell_effect.dart';
-import '../gurps/modifier.dart';
+import '../gurps/trait_modifier.dart';
 
 class Spell {
   static final List<GurpsDuration> times = [
@@ -41,12 +41,12 @@ class Spell {
   List<RitualModifier> get inherentModifiers => new List.unmodifiable(ritualModifiers.where((it) => it.inherent == true));
 
   /// Drawbacks can be added to spells to reduce the spell points needed
-  final List<Modifier> drawbacks = [];
+  final List<TraitModifier> drawbacks = [];
   void addDrawback(String name, String detail, int value) {
     if (value > 0) {
       throw new InputException("only limitations are allowed in Spell");
     }
-    drawbacks.add(new Modifier(name, detail, value));
+    drawbacks.add(new TraitModifier(name, detail, value));
   }
 
   // spells may be conditional - this means there is a specific "trigger" that causes the spell to activate

@@ -111,19 +111,19 @@ void main() {
 
     test("allows for Limitations/Enhancements", () {
       m.value = 24;
-      m.addModifier("Ten percent", null, 10);
+      m.addTraitModifier("Ten percent", null, 10);
       expect(m.spellPoints, equals(27));
 
-      m.addModifier("Another enhancer", null, 5);
+      m.addTraitModifier("Another enhancer", null, 5);
       expect(m.spellPoints, equals(28));
 
-      m.addModifier("Limitation", null, -10);
+      m.addTraitModifier("Limitation", null, -10);
       expect(m.spellPoints, equals(26));
     });
 
     test("another test for Limitations/Enhancements", () {
-      m.addModifier("foo", null, 35);
-      m.addModifier("bar", "detail", -10);
+      m.addTraitModifier("foo", null, 35);
+      m.addTraitModifier("bar", "detail", -10);
 
       m.value = 0;
       expect(m.spellPoints, equals(0));
@@ -434,25 +434,25 @@ void main() {
 
     // Each +5% adds 1 SP if the base cost for Damage is 20 SP or less.
     test("should add 1 SP per 5 Percent of Enhancers", () {
-      m.addModifier("foo", null, 1);
+      m.addTraitModifier("foo", null, 1);
       m.value = 10;
       expect(m.spellPoints, equals(11));
       m.value = 20;
       expect(m.spellPoints, equals(21));
 
-      m.addModifier("bar", null, 4);
+      m.addTraitModifier("bar", null, 4);
       m.value = 10;
       expect(m.spellPoints, equals(11));
       m.value = 20;
       expect(m.spellPoints, equals(21));
 
-      m.addModifier("baz", null, 2);
+      m.addTraitModifier("baz", null, 2);
       m.value = 10;
       expect(m.spellPoints, equals(12));
       m.value = 20;
       expect(m.spellPoints, equals(22));
 
-      m.addModifier("dum", null, 8);
+      m.addTraitModifier("dum", null, 8);
       m.value = 10;
       expect(m.spellPoints, equals(13));
       m.value = 20;
@@ -462,33 +462,33 @@ void main() {
     // If Damage costs 21 SP or more, apply the enhancement percentage to the SP cost for Damage only (not to the cost
     // of the whole spell); round up.
     test("should Add 1 Point Per 1 Percent", () {
-      m.addModifier("foo", null, 1);
+      m.addTraitModifier("foo", null, 1);
       m.value = 25;
       expect(m.spellPoints, equals(26));
 
-      m.addModifier("foo", null, 4);
+      m.addTraitModifier("foo", null, 4);
       m.value = 30;
       expect(m.spellPoints, equals(35));
 
-      m.addModifier("foo", null, 2);
+      m.addTraitModifier("foo", null, 2);
       m.value = 33;
       expect(m.spellPoints, equals(40));
 
-      m.addModifier("foo", null, 8);
+      m.addTraitModifier("foo", null, 8);
       m.value = 50;
       expect(m.spellPoints, equals(65));
     });
 
     // Added limitations reduce this surcharge, but will never provide a net SP discount.
     test("should Not Add 1 Point", () {
-      m.addModifier("foo", null, 10);
-      m.addModifier("bar", null, -5);
+      m.addTraitModifier("foo", null, 10);
+      m.addTraitModifier("bar", null, -5);
       m.value = 10;
       expect(m.spellPoints, equals(11));
       m.value = 30;
       expect(m.spellPoints, equals(35));
 
-      m.addModifier("baz", null, -10);
+      m.addTraitModifier("baz", null, -10);
       m.value = 10;
       expect(m.spellPoints, equals(10));
       m.value = 30;

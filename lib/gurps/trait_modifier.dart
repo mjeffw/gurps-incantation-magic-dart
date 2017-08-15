@@ -1,10 +1,10 @@
 import 'dart:mirrors';
 import '../util/core_utils.dart';
 
-typedef bool EnhancerPredicate(Modifier e);
+typedef bool TraitModifierPredicate(TraitModifier e);
 
-EnhancerPredicate any = (x) => true;
-EnhancerPredicate limitationOnly = (x) => x.level < 0;
+TraitModifierPredicate any = (x) => true;
+TraitModifierPredicate limitationOnly = (x) => x.level < 0;
 
 /// Represents a single GURPS Modifier.
 ///
@@ -15,7 +15,7 @@ EnhancerPredicate limitationOnly = (x) => x.level < 0;
 /// Modifiers adjust the base cost of a trait in proportion to their effects. Enhancements increase the cost, while
 /// limitations reduce the cost. This is expressed as a percentage. For instance, a +20% enhancement would increase
 /// the point cost of an advantage by 1/5 its base cost, while a -50% limitation would reduce it by half its base cost.
-class Modifier {
+class TraitModifier {
   /// Name of this Modifier.
   String name;
 
@@ -25,7 +25,7 @@ class Modifier {
   /// The value of the Modifier. This would be treated as a percentage as per B101.
   int level;
 
-  Modifier(this.name, this.detail, this.level);
+  TraitModifier(this.name, this.detail, this.level);
 
   String get summaryText => name;
 
@@ -38,11 +38,11 @@ class Modifier {
 ///
 /// Provides some convenience methods for getting the sum of all Enhancement and Limitation values, or adjusting a
 /// value
-class ModifierList implements List<Modifier> {
-  List<Modifier> _delegate;
+class TraitModifierList implements List<TraitModifier> {
+  List<TraitModifier> _delegate;
   InstanceMirror _mirror;
 
-  ModifierList() : _delegate = new List<Modifier>() {
+  TraitModifierList() : _delegate = new List<TraitModifier>() {
     _mirror = reflect(_delegate);
   }
 
@@ -58,17 +58,21 @@ class ModifierList implements List<Modifier> {
   int get sum => _delegate.map((e) => e.level).fold(0, (a, b) => a + b);
 }
 
-/// Define the Enhanceable mixin.
+/// Define the TraitModifiable mixin.
 ///
 /// Classes that are extended with _Enhanceable maintain a list of enhancements and limitations.
-abstract class Modifiable {
-  final ModifierList _modifiers = new ModifierList();
+abstract class TraitModifiable {
+  final TraitModifierList _modifiers = new TraitModifierList();
 
-  void addModifier(String name, String detail, int value) {
-    _modifiers.add(new Modifier(name, detail, value));
+  void addTraitModifier(String name, String detail, int value) {
+    _modifiers.add(new TraitModifier(name, detail, value));
   }
 
-  int adjustmentForModifiers(int baseValue) => _modifiers.adjustment(baseValue);
-  int get sumOfModifierLevels => _modifiers.sum;
-  List<Modifier> get modifiers => new List.unmodifiable(_modifiers._delegate);
+  int adjustmentForTraitModifiers(int baseValue) => _modifiers.adjustment(baseValue);
+  int get sumOfTraitModifierLevels => _modifiers.sum;
+  List<TraitModifier> get traitModifiers => new List.unmodifiable(_modifiers._delegate);
+  TraitModifier getAt(int index) => _modifiers[index];
+  void removeAt(int index) {
+    _modifiers.removeAt(index);
+  }
 }
