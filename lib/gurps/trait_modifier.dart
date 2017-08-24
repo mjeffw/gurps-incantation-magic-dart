@@ -70,7 +70,7 @@ abstract class TraitModifiable {
 
   int adjustmentForTraitModifiers(int baseValue) => _modifiers.adjustment(baseValue);
   int get sumOfTraitModifierLevels => _modifiers.sum;
-  List<TraitModifier> get traitModifiers => new List.unmodifiable(_modifiers._delegate);
+  List<TraitModifier> get traitModifiers => _modifiers._delegate;
   TraitModifier getAt(int index) => _modifiers[index];
   void removeAt(int index) {
     _modifiers.removeAt(index);
