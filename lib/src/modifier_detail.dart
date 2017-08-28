@@ -33,11 +33,13 @@ abstract class BestowsDetail extends ModifierDetail {
 }
 
 abstract class DamageDetail extends ModifierDetail {
+  set explosive(bool b);
+  set vampiric(bool b);
   set dieRoll(DieRoll d);
   set type(String type);
   set direct(bool direct);
 
-  void addModifier(TraitModifier e);
+  void addTraitModifier(TraitModifier e);
 }
 
 abstract class RepairDetail extends ModifierDetail {

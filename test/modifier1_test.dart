@@ -111,19 +111,19 @@ void main() {
 
     test("allows for Limitations/Enhancements", () {
       m.value = 24;
-      m.addTraitModifier("Ten percent", null, 10);
+      m.addTraitModifier(new TraitModifier("Ten percent", null, 10));
       expect(m.spellPoints, equals(27));
 
-      m.addTraitModifier("Another enhancer", null, 5);
+      m.addTraitModifier(new TraitModifier("Another enhancer", null, 5));
       expect(m.spellPoints, equals(28));
 
-      m.addTraitModifier("Limitation", null, -10);
+      m.addTraitModifier(new TraitModifier("Limitation", null, -10));
       expect(m.spellPoints, equals(26));
     });
 
     test("another test for Limitations/Enhancements", () {
-      m.addTraitModifier("foo", null, 35);
-      m.addTraitModifier("bar", "detail", -10);
+      m.addTraitModifier(new TraitModifier("foo", null, 35));
+      m.addTraitModifier(new TraitModifier("bar", "detail", -10));
 
       m.value = 0;
       expect(m.spellPoints, equals(0));
@@ -434,25 +434,25 @@ void main() {
 
     // Each +5% adds 1 SP if the base cost for Damage is 20 SP or less.
     test("should add 1 SP per 5 Percent of Enhancers", () {
-      m.addTraitModifier("foo", null, 1);
+      m.addTraitModifier(new TraitModifier("foo", null, 1));
       m.value = 10;
       expect(m.spellPoints, equals(11));
       m.value = 20;
       expect(m.spellPoints, equals(21));
 
-      m.addTraitModifier("bar", null, 4);
+      m.addTraitModifier(new TraitModifier("bar", null, 4));
       m.value = 10;
       expect(m.spellPoints, equals(11));
       m.value = 20;
       expect(m.spellPoints, equals(21));
 
-      m.addTraitModifier("baz", null, 2);
+      m.addTraitModifier(new TraitModifier("baz", null, 2));
       m.value = 10;
       expect(m.spellPoints, equals(12));
       m.value = 20;
       expect(m.spellPoints, equals(22));
 
-      m.addTraitModifier("dum", null, 8);
+      m.addTraitModifier(new TraitModifier("dum", null, 8));
       m.value = 10;
       expect(m.spellPoints, equals(13));
       m.value = 20;
@@ -462,33 +462,33 @@ void main() {
     // If Damage costs 21 SP or more, apply the enhancement percentage to the SP cost for Damage only (not to the cost
     // of the whole spell); round up.
     test("should Add 1 Point Per 1 Percent", () {
-      m.addTraitModifier("foo", null, 1);
+      m.addTraitModifier(new TraitModifier("foo", null, 1));
       m.value = 25;
       expect(m.spellPoints, equals(26));
 
-      m.addTraitModifier("foo", null, 4);
+      m.addTraitModifier(new TraitModifier("foo", null, 4));
       m.value = 30;
       expect(m.spellPoints, equals(35));
 
-      m.addTraitModifier("foo", null, 2);
+      m.addTraitModifier(new TraitModifier("foo", null, 2));
       m.value = 33;
       expect(m.spellPoints, equals(40));
 
-      m.addTraitModifier("foo", null, 8);
+      m.addTraitModifier(new TraitModifier("foo", null, 8));
       m.value = 50;
       expect(m.spellPoints, equals(65));
     });
 
     // Added limitations reduce this surcharge, but will never provide a net SP discount.
     test("should Not Add 1 Point", () {
-      m.addTraitModifier("foo", null, 10);
-      m.addTraitModifier("bar", null, -5);
+      m.addTraitModifier(new TraitModifier("foo", null, 10));
+      m.addTraitModifier(new TraitModifier("bar", null, -5));
       m.value = 10;
       expect(m.spellPoints, equals(11));
       m.value = 30;
       expect(m.spellPoints, equals(35));
 
-      m.addTraitModifier("baz", null, -10);
+      m.addTraitModifier(new TraitModifier("baz", null, -10));
       m.value = 10;
       expect(m.spellPoints, equals(10));
       m.value = 30;

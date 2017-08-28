@@ -65,7 +65,7 @@ void main() {
     spell.name = 'Partial Shapeshifting (Bat Wings)';
     spell.effects.add(new SpellEffect(Effect.Transform, Path.Transfiguration));
     AlteredTraits t = new AlteredTraits("Flight", null, value: 40, inherent: true);
-    t.addTraitModifier("Winged", null, -25);
+    t.addTraitModifier(new TraitModifier("Winged", null, -25));
     spell.ritualModifiers.add(t);
     spell.ritualModifiers.add(new DurationMod(value: 3600));
     spell.ritualModifiers.add(new SubjectWeight(value: 1000));

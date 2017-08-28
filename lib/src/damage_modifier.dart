@@ -142,7 +142,9 @@ class Damage extends RitualModifier with TraitModifiable {
     super.exportDetail(detail);
     detail.type = damageTypeLabels[type];
     detail.direct = _direct;
-    traitModifiers.forEach((it) => detail.addModifier(it));
+    detail.vampiric = vampiric;
+    detail.explosive = _explosive;
+    traitModifiers.forEach((it) => detail.addTraitModifier(it));
     detail.dieRoll = dice;
     exporter.addDetail(detail);
     return exporter;

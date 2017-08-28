@@ -64,14 +64,18 @@ class TraitModifierList implements List<TraitModifier> {
 abstract class TraitModifiable {
   final TraitModifierList _modifiers = new TraitModifierList();
 
-  void addTraitModifier(String name, String detail, int value) {
-    _modifiers.add(new TraitModifier(name, detail, value));
+  void addTraitModifier(TraitModifier t) {
+    _modifiers.add(t);
   }
 
   int adjustmentForTraitModifiers(int baseValue) => _modifiers.adjustment(baseValue);
+
   int get sumOfTraitModifierLevels => _modifiers.sum;
+
   List<TraitModifier> get traitModifiers => _modifiers._delegate;
+
   TraitModifier getAt(int index) => _modifiers[index];
+
   void removeAt(int index) {
     _modifiers.removeAt(index);
   }

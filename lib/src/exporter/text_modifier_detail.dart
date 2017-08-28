@@ -98,6 +98,8 @@ class TextDamageDetail extends TextModifierDetail implements DamageDetail {
   DieRoll dieRoll;
   String type;
   bool direct;
+  bool vampiric;
+  bool explosive;
 
   final List<TraitModifier> modifiers = [];
 
@@ -120,7 +122,7 @@ class TextDamageDetail extends TextModifierDetail implements DamageDetail {
   }
 
   @override
-  void addModifier(TraitModifier e) {
+  void addTraitModifier(TraitModifier e) {
     modifiers.add(e);
   }
 }
