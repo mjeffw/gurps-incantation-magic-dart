@@ -30,9 +30,23 @@ class TextSpellExporter implements SpellExporter {
     return sb.toString();
   }
 
-  String get penaltyText => "Skill Penalty: ${effectExporter.penaltyPath(penalty)}.";
+  String get penaltyText => "Skill Penalty: ${penaltyPath}.";
 
-  String get timeText => "Casting Time: ${GurpsDuration.toFormattedString(time.inSeconds)}.";
+  String get penaltyPath => effectExporter.penaltyPath(penalty);
+
+  String get timeText => "Casting Time: ${castingTime}.";
+
+  String get castingTime => GurpsDuration.toFormattedString(time.inSeconds);
+
+  String get typical {
+    List<String> components = [];
+    components
+      ..add('${effectExporter.typicalText}')
+      ..add('${_conditionalText}')
+      ..add('${modifierExporter.typicalText}')
+      ..removeWhere((it) => it.length == 0);
+    return components.join(' + ');
+  }
 
   String get typicalText {
     List<String> components = [];
@@ -118,6 +132,14 @@ class TextEffectExporter implements EffectExporter {
   @override
   String get typicalText =>
       (values.isEmpty) ? 'None.' : values.map((it) => it.typicalCastingText).reduce((a, b) => a + ' + ' + b);
+
+  @override
+  String get briefText => _text;
+
+  @override
+  void clear() {
+    values.clear();
+  }
 }
 
 class TextModifierExporter implements ModifierExporter {
@@ -125,6 +147,9 @@ class TextModifierExporter implements ModifierExporter {
 
   @override
   String toString() => "Inherent Modifiers: ${_briefText}.";
+
+  @override
+  String get briefText => _briefText;
 
   String get _briefText {
     _details.sort((a, b) => a.name.compareTo(b.name));
@@ -145,6 +170,12 @@ class TextModifierExporter implements ModifierExporter {
   void addDetail(ModifierDetail detailExporter) {
     _details.add(detailExporter as TextModifierDetail);
   }
+
+  @override
+  void clear() {
+    _details.clear();
+  }
+
 
   @override
   List<ModifierDetail> get details => _details;

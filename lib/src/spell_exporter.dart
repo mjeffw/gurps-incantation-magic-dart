@@ -8,8 +8,11 @@ abstract class SpellExporter {
   set time(GurpsDuration time);
   set description(String description);
   set conditional(bool conditional);
+
   EffectExporter get effectExporter;
   ModifierExporter get modifierExporter;
+  String get penaltyText;
+  String get castingTime;
 }
 
 abstract class EffectExporter {
@@ -17,7 +20,11 @@ abstract class EffectExporter {
 
   String get typicalText;
 
+  String get briefText;
+
   void add({String effect: '', String path: '', int spellPoints: 0});
+
+  void clear();
 }
 
 abstract class ModifierExporter {
@@ -25,7 +32,11 @@ abstract class ModifierExporter {
 
   void addDetail(ModifierDetail detailExporter);
 
+  String get briefText;
+
   String get typicalText;
+
+  void clear();
 
   ModifierDetail createAfflictionDetail();
   ModifierDetail createAfflictionStunDetail();

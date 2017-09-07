@@ -91,9 +91,11 @@ class Spell {
     exporter.name = name;
 
     EffectExporter effectExporter = exporter.effectExporter;
+    effectExporter.clear();
     effects.forEach((it) => it.export(effectExporter));
 
     ModifierExporter modifierExporter = exporter.modifierExporter;
+    modifierExporter.clear();
     ritualModifiers.forEach((it) => it.export(modifierExporter));
 
     exporter.penalty = skillPenalty;
