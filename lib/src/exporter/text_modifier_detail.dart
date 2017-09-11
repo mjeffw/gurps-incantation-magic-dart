@@ -13,7 +13,12 @@ class TextModifierDetail extends ModifierDetail {
   int spellPoints;
 
   @override
-  String get typicalText => '${name} (${spellPoints})';
+  String get typicalText {
+    return (detailText.length > 0) ? '${name}, ${detailText} (${spellPoints})' : '${name} (${spellPoints})';
+  }
+
+  @override
+  String get detailText => '';
 
   @override
   String get summaryText => name;
@@ -26,7 +31,7 @@ class TextAfflictionDetail extends TextModifierDetail implements AfflictionDetai
   String get summaryText => '${name}, ${specialization}';
 
   @override
-  String get typicalText => '${name}, ${specialization} (${spellPoints})';
+  String get detailText => specialization ?? '';
 }
 
 class TextAlteredTraitsDetail extends TextModifierDetail implements AlteredTraitsDetail {
@@ -51,15 +56,15 @@ class TextAlteredTraitsDetail extends TextModifierDetail implements AlteredTrait
   }
 
   @override
-  String get typicalText {
-    String temp = '${name}, ${specialization}';
+  String get detailText {
+    String temp = '${specialization}';
     if (specLevel != null && specLevel != 0) {
       temp += ' ${specLevel}';
     }
     if (modifiers.isNotEmpty) {
       temp += ' (${modifiers.map((e) => e.typicalText).join('; ')})';
     }
-    return temp + ' (${spellPoints})';
+    return temp;
   }
 }
 
@@ -71,14 +76,13 @@ class TextAreaOfEffectDetail extends TextModifierDetail implements AreaOfEffectD
   int targets;
 
   @override
-  String get typicalText {
+  String get detailText {
     List<String> components = [];
-    components.add(name);
     components.add('${value} yards');
     if (targets > 0) {
-      components.add('${includes ? 'including' : 'excluding'} ${targets} targets');
+      components.add('${includes ? 'Includes' : 'Excludes'} ${targets} targets');
     }
-    return '${components.join(', ')} (${spellPoints})';
+    return components.join(', ');
   }
 }
 
@@ -87,11 +91,13 @@ class TextBestowsDetail extends TextModifierDetail implements BestowsDetail {
   String range;
 
   @override
-  String get summaryText => 'Bestows a ${value < 0? 'Penalty': 'Bonus'}, ${specialization}';
+  String get summaryText => '${name}, ${specialization}';
 
   @override
-  String get typicalText => 'Bestows a ${value < 0 ? 'Penalty' : 'Bonus'}, '
-      '${toSignedString(value)} to ${specialization} (${spellPoints})';
+  String get name => 'Bestows a ${value < 0 ? 'Penalty' : 'Bonus'}';
+
+  @override
+  String get detailText => '${toSignedString(value)} to ${specialization}';
 }
 
 class TextDamageDetail extends TextModifierDetail implements DamageDetail {
@@ -113,12 +119,12 @@ class TextDamageDetail extends TextModifierDetail implements DamageDetail {
   }
 
   @override
-  String get typicalText {
-    String temp = '${name}, ${direct ? 'Direct' : 'Indirect'} ${type} ${dieRoll}';
+  String get detailText {
+    String temp = '${direct ? 'Direct' : 'Indirect'} ${type} ${dieRoll}';
     if (modifiers.isNotEmpty) {
       temp += ' (${modifiers.map((e) => "${e.typicalText}").join('; ')})';
     }
-    return '${temp} (${spellPoints})';
+    return temp;
   }
 
   @override
@@ -129,29 +135,30 @@ class TextDamageDetail extends TextModifierDetail implements DamageDetail {
 
 class TextDurationDetail extends TextModifierDetail {
   @override
-  String get typicalText => '${name}, ${GurpsDuration.toFormattedString(value)} (${spellPoints})';
+  String get detailText => GurpsDuration.toFormattedString(value);
 }
 
 class TextRangeDetail extends TextModifierDetail {
   @override
-  String get typicalText => '${name}, ${GurpsDistance.toFormattedString(value)} (${spellPoints})';
+  String get detailText => GurpsDistance.toFormattedString(value);
 }
 
 class TextRangeDimensionalDetail extends TextModifierDetail {
   @override
-  String get typicalText => '${name}${value == 1 ? "" : ", " + value.toString() + " dimensions"} (${spellPoints})';
+  String get detailText => value == 1 ? '' : value.toString() + ' dimensions';
 }
 
 class TextRangeInformationalDetail extends TextModifierDetail {
   @override
-  String get typicalText => 'Range, ${GurpsDistance.toFormattedString(value)} (${spellPoints})';
+  String get name => 'Range';
+
+  @override
+  String get detailText => GurpsDistance.toFormattedString(value);
 }
 
 class TextRangeTimeDetail extends TextModifierDetail {
   @override
-  String get typicalText => '${name}, ${_valueText} (${spellPoints})';
-
-  String get _valueText {
+  String get detailText {
     if (value == 0) {
       return GurpsDuration.toFormattedString(new GurpsDuration(hours: 2).inSeconds);
     } else {
@@ -168,21 +175,25 @@ class TextRepairDetail extends TextModifierDetail implements RepairDetail {
   String specialization;
 
   @override
-  String get typicalText =>
-      '${name}${specialization == null ? ' ' : ' ${specialization}'}, ${dieRoll} (${spellPoints})';
+  String get typicalText {
+    return (detailText.length > 0) ? '${name} ${detailText} (${spellPoints})' : '${name} (${spellPoints})';
+  }
+
+  @override
+  String get detailText => '${specialization == null ? ' ' : '${specialization}'}, ${dieRoll}';
 }
 
 class TextSpeedDetail extends TextModifierDetail {
   @override
-  String get typicalText => '${name}, ${GurpsDistance.toFormattedString(value)}/second (${spellPoints})';
+  String get detailText => '${GurpsDistance.toFormattedString(value)}/second';
 }
 
 class TextSubjectWeightDetail extends TextModifierDetail {
   @override
-  String get typicalText => '${name}, ${Weight.toFormattedString(value)} (${spellPoints})';
+  String get detailText => Weight.toFormattedString(value);
 }
 
 class TextSummonedDetail extends TextModifierDetail {
   @override
-  String get typicalText => '${name}, ${value}% of Static Point Total (${spellPoints})';
+  String get detailText => '${value}% of Static Point Total';
 }

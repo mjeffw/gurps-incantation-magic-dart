@@ -8,6 +8,7 @@ abstract class ModifierDetail {
   set value(int value);
 
   String get typicalText;
+  String get detailText;
   String get summaryText;
 }
 
