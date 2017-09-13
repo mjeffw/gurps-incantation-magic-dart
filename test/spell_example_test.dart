@@ -52,7 +52,7 @@ void main() {
         lines[TYPICAL],
         equals('Typical Casting: '
             'Create Arcanum (6) + Conditional Spell (5) + '
-            'Area of Effect, 5 yards, including 6 targets (53). 64 SP.'));
+            'Area of Effect, 5 yards, Includes 6 targets (53). 64 SP.'));
   });
 
   test('Animate Object', () {
@@ -751,7 +751,7 @@ void main() {
         lines[TYPICAL],
         equals('Typical Casting: '
             'Control Augury (5)'
-            ' + Area of Effect, 5 yards, excluding 12 targets (56)'
+            ' + Area of Effect, 5 yards, Excludes 12 targets (56)'
             ' + Bestows a Penalty, -3 to critical failure range of all rolls (20)'
             ' + Duration, 1 hour (7).'
             ' 88 SP.'));

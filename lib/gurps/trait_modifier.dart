@@ -1,5 +1,6 @@
-import 'dart:mirrors';
 import '../util/core_utils.dart';
+
+import 'package:collection/collection.dart';
 
 typedef bool TraitModifierPredicate(TraitModifier e);
 
@@ -38,24 +39,15 @@ class TraitModifier {
 ///
 /// Provides some convenience methods for getting the sum of all Enhancement and Limitation values, or adjusting a
 /// value
-class TraitModifierList implements List<TraitModifier> {
-  List<TraitModifier> _delegate;
-  InstanceMirror _mirror;
-
-  TraitModifierList() : _delegate = new List<TraitModifier>() {
-    _mirror = reflect(_delegate);
-  }
-
-  void noSuchMethod(Invocation invocation) {
-    return _mirror.delegate(invocation);
-  }
+class TraitModifierList extends DelegatingList<TraitModifier>  {
+  TraitModifierList() : super(new List<TraitModifier>());
 
   int adjustment(int baseValue) {
-    double x = _delegate.map((i) => i.level / 100.0).fold(0.0, (a, b) => a + b);
+    double x = this.map((i) => i.level / 100.0).fold(0.0, (a, b) => a + b);
     return (baseValue * x).ceil();
   }
 
-  int get sum => _delegate.map((e) => e.level).fold(0, (a, b) => a + b);
+  int get sum => this.map((e) => e.level).fold(0, (a, b) => a + b);
 }
 
 /// Define the TraitModifiable mixin.
@@ -72,7 +64,7 @@ abstract class TraitModifiable {
 
   int get sumOfTraitModifierLevels => _modifiers.sum;
 
-  List<TraitModifier> get traitModifiers => _modifiers._delegate;
+  List<TraitModifier> get traitModifiers => _modifiers;
 
   TraitModifier getAt(int index) => _modifiers[index];
 

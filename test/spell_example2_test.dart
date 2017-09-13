@@ -129,7 +129,7 @@ void main() {
         lines[TYPICAL],
         equals("Typical Casting: "
             "Strengthen Protection (3) + Altered Traits, Defense Bonus 2 (60)"
-            " + Area of Effect, 4 yards, excluding 6 targets (43) + Duration, 1 hour (7)"
+            " + Area of Effect, 4 yards, Excludes 6 targets (43) + Duration, 1 hour (7)"
             " + Subject Weight, 30 lbs. (1)."
             " 114 SP."));
   });
