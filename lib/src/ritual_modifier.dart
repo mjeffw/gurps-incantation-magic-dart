@@ -32,6 +32,12 @@ Predicate validDuration = (x) => x >= 0 && x <= GurpsDuration.SECONDS_PER_DAY;
 /// A spell that adds +2 to the subject's Strength would need a Bestows a Bonus modifier; this effect is inherent to
 /// the spell.
 abstract class RitualModifier {
+  RitualModifier(this.name, this._value, this.inherent);
+  RitualModifier.withPredicateNew(this.name, this._predicate, this._value, this.inherent);
+  RitualModifier.withPredicate(this.name, this._predicate, {int value: 0, bool inherent: false})
+      : _value = value,
+        inherent = inherent;
+
   /// the name of this Modifier
   final String name;
 
@@ -41,22 +47,10 @@ abstract class RitualModifier {
   /// is this Modifier instance inherent to the spell?
   bool inherent = false;
 
-  Predicate _predicate = nonNegative;
-
   // the current value of this modifier - depends on the modifier, it could represent character points, a time unit,
   // distance unit, a percentage modifier, etc.
   int _value = 0;
-
-  RitualModifier(this.name, this._value, this.inherent);
-
-  RitualModifier.withPredicate(this.name, this._predicate, {int value: 0, bool inherent: false})
-      : _value = value,
-        inherent = inherent;
-
-  RitualModifier.withPredicateNew(this.name, this._predicate, this._value, this.inherent);
-
   int get value => _value;
-
   set value(int val) {
     if (_predicate(val)) {
       _value = val;
@@ -65,26 +59,19 @@ abstract class RitualModifier {
     }
   }
 
-  ModifierExporter export(ModifierExporter exporter);
+  Predicate _predicate = nonNegative;
+  bool get canDecrement => _predicate(value - 1);
+  bool get canIncrement => _predicate(value + 1);
+  void incrementSpellPoints() => _value = canIncrement ? _value + 1 : _value;
+  void decrementSpellPoints() => _value = canDecrement ? _value-- : _value;
 
+  ModifierExporter export(ModifierExporter exporter);
   ModifierDetail exportDetail(ModifierDetail exporter) {
     exporter.name = name;
     exporter.spellPoints = spellPoints;
     exporter.inherent = inherent;
     exporter.value = _value;
     return exporter;
-  }
-
-  void incrementSpellPoints() {
-    if (_predicate(value + 1)) {
-      _value++;
-    }
-  }
-
-  void decrementSpellPoints() {
-    if (_predicate(value - 1)) {
-      _value--;
-    }
   }
 }
 // ----------------------------------
