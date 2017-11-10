@@ -38,7 +38,8 @@ class Spell {
 
   // spells have modifiers, to deliver specific effects at a cost
   final List<RitualModifier> ritualModifiers = [];
-  List<RitualModifier> get inherentModifiers => new List.unmodifiable(ritualModifiers.where((it) => it.inherent == true));
+  List<RitualModifier> get inherentModifiers =>
+      new List.unmodifiable(ritualModifiers.where((it) => it.inherent == true));
 
   /// Drawbacks can be added to spells to reduce the spell points needed
   final List<TraitModifier> drawbacks = [];

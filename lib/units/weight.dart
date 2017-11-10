@@ -12,8 +12,7 @@ class Weight {
   static String toFormattedString(int pounds) {
     if (pounds > POUNDS_PER_TON) {
       num total = pounds / POUNDS_PER_TON;
-      if (pounds % POUNDS_PER_TON == 0)
-        return '${(pounds ~/ POUNDS_PER_TON)} tons';
+      if (pounds % POUNDS_PER_TON == 0) return '${(pounds ~/ POUNDS_PER_TON)} tons';
       return '${total} tons';
     }
     return '${pounds} lbs.';

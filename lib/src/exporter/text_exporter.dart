@@ -176,7 +176,6 @@ class TextModifierExporter implements ModifierExporter {
     _details.clear();
   }
 
-
   @override
   List<ModifierDetail> get details => _details;
 

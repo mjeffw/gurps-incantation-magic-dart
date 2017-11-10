@@ -39,7 +39,7 @@ class TraitModifier {
 ///
 /// Provides some convenience methods for getting the sum of all Enhancement and Limitation values, or adjusting a
 /// value
-class TraitModifierList extends DelegatingList<TraitModifier>  {
+class TraitModifierList extends DelegatingList<TraitModifier> {
   TraitModifierList() : super(new List<TraitModifier>());
 
   int adjustment(int baseValue) {

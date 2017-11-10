@@ -365,8 +365,7 @@ void main() {
         lines[TYPICAL],
         equals("Typical Casting:"
             " Sense Arcanum (2)"
-            " + Range (Cross-Time), 1 day (2). 4 SP."
-        ));
+            " + Range (Cross-Time), 1 day (2). 4 SP."));
   });
 
   test('Death Vison', () {
@@ -390,7 +389,6 @@ void main() {
         equals("Typical Casting:"
             " Sense Augury (2) + Destroy Mesmerism (5)"
             " + Affliction, Stunning (0) + Range, 10 yards (4)."
-            " 11 SP."
-        ));
+            " 11 SP."));
   });
 }

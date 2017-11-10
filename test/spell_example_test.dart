@@ -212,8 +212,8 @@ void main() {
         "a lava-swim.";
     spell.name = 'Bond of Servitude for (Demons)';
     spell.effects.add(new SpellEffect(Effect.Control, Path.Demonology));
-    spell.ritualModifiers.add(
-        new Bestows("Resistance to Bond of Servitude", range: BestowsRange.single, value: -2, inherent: true));
+    spell.ritualModifiers
+        .add(new Bestows("Resistance to Bond of Servitude", range: BestowsRange.single, value: -2, inherent: true));
     spell.ritualModifiers.add(new DurationMod(value: new GurpsDuration(hours: 1).inSeconds));
     spell.ritualModifiers.add(new Range(value: 20));
     spell.description = _description;
@@ -733,8 +733,8 @@ void main() {
     AreaOfEffect areaOfEffect = new AreaOfEffect(value: 5, inherent: true);
     areaOfEffect.setTargetInfo(12, false);
     spell.ritualModifiers.add(areaOfEffect);
-    spell.ritualModifiers.add(
-        new Bestows("critical failure range of all rolls", range: BestowsRange.broad, value: -3, inherent: true));
+    spell.ritualModifiers
+        .add(new Bestows("critical failure range of all rolls", range: BestowsRange.broad, value: -3, inherent: true));
     spell.ritualModifiers.add(new DurationMod(value: 3600));
 
     TextSpellExporter exporter = new TextSpellExporter();
