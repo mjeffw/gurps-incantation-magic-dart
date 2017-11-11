@@ -17,8 +17,11 @@ abstract class AfflictionDetail extends ModifierDetail {
 }
 
 abstract class AlteredTraitsDetail extends ModifierDetail {
-  String specialization;
-  int specLevel;
+  String traitName;
+  int baseCost;
+  bool hasLevels;
+  int costPerLevel;
+  int levels;
 
   void addModifier(TraitModifier it);
 }

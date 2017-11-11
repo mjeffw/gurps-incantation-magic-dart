@@ -146,8 +146,7 @@ void main() {
 
     expect(spell.spellPoints, equals(25));
 
-    AlteredTraits traits = new AlteredTraits("bar", null);
-    traits.value = -15;
+    AlteredTraits traits = new AlteredTraits(new Trait(name: 'bar', baseCost: -15));
     spell.ritualModifiers.add(traits);
 
     expect(spell.spellPoints, equals(28));
@@ -158,7 +157,8 @@ void main() {
     spell.effects.add(new SpellEffect(Effect.Control, Path.Arcanum));
     spell.effects.add(new SpellEffect(Effect.Create, Path.Demonology));
     spell.ritualModifiers.add(new Bestows("Bar", value: 5));
-    spell.ritualModifiers.add(new AlteredTraits("baz", 0, value: -15));
+    Trait trait = new Trait(name: 'baz', baseCost: -15);
+    spell.ritualModifiers.add(new AlteredTraits(trait));
     spell.conditional = true;
 
     expect(spell.skillPenalty, equals(-3));

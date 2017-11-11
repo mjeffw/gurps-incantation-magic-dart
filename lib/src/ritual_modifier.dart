@@ -60,17 +60,17 @@ abstract class RitualModifier {
   }
 
   Predicate _predicate = nonNegative;
-  bool get canDecrement => _predicate(value - 1);
-  bool get canIncrement => _predicate(value + 1);
-  void incrementSpellPoints() => _value = canIncrement ? _value + 1 : _value;
-  void decrementSpellPoints() => _value = canDecrement ? _value-- : _value;
+  bool get canDecrementValue => _predicate(_value - 1);
+  bool get canIncrementValue => _predicate(_value + 1);
+  void incrementValue() => value = value + 1;
+  void decrementValue() => value = value - 1;
 
   ModifierExporter export(ModifierExporter exporter);
   ModifierDetail exportDetail(ModifierDetail exporter) {
     exporter.name = name;
     exporter.spellPoints = spellPoints;
     exporter.inherent = inherent;
-    exporter.value = _value;
+    exporter.value = value;
     return exporter;
   }
 }
@@ -113,17 +113,43 @@ class Affliction extends RitualModifier {
   }
 
   @override
-  void incrementSpellPoints() {
+  void incrementValue() {
     this.value = (spellPoints + 1) * 5;
   }
 
   @override
-  void decrementSpellPoints() {
+  void decrementValue() {
     if (spellPoints == 0) return;
     this.value = (spellPoints - 1) * 5;
   }
 }
 // ----------------------------------
+
+class Trait {
+  Trait({String name: '', int baseCost: 0, int costPerLevel: 0, int levels: 0, bool hasLevels: false})
+      : this.name = name,
+        this.baseCost = baseCost,
+        this.costPerLevel = costPerLevel,
+        this.levels = levels,
+        this._hasLevels = hasLevels;
+
+  String name = '';
+  int baseCost = 0;
+  int costPerLevel = 0;
+  int levels = 0;
+
+  bool _hasLevels = false;
+  bool get hasLevels => _hasLevels;
+  set hasLevels(bool b) {
+    _hasLevels = b;
+    if (!_hasLevels) {
+      costPerLevel = 0;
+      levels = 0;
+    }
+  }
+
+  int get totalCost => baseCost + (costPerLevel * levels);
+}
 
 /// Adds an Altered Trait to a spell.
 ///
@@ -131,23 +157,39 @@ class Affliction extends RitualModifier {
 /// every five character points removed. One that adds advantages, reduces or removes disadvantages, or increases
 /// attributes adds +1 SP for every character point added.
 class AlteredTraits extends RitualModifier with TraitModifiable {
-  String specialization;
-  int specLevel;
+  AlteredTraits(this.trait, {bool inherent: false})
+      : super.withPredicateNew("Altered Traits", anyValue, 0, inherent);
 
-  AlteredTraits(this.specialization, this.specLevel, {int value: 0, bool inherent: false})
-      : super.withPredicateNew("Altered Traits", anyValue, value, inherent);
+  Trait trait;
+//  String specialization;
+//  int specLevel;
+  int get value => trait.totalCost;
+  set value(int val) {
+    trait.baseCost = val;
+    trait.hasLevels = false;
+  }
+
+  @override
+  bool get canIncrementValue => false;
+
+  @override
+  bool get canDecrementValue => false;
 
   @override
   int get spellPoints => _baseSpellPoints + adjustmentForTraitModifiers(_baseSpellPoints);
-
-  int get _baseSpellPoints => (_value < 0) ? (_value.abs() / 5.0).ceil() : _value;
+  int get _baseSpellPoints => (value.isNegative) ? (value.abs() / 5.0).ceil() : value;
 
   @override
   ModifierExporter export(ModifierExporter exporter) {
     AlteredTraitsDetail detail = exporter.createAlteredTraitsDetail() as AlteredTraitsDetail;
     super.exportDetail(detail);
-    detail.specialization = specialization;
-    detail.specLevel = specLevel;
+
+    detail.traitName = trait.name;
+    detail.baseCost = trait.baseCost;
+    detail.hasLevels = trait.hasLevels;
+    detail.costPerLevel = trait.costPerLevel;
+    detail.levels = trait.levels;
+
     traitModifiers.forEach((it) => detail.addModifier(it));
     exporter.addDetail(detail);
     return exporter;
@@ -272,14 +314,14 @@ class DurationMod extends RitualModifier {
   int get spellPoints => (_value == 0) ? 0 : array.indexOf(array.lastWhere((d) => d.inSeconds < _value)) + 1;
 
   @override
-  void incrementSpellPoints() {
+  void incrementValue() {
     if (spellPoints < array.length - 1) {
       this._value = array[spellPoints + 1].inSeconds;
     }
   }
 
   @override
-  void decrementSpellPoints() {
+  void decrementValue() {
     if (spellPoints > 0) {
       this._value = array[spellPoints - 1].inSeconds;
     }
@@ -336,7 +378,7 @@ class RangeCrossTime extends RitualModifier {
   }
 
   @override
-  void incrementSpellPoints() {
+  void incrementValue() {
     if (spellPoints == 0) {
       _value = 12;
     } else if (spellPoints == 1) {
@@ -351,7 +393,7 @@ class RangeCrossTime extends RitualModifier {
   }
 
   @override
-  void decrementSpellPoints() {
+  void decrementValue() {
     if (spellPoints == 0) {
       return;
     } else if (spellPoints == 1) {
@@ -412,7 +454,7 @@ class RangeInformational extends RitualModifier {
   }
 
   @override
-  void incrementSpellPoints() {
+  void incrementValue() {
     if (spellPoints == 0) {
       _value = 880;
     } else if (spellPoints == 1) {
@@ -427,7 +469,7 @@ class RangeInformational extends RitualModifier {
   }
 
   @override
-  void decrementSpellPoints() {
+  void decrementValue() {
     if (spellPoints == 0) {
       return;
     } else if (spellPoints == 1) {
@@ -461,7 +503,7 @@ class Range extends RitualModifier {
   }
 
   @override
-  void incrementSpellPoints() {
+  void incrementValue() {
     int currentIndex = rangeTable.valueToOrdinal(_value);
     int newValue = rangeTable.ordinalToValue(currentIndex + 1);
 
@@ -471,7 +513,7 @@ class Range extends RitualModifier {
   }
 
   @override
-  void decrementSpellPoints() {
+  void decrementValue() {
     if (spellPoints == 0) {
       return;
     }
@@ -518,7 +560,7 @@ class Speed extends RitualModifier {
   }
 
   @override
-  void incrementSpellPoints() {
+  void incrementValue() {
     int currentIndex = rangeTable.valueToOrdinal(_value);
     int newValue = rangeTable.ordinalToValue(currentIndex + 1);
 
@@ -528,7 +570,7 @@ class Speed extends RitualModifier {
   }
 
   @override
-  void decrementSpellPoints() {
+  void decrementValue() {
     if (spellPoints == 0) {
       return;
     }
@@ -557,7 +599,7 @@ class SubjectWeight extends RitualModifier {
   }
 
   @override
-  void incrementSpellPoints() {
+  void incrementValue() {
     int currentIndex = sequence.valueToOrdinal(_value);
     int newValue = sequence.ordinalToValue(currentIndex + 1);
 
@@ -567,7 +609,7 @@ class SubjectWeight extends RitualModifier {
   }
 
   @override
-  void decrementSpellPoints() {
+  void decrementValue() {
     if (spellPoints == 0) {
       return;
     }
@@ -611,7 +653,7 @@ class Summoned extends RitualModifier {
   }
 
   @override
-  void incrementSpellPoints() {
+  void incrementValue() {
     int value = (spellPoints <= 12) ? _valueForSpellPoints(spellPoints) + 25 : _valueForSpellPoints(spellPoints) + 50;
     if (_predicate(value)) {
       _value = value;
@@ -619,7 +661,7 @@ class Summoned extends RitualModifier {
   }
 
   @override
-  void decrementSpellPoints() {
+  void decrementValue() {
     int value = (spellPoints <= 20) ? _valueForSpellPoints(spellPoints) - 25 : _valueForSpellPoints(spellPoints) - 50;
     if (_predicate(value)) {
       _value = value;

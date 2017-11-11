@@ -247,7 +247,9 @@ void main() {
         "12 minutes.";
     spell.name = 'Bulwark';
     spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Protection));
-    AlteredTraits alteredTraits = new AlteredTraits("Damage Resistance", 6, value: 30, inherent: true);
+    AlteredTraits alteredTraits = new AlteredTraits(
+        new Trait(name: "Damage Resistance", levels: 6, hasLevels: true, costPerLevel: 5),
+        inherent: true);
     alteredTraits.addTraitModifier(new TraitModifier("Hardened 2", null, 40));
     alteredTraits.addTraitModifier(new TraitModifier("Tough Skin", null, -40));
     spell.ritualModifiers.add(alteredTraits);
@@ -426,8 +428,9 @@ void main() {
         "1.5 points of damage and 1.5 x 7 = 10.5, the average of rolling 3d.";
     spell.name = 'Creeping Frost';
     spell.effects.add(new SpellEffect(Effect.Create, Path.Elementalism));
-    spell.ritualModifiers.add(
-        new AlteredTraits("Fragile (Brittle) and Vulnerability (Crushing Attacks x2)", null, value: 9, inherent: true));
+    spell.ritualModifiers.add(new AlteredTraits(new Trait(name: 'Fragile (Brittle)', baseCost: -15), inherent: true));
+    spell.ritualModifiers
+        .add(new AlteredTraits(new Trait(name: 'Vulnerability (Crushing Attacks x2)', baseCost: -30), inherent: true));
     spell.ritualModifiers.add(new AreaOfEffect(value: 3, inherent: true));
     Damage dam = new Damage(type: DamageType.burning, direct: true, value: 8, inherent: true);
     dam.addTraitModifier(new TraitModifier("No Incendiary", null, -10));
@@ -446,7 +449,8 @@ void main() {
     expect(lines[EFFECTS], equals("Spell Effects: Create Elementalism."));
     expect(
         lines[MODS],
-        equals('Inherent Modifiers: Altered Traits, Fragile (Brittle) and Vulnerability (Crushing Attacks x2)'
+        equals(
+            'Inherent Modifiers: Altered Traits, Fragile (Brittle) + Altered Traits, Vulnerability (Crushing Attacks x2)'
             ' + Area of Effect + Damage, Direct Burning (No Incendiary).'));
     expect(lines[PENALTY], equals("Skill Penalty: Path of Elementalism-6."));
     expect(lines[TIME], equals('Casting Time: 5 minutes.'));
@@ -457,7 +461,7 @@ void main() {
         lines[TYPICAL],
         equals('Typical Casting: '
             'Create Elementalism (6)'
-            ' + Altered Traits, Fragile (Brittle) and Vulnerability (Crushing Attacks x2) (9)'
+            ' + Altered Traits, Fragile (Brittle) (3) + Altered Traits, Vulnerability (Crushing Attacks x2) (6)'
             ' + Area of Effect, 3 yards (30) + Damage, Direct Burning 3d (No Incendiary, -10%) (8)'
             ' + Duration, 1 minute (3) + Range, 20 yards (6) + Subject Weight, 5 tons (6). '
             '68 SP.'));
@@ -626,7 +630,8 @@ void main() {
     spell.name = 'Solidify Spirit';
     spell.effects.add(new SpellEffect(Effect.Control, Path.Necromancy));
     spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Necromancy));
-    spell.ritualModifiers.add(new AlteredTraits("Negated Insubstantiality", null, value: 16, inherent: true));
+    spell.ritualModifiers
+        .add(new AlteredTraits(new Trait(name: "Negated Insubstantiality", baseCost: 16), inherent: true));
     spell.ritualModifiers.add(new DurationMod(value: 720));
     spell.ritualModifiers.add(new RangeDimensional(value: 1));
 
@@ -703,7 +708,7 @@ void main() {
   test("Invisibility", () {
     spell.name = 'Invisibility';
     spell.effects.add(new SpellEffect(Effect.Control, Path.Elementalism));
-    AlteredTraits traits = new AlteredTraits("Invisibility", null, value: 40, inherent: true);
+    AlteredTraits traits = new AlteredTraits(new Trait(name: "Invisibility", baseCost: 40), inherent: true);
     traits.addTraitModifier(new TraitModifier("Can Carry Objects", "Heavy Encumbrance", 100));
     spell.ritualModifiers.add(traits);
     spell.ritualModifiers.add(new DurationMod(value: 60));

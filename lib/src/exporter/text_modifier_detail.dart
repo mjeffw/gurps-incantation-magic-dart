@@ -38,17 +38,26 @@ class TextAlteredTraitsDetail extends TextModifierDetail implements AlteredTrait
   final List<TraitModifier> modifiers = [];
 
   @override
-  int specLevel;
+  int baseCost;
 
   @override
-  String specialization;
+  int costPerLevel;
+
+  @override
+  bool hasLevels;
+
+  @override
+  int levels;
+
+  @override
+  String traitName;
 
   @override
   void addModifier(TraitModifier e) => modifiers.add(e);
 
   @override
   String get summaryText {
-    String temp = '${name}, ${specialization}';
+    String temp = '${name}, ${traitName}';
     if (modifiers.isNotEmpty) {
       temp += ' (${modifiers.map((e) => e.summaryText).join('; ')})';
     }
@@ -57,10 +66,11 @@ class TextAlteredTraitsDetail extends TextModifierDetail implements AlteredTrait
 
   @override
   String get detailText {
-    String temp = '${specialization}';
-    if (specLevel != null && specLevel != 0) {
-      temp += ' ${specLevel}';
+    String temp = '${traitName}';
+    if (hasLevels) {
+      temp += ' ${levels}';
     }
+
     if (modifiers.isNotEmpty) {
       temp += ' (${modifiers.map((e) => e.typicalText).join('; ')})';
     }
