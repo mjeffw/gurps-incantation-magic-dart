@@ -1,10 +1,10 @@
 class GurpsDuration {
-  static const int SECONDS_PER_YEAR = Duration.SECONDS_PER_DAY * 365;
+  static const int SECONDS_PER_YEAR = Duration.secondsPerDay * 365;
   static const int SECONDS_PER_MONTH = 2628000;
-  static const int SECONDS_PER_WEEK = Duration.SECONDS_PER_DAY * 7;
-  static const int SECONDS_PER_DAY = Duration.SECONDS_PER_DAY;
-  static const int SECONDS_PER_HOUR = Duration.SECONDS_PER_HOUR;
-  static const int SECONDS_PER_MINUTE = Duration.SECONDS_PER_MINUTE;
+  static const int SECONDS_PER_WEEK = Duration.secondsPerDay * 7;
+  static const int SECONDS_PER_DAY = Duration.secondsPerDay;
+  static const int SECONDS_PER_HOUR = Duration.secondsPerHour;
+  static const int SECONDS_PER_MINUTE = Duration.secondsPerMinute;
 
   final int _duration;
 
