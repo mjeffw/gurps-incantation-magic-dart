@@ -149,4 +149,6 @@ class Damage extends RitualModifier with TraitModifiable {
     exporter.addDetail(detail);
     return exporter;
   }
+
+  Damage asDamage() => this;
 }

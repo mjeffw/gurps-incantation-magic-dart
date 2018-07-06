@@ -7,6 +7,7 @@ import '../gurps/trait_modifier.dart';
 import '../gurps/die_roll.dart';
 import 'spell_exporter.dart';
 import 'modifier_detail.dart';
+import 'damage_modifier.dart';
 
 class InputException implements Exception {
   String message;
@@ -14,12 +15,34 @@ class InputException implements Exception {
   InputException(this.message);
 }
 
+/// defines predicate methdos used to validate the range of values a RitualModifier can have
 typedef bool Predicate(int item);
 
 Predicate zeroOnly = (x) => x == 0;
 Predicate anyValue = (x) => true;
 Predicate nonNegative = (x) => x >= 0;
 Predicate validDuration = (x) => x >= 0 && x <= GurpsDuration.SECONDS_PER_DAY;
+
+abstract class HasSpecialization {
+  String get specialization;
+  set specialization(String x);
+
+  HasSpecialization asHasSpecialization() => this;
+}
+
+abstract class HasTrait {
+  Trait get trait;
+  set trait(Trait x);
+
+  HasTrait asHasTrait() => this;
+}
+
+abstract class HasBestowsRange {
+  BestowsRange get range;
+  set range(BestowsRange x);
+
+  HasBestowsRange asHasBestowsRange() => this;
+}
 
 /// Describes a modifier to an Incantation Spell.
 ///
@@ -33,8 +56,12 @@ Predicate validDuration = (x) => x >= 0 && x <= GurpsDuration.SECONDS_PER_DAY;
 /// the spell.
 abstract class RitualModifier {
   RitualModifier(this.name, this._value, this.inherent);
-  RitualModifier.withPredicateNew(this.name, this._predicate, this._value, this.inherent);
-  RitualModifier.withPredicate(this.name, this._predicate, {int value: 0, bool inherent: false})
+
+  RitualModifier.withPredicateNew(
+      this.name, this._predicate, this._value, this.inherent);
+
+  RitualModifier.withPredicate(this.name, this._predicate,
+      {int value: 0, bool inherent: false})
       : _value = value,
         inherent = inherent;
 
@@ -73,6 +100,13 @@ abstract class RitualModifier {
     exporter.value = value;
     return exporter;
   }
+
+  HasSpecialization asHasSpecialization() => null;
+  TraitModifiable asTraitModifiable() => null;
+  HasTrait asHasTrait() => null;
+  AreaOfEffect asAreaOfEffect() => null;
+  HasBestowsRange asHasBestowsRange() => null;
+  Damage asDamage() => null;
 }
 // ----------------------------------
 
@@ -82,7 +116,9 @@ abstract class RitualModifier {
 ///
 /// A spell effect to stun a foe requires no additional SP.
 class AfflictionStun extends RitualModifier {
-  AfflictionStun({bool inherent: false}) : super.withPredicate("Affliction, Stunning", zeroOnly, inherent: inherent);
+  AfflictionStun({bool inherent: false})
+      : super.withPredicate("Affliction, Stunning", zeroOnly,
+            inherent: inherent);
 
   ModifierExporter export(ModifierExporter exporter) {
     ModifierDetail detail = exporter.createAfflictionStunDetail();
@@ -96,16 +132,18 @@ class AfflictionStun extends RitualModifier {
 /// Adds an Affliction (p. B36) effect to a spell.
 ///
 /// This adds +1 SP for every +5% it’s worth as an enhancement to Affliction.
-class Affliction extends RitualModifier {
+class Affliction extends RitualModifier with HasSpecialization {
   String specialization;
 
-  Affliction(this.specialization, {int value: 0, bool inherent: false}) : super("Afflictions", value, inherent);
+  Affliction(this.specialization, {int value: 0, bool inherent: false})
+      : super("Afflictions", value, inherent);
 
   @override
   int get spellPoints => (_value / 5.0).ceil();
 
   ModifierExporter export(ModifierExporter exporter) {
-    AfflictionDetail detail = exporter.createAfflictionDetail() as AfflictionDetail;
+    AfflictionDetail detail =
+        exporter.createAfflictionDetail() as AfflictionDetail;
     super.exportDetail(detail);
     detail.specialization = specialization;
     exporter.addDetail(detail);
@@ -126,7 +164,12 @@ class Affliction extends RitualModifier {
 // ----------------------------------
 
 class Trait {
-  Trait({String name: '', int baseCost: 0, int costPerLevel: 0, int levels: 0, bool hasLevels: false})
+  Trait(
+      {String name: '',
+      int baseCost: 0,
+      int costPerLevel: 0,
+      int levels: 0,
+      bool hasLevels: false})
       : this.name = name,
         this.baseCost = baseCost,
         this.costPerLevel = costPerLevel,
@@ -156,7 +199,7 @@ class Trait {
 /// Any spell that adds disadvantages, reduces attributes, or reduces or removes advantages adds +1 SP for
 /// every five character points removed. One that adds advantages, reduces or removes disadvantages, or increases
 /// attributes adds +1 SP for every character point added.
-class AlteredTraits extends RitualModifier with TraitModifiable {
+class AlteredTraits extends RitualModifier with TraitModifiable, HasTrait {
   AlteredTraits(this.trait, {bool inherent: false})
       : super.withPredicateNew("Altered Traits", anyValue, 0, inherent);
 
@@ -176,12 +219,15 @@ class AlteredTraits extends RitualModifier with TraitModifiable {
   bool get canDecrementValue => false;
 
   @override
-  int get spellPoints => _baseSpellPoints + adjustmentForTraitModifiers(_baseSpellPoints);
-  int get _baseSpellPoints => (value.isNegative) ? (value.abs() / 5.0).ceil() : value;
+  int get spellPoints =>
+      _baseSpellPoints + adjustmentForTraitModifiers(_baseSpellPoints);
+  int get _baseSpellPoints =>
+      (value.isNegative) ? (value.abs() / 5.0).ceil() : value;
 
   @override
   ModifierExporter export(ModifierExporter exporter) {
-    AlteredTraitsDetail detail = exporter.createAlteredTraitsDetail() as AlteredTraitsDetail;
+    AlteredTraitsDetail detail =
+        exporter.createAlteredTraitsDetail() as AlteredTraitsDetail;
     super.exportDetail(detail);
 
     detail.traitName = trait.name;
@@ -210,7 +256,8 @@ class AreaOfEffect extends RitualModifier {
 
   bool includes = false;
 
-  AreaOfEffect({int value: 0, bool inherent: false}) : super("Area of Effect", value, inherent);
+  AreaOfEffect({int value: 0, bool inherent: false})
+      : super("Area of Effect", value, inherent);
 
   /// Figure the circular area and add 10 SP per yard of radius from its center.
   /// Add another +1 SP for every two specific subjects in the area that won’t be affected by the spell, or
@@ -229,13 +276,17 @@ class AreaOfEffect extends RitualModifier {
 
   @override
   ModifierExporter export(ModifierExporter exporter) {
-    AreaOfEffectDetail detail = exporter.createAreaEffectDetail() as AreaOfEffectDetail;
+    AreaOfEffectDetail detail =
+        exporter.createAreaEffectDetail() as AreaOfEffectDetail;
     super.exportDetail(detail);
     detail.targets = targets;
     detail.includes = includes;
     exporter.addDetail(detail);
     return exporter;
   }
+
+  @override
+  AreaOfEffect asAreaOfEfect() => this;
 }
 // ----------------------------------
 
@@ -245,13 +296,17 @@ enum BestowsRange { single, moderate, broad }
 // ----------------------------------
 
 /// Adds a bonus or penalty to skills or attributes.
-class Bestows extends RitualModifier {
+class Bestows extends RitualModifier with HasSpecialization, HasBestowsRange {
   BestowsRange range = BestowsRange.single;
   String specialization;
 
-  Bestows(this.specialization, {BestowsRange range: BestowsRange.single, int value: 0, bool inherent: false})
+  Bestows(this.specialization,
+      {BestowsRange range: BestowsRange.single,
+      int value: 0,
+      bool inherent: false})
       : this.range = range,
-        super.withPredicate("Bestows a (Bonus or Penalty)", anyValue, value: value, inherent: inherent);
+        super.withPredicateNew(
+            "Bestows a (Bonus or Penalty)", anyValue, value, inherent);
 
   @override
   int get spellPoints => (_value == 0) ? 0 : _spellPointsForRange;
@@ -271,7 +326,8 @@ class Bestows extends RitualModifier {
     return x;
   }
 
-  int _baseSpellPoints(int x) => (x < 5) ? pow(2, x - 1).toInt() : 12 + ((x - 5) * 4);
+  int _baseSpellPoints(int x) =>
+      (x < 5) ? pow(2, x - 1).toInt() : 12 + ((x - 5) * 4);
 
   @override
   ModifierExporter export(ModifierExporter exporter) {
@@ -308,10 +364,13 @@ class DurationMod extends RitualModifier {
   ];
 
   DurationMod({int value: 0, bool inherent: false})
-      : super.withPredicate("Duration", validDuration, value: value, inherent: inherent);
+      : super.withPredicate("Duration", validDuration,
+            value: value, inherent: inherent);
 
   @override
-  int get spellPoints => (_value == 0) ? 0 : array.indexOf(array.lastWhere((d) => d.inSeconds < _value)) + 1;
+  int get spellPoints => (_value == 0)
+      ? 0
+      : array.indexOf(array.lastWhere((d) => d.inSeconds < _value)) + 1;
 
   @override
   void incrementValue() {
@@ -337,7 +396,8 @@ class DurationMod extends RitualModifier {
 }
 
 class Girded extends RitualModifier {
-  Girded({int value: 0, bool inherent: false}) : super("Girded", value, inherent);
+  Girded({int value: 0, bool inherent: false})
+      : super("Girded", value, inherent);
 
   @override
   int get spellPoints => _value;
@@ -351,11 +411,13 @@ class Girded extends RitualModifier {
   }
 }
 
-final RepeatingSequenceConverter longDistanceModifiers = new RepeatingSequenceConverter([1, 3]);
+final RepeatingSequenceConverter longDistanceModifiers =
+    new RepeatingSequenceConverter([1, 3]);
 
 /// Value is in hours.
 class RangeCrossTime extends RitualModifier {
-  RangeCrossTime({int value: 0, bool inherent: false}) : super("Range (Cross-Time)", value, inherent);
+  RangeCrossTime({int value: 0, bool inherent: false})
+      : super("Range (Cross-Time)", value, inherent);
 
   @override
   int get spellPoints {
@@ -384,8 +446,10 @@ class RangeCrossTime extends RitualModifier {
     } else if (spellPoints == 1) {
       _value = 24;
     } else {
-      int currentIndex = longDistanceModifiers.valueToOrdinal((_value / 24).ceil());
-      int newValue = longDistanceModifiers.ordinalToValue(currentIndex + 1) * 24;
+      int currentIndex =
+          longDistanceModifiers.valueToOrdinal((_value / 24).ceil());
+      int newValue =
+          longDistanceModifiers.ordinalToValue(currentIndex + 1) * 24;
       if (_predicate(newValue)) {
         _value = newValue;
       }
@@ -401,8 +465,10 @@ class RangeCrossTime extends RitualModifier {
     } else if (spellPoints == 2) {
       _value = 12;
     } else {
-      int currentIndex = longDistanceModifiers.valueToOrdinal((_value / 24).ceil());
-      int newValue = longDistanceModifiers.ordinalToValue(currentIndex - 1) * 24;
+      int currentIndex =
+          longDistanceModifiers.valueToOrdinal((_value / 24).ceil());
+      int newValue =
+          longDistanceModifiers.ordinalToValue(currentIndex - 1) * 24;
 
       if (_predicate(newValue)) {
         _value = newValue;
@@ -412,7 +478,8 @@ class RangeCrossTime extends RitualModifier {
 }
 
 class RangeDimensional extends RitualModifier {
-  RangeDimensional({int value: 0, bool inherent: false}) : super("Range, Extradimensional", value, inherent);
+  RangeDimensional({int value: 0, bool inherent: false})
+      : super("Range, Extradimensional", value, inherent);
 
   /// Crossing dimensional barriers adds a flat 10 SP per dimension.
   @override
@@ -429,7 +496,8 @@ class RangeDimensional extends RitualModifier {
 
 /// Range is _value in yards
 class RangeInformational extends RitualModifier {
-  RangeInformational({int value: 0, bool inherent: false}) : super("Range, Informational", value, inherent);
+  RangeInformational({int value: 0, bool inherent: false})
+      : super("Range, Informational", value, inherent);
 
   /// For information spells (e.g., Seek Treasure), consult Long-Distance Modifiers (p. B241) and apply the penalty
   /// (inverted) as additional SP; e.g., +2 SP for one mile.
@@ -460,8 +528,10 @@ class RangeInformational extends RitualModifier {
     } else if (spellPoints == 1) {
       _value = GurpsDistance.YARDS_PER_MILE;
     } else {
-      int currentIndex = longDistanceModifiers.valueToOrdinal((_value / GurpsDistance.YARDS_PER_MILE).ceil());
-      int newValue = longDistanceModifiers.ordinalToValue(currentIndex + 1) * GurpsDistance.YARDS_PER_MILE;
+      int currentIndex = longDistanceModifiers
+          .valueToOrdinal((_value / GurpsDistance.YARDS_PER_MILE).ceil());
+      int newValue = longDistanceModifiers.ordinalToValue(currentIndex + 1) *
+          GurpsDistance.YARDS_PER_MILE;
       if (_predicate(newValue)) {
         _value = newValue;
       }
@@ -477,8 +547,10 @@ class RangeInformational extends RitualModifier {
     } else if (spellPoints == 2) {
       _value = 880;
     } else {
-      int currentIndex = longDistanceModifiers.valueToOrdinal((_value / GurpsDistance.YARDS_PER_MILE).ceil());
-      int newValue = longDistanceModifiers.ordinalToValue(currentIndex - 1) * GurpsDistance.YARDS_PER_MILE;
+      int currentIndex = longDistanceModifiers
+          .valueToOrdinal((_value / GurpsDistance.YARDS_PER_MILE).ceil());
+      int newValue = longDistanceModifiers.ordinalToValue(currentIndex - 1) *
+          GurpsDistance.YARDS_PER_MILE;
 
       if (_predicate(newValue)) {
         _value = newValue;
@@ -487,7 +559,8 @@ class RangeInformational extends RitualModifier {
   }
 }
 
-final RepeatingSequenceConverter rangeTable = new RepeatingSequenceConverter([2, 3, 5, 7, 10, 15]);
+final RepeatingSequenceConverter rangeTable =
+    new RepeatingSequenceConverter([2, 3, 5, 7, 10, 15]);
 
 class Range extends RitualModifier {
   Range({int value: 0, bool inherent: false}) : super("Range", value, inherent);
@@ -526,10 +599,11 @@ class Range extends RitualModifier {
   }
 }
 
-class Repair extends RitualModifier {
+class Repair extends RitualModifier with HasSpecialization {
   String specialization;
 
-  Repair(this.specialization, {int value: 0, bool inherent: false}) : super("Repair", value, inherent);
+  Repair(this.specialization, {int value: 0, bool inherent: false})
+      : super("Repair", value, inherent);
 
   int get spellPoints => _value;
 
@@ -584,9 +658,11 @@ class Speed extends RitualModifier {
 }
 
 class SubjectWeight extends RitualModifier {
-  static RepeatingSequenceConverter sequence = new RepeatingSequenceConverter([10, 30]);
+  static RepeatingSequenceConverter sequence =
+      new RepeatingSequenceConverter([10, 30]);
 
-  SubjectWeight({int value: 0, bool inherent: false}) : super("Subject Weight", value, inherent);
+  SubjectWeight({int value: 0, bool inherent: false})
+      : super("Subject Weight", value, inherent);
 
   int get spellPoints => sequence.valueToOrdinal(_value);
 
@@ -623,7 +699,8 @@ class SubjectWeight extends RitualModifier {
 }
 
 class Summoned extends RitualModifier {
-  Summoned({int value: 0, bool inherent: false}) : super("Summoned", value, inherent);
+  Summoned({int value: 0, bool inherent: false})
+      : super("Summoned", value, inherent);
 
   //  | Power                                    | Add SP |
   //  |  25% of Static Point Total (62 points*)  |  +4 SP |
@@ -632,7 +709,8 @@ class Summoned extends RitualModifier {
   //  | 100% of Static Point Total (250 points*) | +20 SP |
   //  | 150% of Static Point Total (375 points*) | +40 SP |
   //  | +50% of Static Point Total (+125 points*)| +20 SP |
-  int get spellPoints => (_value <= 75) ? (value / 25).ceil() * 4 : ((value / 50).ceil() - 1) * 20;
+  int get spellPoints =>
+      (_value <= 75) ? (value / 25).ceil() * 4 : ((value / 50).ceil() - 1) * 20;
 
   @override
   ModifierExporter export(ModifierExporter exporter) {
@@ -654,7 +732,9 @@ class Summoned extends RitualModifier {
 
   @override
   void incrementValue() {
-    int value = (spellPoints <= 12) ? _valueForSpellPoints(spellPoints) + 25 : _valueForSpellPoints(spellPoints) + 50;
+    int value = (spellPoints <= 12)
+        ? _valueForSpellPoints(spellPoints) + 25
+        : _valueForSpellPoints(spellPoints) + 50;
     if (_predicate(value)) {
       _value = value;
     }
@@ -662,7 +742,9 @@ class Summoned extends RitualModifier {
 
   @override
   void decrementValue() {
-    int value = (spellPoints <= 20) ? _valueForSpellPoints(spellPoints) - 25 : _valueForSpellPoints(spellPoints) - 50;
+    int value = (spellPoints <= 20)
+        ? _valueForSpellPoints(spellPoints) - 25
+        : _valueForSpellPoints(spellPoints) - 50;
     if (_predicate(value)) {
       _value = value;
     }

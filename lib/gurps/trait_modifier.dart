@@ -52,7 +52,7 @@ class TraitModifierList extends DelegatingList<TraitModifier> {
 
 /// Define the TraitModifiable mixin.
 ///
-/// Classes that are extended with _Enhanceable maintain a list of enhancements and limitations.
+/// Classes that are extended with TraitModifiable maintain a list of enhancements and limitations.
 abstract class TraitModifiable {
   final TraitModifierList _modifiers = new TraitModifierList();
 
@@ -68,7 +68,7 @@ abstract class TraitModifiable {
 
   TraitModifier getAt(int index) => _modifiers[index];
 
-  void removeAt(int index) {
-    _modifiers.removeAt(index);
-  }
+  void removeAt(int index) => _modifiers.removeAt(index);
+
+  TraitModifiable asTraitModifiable() => this;
 }
