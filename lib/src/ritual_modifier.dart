@@ -286,7 +286,7 @@ class AreaOfEffect extends RitualModifier {
   }
 
   @override
-  AreaOfEffect asAreaOfEfect() => this;
+  AreaOfEffect asAreaOfEffect() => this;
 }
 // ----------------------------------
 
