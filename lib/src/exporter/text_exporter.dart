@@ -1,4 +1,5 @@
 import '../../units/gurps_duration.dart';
+import '../../util/core_utils.dart';
 import '../spell_exporter.dart';
 import '../modifier_detail.dart';
 import 'text_modifier_detail.dart';
@@ -75,7 +76,8 @@ class _Effect {
     if (other is! _Effect) {
       return false;
     }
-    return ((other as _Effect).effect == effect) && ((other as _Effect).path == path);
+    return ((other as _Effect).effect == effect) &&
+        ((other as _Effect).path == path);
   }
 
   @override
@@ -111,27 +113,36 @@ class TextEffectExporter implements EffectExporter {
         }
       });
 
-      return countMap.keys.map((it) => _summaryText(it, countMap)).reduce((a, b) => a + ' + ' + b);
+      return countMap.keys
+          .map((it) => _summaryText(it, countMap))
+          .reduce((a, b) => a + ' + ' + b);
     }
   }
 
   String _summaryText(_Effect effect, Map<_Effect, int> countMap) =>
-      (countMap[effect] == 1) ? '${effect.summaryText}' : '${effect.summaryText} x${countMap[effect]}';
+      (countMap[effect] == 1)
+          ? '${effect.summaryText}'
+          : '${effect.summaryText} x${countMap[effect]}';
 
   @override
   String penaltyPath(int penalty) {
+    String penaltyValueText =
+        "${(penalty == 0) ? '' : toSignedString(penalty)}";
+
     if (values.length > 0 && values.every((it) => it.path == values[0].path)) {
       return 'Path of ${values[0].path}-${penalty.abs()}';
     } else if (values.length > 1) {
-      return "The lower of ${values.map((it) =>
-        'Path of ${it.path}').toSet().reduce((a, b) => '${a}${penalty} or ${b}${penalty}')}";
+      return "The lower of ${values.map((it) => 'Path of ${it.path}').toSet().reduce((a, b) => '${a}${penaltyValueText} or ${b}${penaltyValueText}')}";
     }
     return 'Appropriate Path';
   }
 
   @override
-  String get typicalText =>
-      (values.isEmpty) ? 'None.' : values.map((it) => it.typicalCastingText).reduce((a, b) => a + ' + ' + b);
+  String get typicalText => (values.isEmpty)
+      ? 'None.'
+      : values
+          .map((it) => it.typicalCastingText)
+          .reduce((a, b) => a + ' + ' + b);
 
   @override
   String get briefText => _text;
@@ -156,7 +167,10 @@ class TextModifierExporter implements ModifierExporter {
     if (_details.every((f) => !f.inherent)) {
       return "None";
     } else {
-      return _details.where((a) => a.inherent).map((a) => a.summaryText).join(' + ');
+      return _details
+          .where((a) => a.inherent)
+          .map((a) => a.summaryText)
+          .join(' + ');
     }
   }
 
@@ -207,10 +221,12 @@ class TextModifierExporter implements ModifierExporter {
   ModifierDetail createRangeDetail() => new TextRangeDetail();
 
   @override
-  ModifierDetail createRangeDimensionalDetail() => new TextRangeDimensionalDetail();
+  ModifierDetail createRangeDimensionalDetail() =>
+      new TextRangeDimensionalDetail();
 
   @override
-  ModifierDetail createRangeInformationalDetail() => new TextRangeInformationalDetail();
+  ModifierDetail createRangeInformationalDetail() =>
+      new TextRangeInformationalDetail();
 
   @override
   ModifierDetail createRangeTimeDetail() => new TextRangeTimeDetail();
