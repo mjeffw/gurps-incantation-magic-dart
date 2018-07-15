@@ -9,7 +9,13 @@ class GurpsDuration {
   final int _duration;
 
   const GurpsDuration(
-      {int years: 0, int months: 0, int weeks: 0, int days: 0, int hours: 0, int minutes: 0, int seconds: 0})
+      {int years: 0,
+      int months: 0,
+      int weeks: 0,
+      int days: 0,
+      int hours: 0,
+      int minutes: 0,
+      int seconds: 0})
       : this._seconds(SECONDS_PER_YEAR * years +
             SECONDS_PER_MONTH * months +
             SECONDS_PER_WEEK * weeks +
@@ -24,13 +30,17 @@ class GurpsDuration {
 
   int get inHours => _duration ~/ SECONDS_PER_HOUR;
 
-  GurpsDuration operator +(GurpsDuration other) => new GurpsDuration._seconds(_duration + other._duration);
+  GurpsDuration operator +(GurpsDuration other) =>
+      new GurpsDuration._seconds(_duration + other._duration);
 
-  GurpsDuration operator -(GurpsDuration other) => new GurpsDuration._seconds(_duration - other._duration);
+  GurpsDuration operator -(GurpsDuration other) =>
+      new GurpsDuration._seconds(_duration - other._duration);
 
-  GurpsDuration operator *(GurpsDuration other) => new GurpsDuration._seconds(_duration * other._duration);
+  GurpsDuration operator *(GurpsDuration other) =>
+      new GurpsDuration._seconds(_duration * other._duration);
 
-  GurpsDuration operator ~/(GurpsDuration other) => new GurpsDuration._seconds(_duration ~/ other._duration);
+  GurpsDuration operator ~/(GurpsDuration other) =>
+      new GurpsDuration._seconds(_duration ~/ other._duration);
 
   bool operator <(GurpsDuration other) => _duration < other._duration;
 

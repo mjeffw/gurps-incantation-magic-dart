@@ -46,7 +46,10 @@ class DieRoll {
   /// (N)d(+7) == (N+2)d(-1) -- 5d+7 == 7d-1
   static List<int> normalize(int numberOfDice, int adds) {
     if (adds > 2) {
-      return [((numberOfDice + (adds + 1) / 4).floor()), (((adds + 1) % 4) - 1)];
+      return [
+        ((numberOfDice + (adds + 1) / 4).floor()),
+        (((adds + 1) % 4) - 1)
+      ];
     } else if (adds < -1 && numberOfDice > 1) {
       return normalize(numberOfDice - 1, adds + 4);
     }
@@ -64,10 +67,12 @@ class DieRoll {
 
   factory DieRoll.fromString(String text) {
     final natural_number = r'\d+'; // all positive integers
-    final signed_integer = r'(?:\+|-)' + natural_number; // either (plus OR minus) plus an integer
+    final signed_integer =
+        r'(?:\+|-)' + natural_number; // either (plus OR minus) plus an integer
 
     // ^(\d+)d((?:\+|-)\d+)?$
-    RegExp e = new RegExp(r'^(' + natural_number + r')d(' + signed_integer + r')?$');
+    RegExp e =
+        new RegExp(r'^(' + natural_number + r')d(' + signed_integer + r')?$');
     Iterable<Match> iter = e.allMatches(text);
 
     if (iter.isNotEmpty) {
@@ -86,13 +91,17 @@ class DieRoll {
 
   int get numberOfDice => _numberOfDice;
 
-  DieRoll operator +(int adds) => new DieRoll(this._numberOfDice, this._adds + adds);
+  DieRoll operator +(int adds) =>
+      new DieRoll(this._numberOfDice, this._adds + adds);
 
-  DieRoll operator -(int adds) => new DieRoll(this._numberOfDice, this._adds - adds);
+  DieRoll operator -(int adds) =>
+      new DieRoll(this._numberOfDice, this._adds - adds);
 
-  DieRoll operator *(int factor) => new DieRoll(0, DieRoll.denormalize(this, 0) * factor);
+  DieRoll operator *(int factor) =>
+      new DieRoll(0, DieRoll.denormalize(this, 0) * factor);
 
-  DieRoll operator /(int divisor) => new DieRoll(0, (DieRoll.denormalize(this, 0) / divisor).floor());
+  DieRoll operator /(int divisor) =>
+      new DieRoll(0, (DieRoll.denormalize(this, 0) / divisor).floor());
 
   @override
   String toString() {
@@ -107,7 +116,8 @@ class DieRoll {
   }
 
   @override
-  bool operator ==(Object o) => o is DieRoll && o._numberOfDice == _numberOfDice && o._adds == _adds;
+  bool operator ==(Object o) =>
+      o is DieRoll && o._numberOfDice == _numberOfDice && o._adds == _adds;
 
   @override
   int get hashCode => hash2(_adds.hashCode, _numberOfDice.hashCode);

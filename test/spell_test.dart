@@ -36,14 +36,17 @@ void main() {
     expect(spell.spellPoints, equals(7));
     expect(spell.effects.length, equals(2));
     expect(spell.effects, contains(new SpellEffect(Effect.Sense, Path.Augury)));
-    expect(spell.effects, contains(new SpellEffect(Effect.Control, Path.Arcanum)));
+    expect(
+        spell.effects, contains(new SpellEffect(Effect.Control, Path.Arcanum)));
 
     spell.effects.add(new SpellEffect(Effect.Create, Path.Elementalism));
     expect(spell.spellPoints, equals(13));
     expect(spell.effects.length, equals(3));
     expect(spell.effects, contains(new SpellEffect(Effect.Sense, Path.Augury)));
-    expect(spell.effects, contains(new SpellEffect(Effect.Control, Path.Arcanum)));
-    expect(spell.effects, contains(new SpellEffect(Effect.Create, Path.Elementalism)));
+    expect(
+        spell.effects, contains(new SpellEffect(Effect.Control, Path.Arcanum)));
+    expect(spell.effects,
+        contains(new SpellEffect(Effect.Create, Path.Elementalism)));
   });
 
   test("contains Modifiers", () {
@@ -146,7 +149,8 @@ void main() {
 
     expect(spell.spellPoints, equals(25));
 
-    AlteredTraits traits = new AlteredTraits(new Trait(name: 'bar', baseCost: -15));
+    AlteredTraits traits =
+        new AlteredTraits(new Trait(name: 'bar', baseCost: -15));
     spell.ritualModifiers.add(traits);
 
     expect(spell.spellPoints, equals(28));

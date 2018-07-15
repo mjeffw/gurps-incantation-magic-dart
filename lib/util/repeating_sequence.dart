@@ -2,7 +2,8 @@ import 'dart:math';
 
 class RepeatingSequenceConverter {
   List<int> _pattern;
-  int _base = 10; // this can be changed in case the repetition is based on another value than 10
+  int _base =
+      10; // this can be changed in case the repetition is based on another value than 10
 
   RepeatingSequenceConverter(this._pattern);
 

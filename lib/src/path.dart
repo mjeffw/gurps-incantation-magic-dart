@@ -33,7 +33,9 @@ abstract class Path {
 }
 
 class _Arcanum extends Path {
-  const _Arcanum() : super("Arcanum", "Spells, mana, and the creations of the magical arts.");
+  const _Arcanum()
+      : super(
+            "Arcanum", "Spells, mana, and the creations of the magical arts.");
 }
 
 class _Augury extends Path {
@@ -41,7 +43,9 @@ class _Augury extends Path {
 }
 
 class _Demonology extends Path {
-  const _Demonology() : super("Demonology", "Demons and angels; also traveling to and from Hell (but not Heaven!).");
+  const _Demonology()
+      : super("Demonology",
+            "Demons and angels; also traveling to and from Hell (but not Heaven!).");
 }
 
 class _Elementalism extends Path {
@@ -51,11 +55,14 @@ class _Elementalism extends Path {
 }
 
 class _Mesmerism extends Path {
-  const _Mesmerism() : super("Mesmerism", "The minds of sapient (IQ6+) beings.");
+  const _Mesmerism()
+      : super("Mesmerism", "The minds of sapient (IQ6+) beings.");
 }
 
 class _Necromancy extends Path {
-  const _Necromancy() : super("Necromancy", "The dead and undead, as well as shadows and darkness.");
+  const _Necromancy()
+      : super("Necromancy",
+            "The dead and undead, as well as shadows and darkness.");
 }
 
 class _Protection extends Path {
@@ -64,5 +71,6 @@ class _Protection extends Path {
 
 class _Transfiguration extends Path {
   const _Transfiguration()
-      : super("Transfiguration", "Living sapient beings, including their flesh and blood in general.");
+      : super("Transfiguration",
+            "Living sapient beings, including their flesh and blood in general.");
 }

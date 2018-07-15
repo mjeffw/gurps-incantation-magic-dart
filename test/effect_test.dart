@@ -10,7 +10,8 @@ void main() {
     });
 
     test("has description", () {
-      expect(sense.description, equals("Learn something about, or communicate with, the subject."));
+      expect(sense.description,
+          equals("Learn something about, or communicate with, the subject."));
     });
 
     test("has SpellPoints", () {
@@ -34,7 +35,8 @@ void main() {
     });
 
     test("has description", () {
-      expect(strengthen.description, equals("Protect, enhance, or otherwise augment the subject."));
+      expect(strengthen.description,
+          equals("Protect, enhance, or otherwise augment the subject."));
     });
 
     test("has SpellPoints", () {
@@ -54,7 +56,8 @@ void main() {
     });
 
     test("has description", () {
-      expect(restore.description, equals("Repair subject or undo a transformation."));
+      expect(restore.description,
+          equals("Repair subject or undo a transformation."));
     });
 
     test("has SpellPoints", () {
@@ -74,7 +77,10 @@ void main() {
     });
 
     test("has description", () {
-      expect(control.description, equals("Direct or move the subject without changing it fundamentally."));
+      expect(
+          control.description,
+          equals(
+              "Direct or move the subject without changing it fundamentally."));
     });
 
     test("has SpellPoints", () {
@@ -114,7 +120,8 @@ void main() {
     });
 
     test("has description", () {
-      expect(create.description, equals("Bring subject into being from nothing."));
+      expect(
+          create.description, equals("Bring subject into being from nothing."));
     });
 
     test("has SpellPoints", () {

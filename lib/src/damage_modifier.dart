@@ -39,8 +39,16 @@ final List<DamageType> impalingTypes = [
   DamageType.impaling,
   DamageType.hugePiercing
 ];
-final List<DamageType> crushingTypes = [DamageType.burning, DamageType.crushing, DamageType.piercing, DamageType.toxic];
-final List<DamageType> cuttingTypes = [DamageType.cutting, DamageType.largePiercing];
+final List<DamageType> crushingTypes = [
+  DamageType.burning,
+  DamageType.crushing,
+  DamageType.piercing,
+  DamageType.toxic
+];
+final List<DamageType> cuttingTypes = [
+  DamageType.cutting,
+  DamageType.largePiercing
+];
 
 /// For spells that damage its targets.
 ///
@@ -54,7 +62,11 @@ class Damage extends RitualModifier with TraitModifiable {
   bool _explosive = false;
   bool vampiric = false;
 
-  Damage({DamageType type: DamageType.crushing, bool direct: true, int value: 0, bool inherent: false})
+  Damage(
+      {DamageType type: DamageType.crushing,
+      bool direct: true,
+      int value: 0,
+      bool inherent: false})
       : this.type = type,
         this._direct = direct,
         super("Damage", value, inherent);

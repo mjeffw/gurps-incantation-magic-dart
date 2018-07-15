@@ -60,7 +60,8 @@ abstract class TraitModifiable {
     _modifiers.add(t);
   }
 
-  int adjustmentForTraitModifiers(int baseValue) => _modifiers.adjustment(baseValue);
+  int adjustmentForTraitModifiers(int baseValue) =>
+      _modifiers.adjustment(baseValue);
 
   int get sumOfTraitModifierLevels => _modifiers.sum;
 

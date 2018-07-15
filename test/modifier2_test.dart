@@ -26,7 +26,8 @@ void main() {
     });
 
     test("should throw exception if more than one day", () {
-      expect(() => dur.value = const GurpsDuration(days: 1).inSeconds + 1, throwsException);
+      expect(() => dur.value = const GurpsDuration(days: 1).inSeconds + 1,
+          throwsException);
     });
 
     /*

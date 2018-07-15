@@ -18,9 +18,11 @@ void main() {
   test('Mule’s Strength', () {
     spell.name = "Mule's Strength";
     spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Transfiguration));
-    Trait trait = new Trait(name: 'Lifting ST', costPerLevel: 3, levels: 5, hasLevels: true);
+    Trait trait = new Trait(
+        name: 'Lifting ST', costPerLevel: 3, levels: 5, hasLevels: true);
     spell.ritualModifiers.add(new AlteredTraits(trait, inherent: true));
-    spell.ritualModifiers.add(new DurationMod(value: new GurpsDuration(days: 1).inSeconds));
+    spell.ritualModifiers
+        .add(new DurationMod(value: new GurpsDuration(days: 1).inSeconds));
     spell.ritualModifiers.add(new SubjectWeight(value: 1000));
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -28,8 +30,10 @@ void main() {
     List<String> lines = exporter.toString().split('\n');
 
     expect(lines[NAME], equals("Mule's Strength"));
-    expect(lines[EFFECTS], equals("Spell Effects: Strengthen Transfiguration."));
-    expect(lines[MODS], equals('Inherent Modifiers: Altered Traits, Lifting ST.'));
+    expect(
+        lines[EFFECTS], equals("Spell Effects: Strengthen Transfiguration."));
+    expect(
+        lines[MODS], equals('Inherent Modifiers: Altered Traits, Lifting ST.'));
     expect(lines[PENALTY], equals("Skill Penalty: Path of Transfiguration-3."));
     expect(lines[TIME], equals('Casting Time: 5 minutes.'));
     expect(
@@ -43,7 +47,8 @@ void main() {
   test('Occultus Oculus', () {
     spell.name = 'Occultus Oculus';
     spell.effects.add(new SpellEffect(Effect.Sense, Path.Augury));
-    spell.ritualModifiers.add(new Bestows("Recognition", range: BestowsRange.single, value: 6, inherent: true));
+    spell.ritualModifiers.add(new Bestows("Recognition",
+        range: BestowsRange.single, value: 6, inherent: true));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -51,7 +56,8 @@ void main() {
 
     expect(lines[NAME], equals("Occultus Oculus"));
     expect(lines[EFFECTS], equals("Spell Effects: Sense Augury."));
-    expect(lines[MODS], equals('Inherent Modifiers: Bestows a Bonus, Recognition.'));
+    expect(lines[MODS],
+        equals('Inherent Modifiers: Bestows a Bonus, Recognition.'));
     expect(lines[PENALTY], equals("Skill Penalty: Path of Augury-1."));
     expect(lines[TIME], equals('Casting Time: 5 minutes.'));
     expect(
@@ -78,7 +84,8 @@ void main() {
 
     expect(lines[NAME], equals("Partial Shapeshifting (Bat Wings)"));
     expect(lines[EFFECTS], equals("Spell Effects: Transform Transfiguration."));
-    expect(lines[MODS], equals('Inherent Modifiers: Altered Traits, Flight (Winged).'));
+    expect(lines[MODS],
+        equals('Inherent Modifiers: Altered Traits, Flight (Winged).'));
     expect(lines[PENALTY], equals("Skill Penalty: Path of Transfiguration-4."));
     expect(lines[TIME], equals('Casting Time: 5 minutes.'));
     expect(
@@ -106,7 +113,9 @@ void main() {
     expect(lines[PENALTY], equals("Skill Penalty: Path of Transfiguration-0."));
     expect(lines[TIME], equals('Casting Time: 5 minutes.'));
     expect(
-        lines[TYPICAL], equals("Typical Casting: Destroy Transfiguration (5) + Subject Weight, 300 lbs. (3). 8 SP."));
+        lines[TYPICAL],
+        equals(
+            "Typical Casting: Destroy Transfiguration (5) + Subject Weight, 300 lbs. (3). 8 SP."));
   });
 
   test('Radiant Shield', () {
@@ -117,7 +126,8 @@ void main() {
     AreaOfEffect areaOfEffect = new AreaOfEffect(value: 4, inherent: true);
     areaOfEffect.setTargetInfo(6, false);
     spell.ritualModifiers.add(areaOfEffect);
-    Trait trait = new Trait(name: "Defense Bonus", hasLevels: true, costPerLevel: 30, levels: 2);
+    Trait trait = new Trait(
+        name: "Defense Bonus", hasLevels: true, costPerLevel: 30, levels: 2);
     spell.ritualModifiers.add(new AlteredTraits(trait, inherent: true));
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -125,7 +135,10 @@ void main() {
 
     expect(lines[NAME], equals("Radiant Shield"));
     expect(lines[EFFECTS], equals("Spell Effects: Strengthen Protection."));
-    expect(lines[MODS], equals('Inherent Modifiers: Altered Traits, Defense Bonus + Area of Effect.'));
+    expect(
+        lines[MODS],
+        equals(
+            'Inherent Modifiers: Altered Traits, Defense Bonus + Area of Effect.'));
     expect(lines[PENALTY], equals("Skill Penalty: Path of Protection-11."));
     expect(lines[TIME], equals('Casting Time: 5 minutes.'));
     expect(
@@ -165,9 +178,14 @@ void main() {
     spell.name = 'Safeguard';
     spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Protection));
     spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Protection));
-    Trait trait = new Trait(name: 'Modified Altered Time Rate', hasLevels: true, levels: 1, costPerLevel: 60);
+    Trait trait = new Trait(
+        name: 'Modified Altered Time Rate',
+        hasLevels: true,
+        levels: 1,
+        costPerLevel: 60);
     spell.ritualModifiers.add(new AlteredTraits(trait, inherent: true));
-    spell.ritualModifiers.add(new Bestows("Active Defense rolls", range: BestowsRange.broad, value: 2, inherent: true));
+    spell.ritualModifiers.add(new Bestows("Active Defense rolls",
+        range: BestowsRange.broad, value: 2, inherent: true));
     spell.ritualModifiers.add(new DurationMod(value: 10));
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -217,7 +235,8 @@ void main() {
   test('Seek Treasure', () {
     spell.name = 'Seek Treasure';
     spell.effects.add(new SpellEffect(Effect.Sense, Path.Augury));
-    spell.ritualModifiers.add(new RangeInformational(value: new GurpsDistance(miles: 100).inYards));
+    spell.ritualModifiers.add(
+        new RangeInformational(value: new GurpsDistance(miles: 100).inYards));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -228,7 +247,10 @@ void main() {
     expect(lines[MODS], equals('Inherent Modifiers: None.'));
     expect(lines[PENALTY], equals("Skill Penalty: Path of Augury-0."));
     expect(lines[TIME], equals('Casting Time: 5 minutes.'));
-    expect(lines[TYPICAL], equals("Typical Casting: Sense Augury (2) + Range, 100 miles (6). 8 SP."));
+    expect(
+        lines[TYPICAL],
+        equals(
+            "Typical Casting: Sense Augury (2) + Range, 100 miles (6). 8 SP."));
   });
 
   test('Summon Flaming Skull', () {
@@ -257,7 +279,9 @@ void main() {
   test('Twist of Fate', () {
     spell.name = 'Twist of Fate';
     spell.effects.add(new SpellEffect(Effect.Transform, Path.Augury));
-    spell.ritualModifiers.add(new AlteredTraits(new Trait(name: "Destiny", baseCost: 5), inherent: true));
+    spell.ritualModifiers.add(new AlteredTraits(
+        new Trait(name: "Destiny", baseCost: 5),
+        inherent: true));
     spell.ritualModifiers.add(new DurationMod(value: 3600));
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -280,7 +304,8 @@ void main() {
     spell.effects.add(new SpellEffect(Effect.Control, Path.Augury));
     spell.ritualModifiers.add(new DurationMod(value: 3600));
     spell.ritualModifiers.add(new AreaOfEffect(value: 5, inherent: true));
-    spell.ritualModifiers.add(new Bestows("Ward’s Power", range: BestowsRange.moderate, value: 2, inherent: true));
+    spell.ritualModifiers.add(new Bestows("Ward’s Power",
+        range: BestowsRange.moderate, value: 2, inherent: true));
 
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
@@ -288,7 +313,10 @@ void main() {
 
     expect(lines[NAME], equals("Ward for Augury"));
     expect(lines[EFFECTS], equals("Spell Effects: Control Augury."));
-    expect(lines[MODS], equals("Inherent Modifiers: Area of Effect + Bestows a Bonus, Ward’s Power."));
+    expect(
+        lines[MODS],
+        equals(
+            "Inherent Modifiers: Area of Effect + Bestows a Bonus, Ward’s Power."));
     expect(lines[PENALTY], equals("Skill Penalty: Path of Augury-6."));
     expect(lines[TIME], equals('Casting Time: 5 minutes.'));
     expect(
@@ -302,7 +330,8 @@ void main() {
   test('Whiplash', () {
     spell.name = 'Whiplash';
     spell.effects.add(new SpellEffect(Effect.Control, Path.Mesmerism));
-    spell.ritualModifiers.add(new Affliction("Seizure", value: 100, inherent: true));
+    spell.ritualModifiers
+        .add(new Affliction("Seizure", value: 100, inherent: true));
     spell.ritualModifiers.add(new Damage(value: 1, inherent: true));
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -311,7 +340,10 @@ void main() {
 
     expect(lines[NAME], equals("Whiplash"));
     expect(lines[EFFECTS], equals("Spell Effects: Control Mesmerism."));
-    expect(lines[MODS], equals("Inherent Modifiers: Afflictions, Seizure + Damage, Direct Crushing."));
+    expect(
+        lines[MODS],
+        equals(
+            "Inherent Modifiers: Afflictions, Seizure + Damage, Direct Crushing."));
     expect(lines[PENALTY], equals("Skill Penalty: Path of Mesmerism-2."));
     expect(lines[TIME], equals('Casting Time: 5 minutes.'));
     expect(
@@ -326,23 +358,36 @@ void main() {
     spell.name = 'Wrathchild';
     spell.effects.add(new SpellEffect(Effect.Control, Path.Mesmerism));
     spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Transfiguration));
-    spell.ritualModifiers
-        .add(new AlteredTraits(new Trait(name: "ST", hasLevels: true, costPerLevel: 10, levels: 5), inherent: true));
-    spell.ritualModifiers.add(new AlteredTraits(new Trait(name: "Berserk (N/A)", baseCost: -25), inherent: true));
-    spell.ritualModifiers.add(
-        new Bestows("HT rolls to remain conscious or alive", range: BestowsRange.single, value: 2, inherent: true));
+    spell.ritualModifiers.add(new AlteredTraits(
+        new Trait(name: "ST", hasLevels: true, costPerLevel: 10, levels: 5),
+        inherent: true));
+    spell.ritualModifiers.add(new AlteredTraits(
+        new Trait(name: "Berserk (N/A)", baseCost: -25),
+        inherent: true));
+    spell.ritualModifiers.add(new Bestows(
+        "HT rolls to remain conscious or alive",
+        range: BestowsRange.single,
+        value: 2,
+        inherent: true));
     spell.ritualModifiers.add(new DurationMod(value: 30));
     TextSpellExporter exporter = new TextSpellExporter();
     spell.export(exporter);
     List<String> lines = exporter.toString().split('\n');
 
     expect(lines[NAME], equals("Wrathchild"));
-    expect(lines[EFFECTS], equals("Spell Effects: Control Mesmerism + Strengthen Transfiguration."));
+    expect(
+        lines[EFFECTS],
+        equals(
+            "Spell Effects: Control Mesmerism + Strengthen Transfiguration."));
     expect(
         lines[MODS],
-        equals("Inherent Modifiers: Altered Traits, ST + Altered Traits, Berserk (N/A)"
+        equals(
+            "Inherent Modifiers: Altered Traits, ST + Altered Traits, Berserk (N/A)"
             " + Bestows a Bonus, HT rolls to remain conscious or alive."));
-    expect(lines[PENALTY], equals("Skill Penalty: The lower of Path of Mesmerism-6 or Path of Transfiguration-6."));
+    expect(
+        lines[PENALTY],
+        equals(
+            "Skill Penalty: The lower of Path of Mesmerism-6 or Path of Transfiguration-6."));
     expect(lines[TIME], equals('Casting Time: 10 minutes.'));
     expect(
         lines[TYPICAL],
@@ -386,9 +431,13 @@ void main() {
     List<String> lines = exporter.toString().split('\n');
 
     expect(lines[NAME], equals("Death Vision"));
-    expect(lines[EFFECTS], equals("Spell Effects: Sense Augury + Destroy Mesmerism."));
+    expect(lines[EFFECTS],
+        equals("Spell Effects: Sense Augury + Destroy Mesmerism."));
     expect(lines[MODS], equals("Inherent Modifiers: Affliction, Stunning."));
-    expect(lines[PENALTY], equals("Skill Penalty: The lower of Path of Augury-1 or Path of Mesmerism-1."));
+    expect(
+        lines[PENALTY],
+        equals(
+            "Skill Penalty: The lower of Path of Augury-1 or Path of Mesmerism-1."));
     expect(lines[TIME], equals('Casting Time: 10 minutes.'));
     expect(
         lines[TYPICAL],

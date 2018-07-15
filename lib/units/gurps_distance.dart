@@ -4,9 +4,11 @@ class GurpsDistance {
   static String toFormattedString(int yards, {bool showFraction: true}) {
     if (yards >= YARDS_PER_MILE) {
       if (showFraction) {
-        return (_isNotAFraction(yards)) ? '${yards ~/ YARDS_PER_MILE} miles' : '${yards / YARDS_PER_MILE} miles';
+        return (_isNotAFraction(yards))
+            ? '${yards ~/ YARDS_PER_MILE} miles'
+            : '${yards / YARDS_PER_MILE} miles';
       } else {
-        return '${yards ~/ YARDS_PER_MILE} miles${_isNotAFraction(yards) ? "": " ${yards % YARDS_PER_MILE} yards"}';
+        return '${yards ~/ YARDS_PER_MILE} miles${_isNotAFraction(yards) ? "" : " ${yards % YARDS_PER_MILE} yards"}';
       }
     } else {
       return '${yards} yards';
@@ -19,7 +21,8 @@ class GurpsDistance {
 
   const GurpsDistance._yards(this._value);
 
-  const GurpsDistance({int yards: 0, int miles: 0}) : this._yards(YARDS_PER_MILE * miles + yards);
+  const GurpsDistance({int yards: 0, int miles: 0})
+      : this._yards(YARDS_PER_MILE * miles + yards);
 
   int get inYards => _value;
 

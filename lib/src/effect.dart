@@ -21,14 +21,23 @@ abstract class Effect {
   static const Effect Create = const _Create();
   static const Effect Transform = const _Transform();
 
-  static const List<Effect> values = const [Sense, Strengthen, Restore, Control, Destroy, Create, Transform];
+  static const List<Effect> values = const [
+    Sense,
+    Strengthen,
+    Restore,
+    Control,
+    Destroy,
+    Create,
+    Transform
+  ];
 }
 
 class _Sense extends Effect {
   const _Sense() : super("Sense");
 
   @override
-  String get description => "Learn something about, or communicate with, the subject.";
+  String get description =>
+      "Learn something about, or communicate with, the subject.";
 
   @override
   int get spellPoints => 2;
@@ -38,7 +47,8 @@ class _Strengthen extends Effect {
   const _Strengthen() : super("Strengthen");
 
   @override
-  String get description => "Protect, enhance, or otherwise augment the subject.";
+  String get description =>
+      "Protect, enhance, or otherwise augment the subject.";
 
   @override
   int get spellPoints => 3;
@@ -58,7 +68,8 @@ class _Control extends Effect {
   const _Control() : super("Control");
 
   @override
-  String get description => "Direct or move the subject without changing it fundamentally.";
+  String get description =>
+      "Direct or move the subject without changing it fundamentally.";
 
   @override
   int get spellPoints => 5;

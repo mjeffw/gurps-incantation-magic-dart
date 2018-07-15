@@ -14,7 +14,9 @@ class TextModifierDetail extends ModifierDetail {
 
   @override
   String get typicalText {
-    return (detailText.length > 0) ? '${name}, ${detailText} (${spellPoints})' : '${name} (${spellPoints})';
+    return (detailText.length > 0)
+        ? '${name}, ${detailText} (${spellPoints})'
+        : '${name} (${spellPoints})';
   }
 
   @override
@@ -24,7 +26,8 @@ class TextModifierDetail extends ModifierDetail {
   String get summaryText => name;
 }
 
-class TextAfflictionDetail extends TextModifierDetail implements AfflictionDetail {
+class TextAfflictionDetail extends TextModifierDetail
+    implements AfflictionDetail {
   String specialization;
 
   @override
@@ -34,7 +37,8 @@ class TextAfflictionDetail extends TextModifierDetail implements AfflictionDetai
   String get detailText => specialization ?? '';
 }
 
-class TextAlteredTraitsDetail extends TextModifierDetail implements AlteredTraitsDetail {
+class TextAlteredTraitsDetail extends TextModifierDetail
+    implements AlteredTraitsDetail {
   final List<TraitModifier> modifiers = [];
 
   @override
@@ -78,7 +82,8 @@ class TextAlteredTraitsDetail extends TextModifierDetail implements AlteredTrait
   }
 }
 
-class TextAreaOfEffectDetail extends TextModifierDetail implements AreaOfEffectDetail {
+class TextAreaOfEffectDetail extends TextModifierDetail
+    implements AreaOfEffectDetail {
   @override
   bool includes;
 
@@ -90,7 +95,8 @@ class TextAreaOfEffectDetail extends TextModifierDetail implements AreaOfEffectD
     List<String> components = [];
     components.add('${value} yards');
     if (targets > 0) {
-      components.add('${includes ? 'Includes' : 'Excludes'} ${targets} targets');
+      components
+          .add('${includes ? 'Includes' : 'Excludes'} ${targets} targets');
     }
     return components.join(', ');
   }
@@ -170,9 +176,11 @@ class TextRangeTimeDetail extends TextModifierDetail {
   @override
   String get detailText {
     if (value == 0) {
-      return GurpsDuration.toFormattedString(new GurpsDuration(hours: 2).inSeconds);
+      return GurpsDuration.toFormattedString(
+          new GurpsDuration(hours: 2).inSeconds);
     } else {
-      return GurpsDuration.toFormattedString(new GurpsDuration(hours: value).inSeconds);
+      return GurpsDuration.toFormattedString(
+          new GurpsDuration(hours: value).inSeconds);
     }
   }
 }
@@ -186,11 +194,14 @@ class TextRepairDetail extends TextModifierDetail implements RepairDetail {
 
   @override
   String get typicalText {
-    return (detailText.length > 0) ? '${name} ${detailText} (${spellPoints})' : '${name} (${spellPoints})';
+    return (detailText.length > 0)
+        ? '${name} ${detailText} (${spellPoints})'
+        : '${name} (${spellPoints})';
   }
 
   @override
-  String get detailText => '${specialization == null ? ' ' : '${specialization}'}, ${dieRoll}';
+  String get detailText =>
+      '${specialization == null ? ' ' : '${specialization}'}, ${dieRoll}';
 }
 
 class TextSpeedDetail extends TextModifierDetail {
