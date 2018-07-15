@@ -1,5 +1,4 @@
-import '../../units/gurps_duration.dart';
-import '../../util/core_utils.dart';
+import 'package:gurps_dart/gurps_dart.dart';
 import '../spell_exporter.dart';
 import '../modifier_detail.dart';
 import 'text_modifier_detail.dart';

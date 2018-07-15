@@ -1,5 +1,4 @@
-import '../gurps/trait_modifier.dart';
-import '../gurps/die_roll.dart';
+import 'package:gurps_dart/gurps_dart.dart';
 
 abstract class ModifierDetail {
   set name(String name);

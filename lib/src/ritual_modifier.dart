@@ -1,10 +1,6 @@
 import 'dart:math';
 
-import '../util/repeating_sequence.dart';
-import '../units/gurps_distance.dart';
-import '../units/gurps_duration.dart';
-import '../gurps/trait_modifier.dart';
-import '../gurps/die_roll.dart';
+import 'package:gurps_dart/gurps_dart.dart';
 import 'spell_exporter.dart';
 import 'modifier_detail.dart';
 import 'damage_modifier.dart';

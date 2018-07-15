@@ -1,10 +1,5 @@
+import 'package:gurps_dart/gurps_dart.dart';
 import '../modifier_detail.dart';
-import '../../units/gurps_duration.dart';
-import '../../units/gurps_distance.dart';
-import '../../units/weight.dart';
-import '../../gurps/trait_modifier.dart';
-import '../../util/core_utils.dart';
-import 'package:gurps_incantation_magic_model/gurps/die_roll.dart';
 
 class TextModifierDetail extends ModifierDetail {
   String name;

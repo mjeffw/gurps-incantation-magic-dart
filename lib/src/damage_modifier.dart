@@ -1,5 +1,4 @@
-import '../gurps/die_roll.dart';
-import '../gurps/trait_modifier.dart';
+import 'package:gurps_dart/gurps_dart.dart';
 import 'ritual_modifier.dart';
 import 'spell_exporter.dart';
 import 'modifier_detail.dart';

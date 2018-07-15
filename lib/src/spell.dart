@@ -1,8 +1,7 @@
-import '../units/gurps_duration.dart';
+import 'package:gurps_dart/gurps_dart.dart';
 import 'spell_exporter.dart';
 import 'ritual_modifier.dart';
 import 'spell_effect.dart';
-import '../gurps/trait_modifier.dart';
 
 class Spell {
   static final List<GurpsDuration> times = [
