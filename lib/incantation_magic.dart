@@ -1,6 +1,5 @@
-export 'package:gurps_incantation_magic_model/src/exporter/text_exporter.dart';
-
 export 'package:gurps_dart/gurps_dart.dart';
+export 'src/exporter/text_exporter.dart';
 export 'src/damage_modifier.dart';
 export 'src/effect.dart';
 export 'src/ritual_modifier.dart';
