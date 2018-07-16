@@ -12,15 +12,15 @@ void main() {
   });
 
   test("Sense Augury", () {
-    effect = new SpellEffect(Effect.Sense, Path.Augury);
-    expect(effect.path, equals(Path.Augury));
+    effect = new SpellEffect(Effect.Sense, Path.augury);
+    expect(effect.path, equals(Path.augury));
     expect(effect.effect, equals(Effect.Sense));
     expect(effect.spellPoints, equals(2));
   });
 
   test("Control Elementalism", () {
-    effect = new SpellEffect(Effect.Control, Path.Elementalism);
-    expect(effect.path, equals(Path.Elementalism));
+    effect = new SpellEffect(Effect.Control, Path.elementalism);
+    expect(effect.path, equals(Path.elementalism));
     expect(effect.effect, equals(Effect.Control));
     expect(effect.spellPoints, equals(5));
   });

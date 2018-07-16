@@ -1,3 +1,4 @@
+import 'package:gurps_dart/gurps_dart.dart';
 import "package:gurps_incantation_magic_model/incantation_magic.dart";
 import "package:test/test.dart";
 
@@ -26,7 +27,8 @@ void main() {
     });
 
     test("should throw exception if more than one day", () {
-      expect(() => dur.value = const GurpsDuration(days: 1).inSeconds + 1, throwsException);
+      expect(() => dur.value = const GurpsDuration(days: 1).inSeconds + 1,
+          throwsException);
     });
 
     /*

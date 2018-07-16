@@ -1,13 +1,17 @@
-import '../../units/gurps_duration.dart';
-import '../../util/core_utils.dart';
+import 'package:gurps_dart/gurps_dart.dart';
 import '../spell_exporter.dart';
 import '../modifier_detail.dart';
 import 'text_modifier_detail.dart';
 import 'package:quiver/core.dart';
 
 class TextSpellExporter implements SpellExporter {
+  @override
   String name;
+
+  @override
   EffectExporter effectExporter = new TextEffectExporter();
+
+  @override
   ModifierExporter modifierExporter = new TextModifierExporter();
   int penalty;
   GurpsDuration time;
@@ -31,12 +35,14 @@ class TextSpellExporter implements SpellExporter {
     return sb.toString();
   }
 
+  @override
   String get penaltyText => "Skill Penalty: ${penaltyPath}.";
 
   String get penaltyPath => effectExporter.penaltyPath(penalty);
 
   String get timeText => "Casting Time: ${castingTime}.";
 
+  @override
   String get castingTime => GurpsDuration.toFormattedString(time.inSeconds);
 
   String get typical {
@@ -72,12 +78,12 @@ class _Effect {
 
   String get typicalCastingText => '${effect} ${path} (${spellPoints})';
 
+  @override
   bool operator ==(Object other) {
-    if (other is! _Effect) {
-      return false;
+    if (identical(this, other)) {
+      return true;
     }
-    return ((other as _Effect).effect == effect) &&
-        ((other as _Effect).path == path);
+    return other is _Effect && other.effect == effect && other.path == path;
   }
 
   @override

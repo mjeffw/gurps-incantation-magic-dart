@@ -1,22 +1,22 @@
 abstract class Path {
-  static const Path Arcanum = const _Arcanum();
-  static const Path Augury = const _Augury();
-  static const Path Demonology = const _Demonology();
-  static const Path Elementalism = const _Elementalism();
-  static const Path Mesmerism = const _Mesmerism();
-  static const Path Necromancy = const _Necromancy();
-  static const Path Protection = const _Protection();
-  static const Path Transfiguration = const _Transfiguration();
+  static const Path arcanum = const _Arcanum();
+  static const Path augury = const _Augury();
+  static const Path demonology = const _Demonology();
+  static const Path elementalism = const _Elementalism();
+  static const Path mesmerism = const _Mesmerism();
+  static const Path necromancy = const _Necromancy();
+  static const Path protection = const _Protection();
+  static const Path transfiguration = const _Transfiguration();
 
   static const List<Path> values = const [
-    Arcanum,
-    Augury,
-    Demonology,
-    Elementalism,
-    Mesmerism,
-    Necromancy,
-    Protection,
-    Transfiguration
+    arcanum,
+    augury,
+    demonology,
+    elementalism,
+    mesmerism,
+    necromancy,
+    protection,
+    transfiguration
   ];
 
   final String name;
@@ -33,7 +33,9 @@ abstract class Path {
 }
 
 class _Arcanum extends Path {
-  const _Arcanum() : super("Arcanum", "Spells, mana, and the creations of the magical arts.");
+  const _Arcanum()
+      : super(
+            "Arcanum", "Spells, mana, and the creations of the magical arts.");
 }
 
 class _Augury extends Path {
@@ -41,7 +43,9 @@ class _Augury extends Path {
 }
 
 class _Demonology extends Path {
-  const _Demonology() : super("Demonology", "Demons and angels; also traveling to and from Hell (but not Heaven!).");
+  const _Demonology()
+      : super("Demonology",
+            "Demons and angels; also traveling to and from Hell (but not Heaven!).");
 }
 
 class _Elementalism extends Path {
@@ -51,11 +55,14 @@ class _Elementalism extends Path {
 }
 
 class _Mesmerism extends Path {
-  const _Mesmerism() : super("Mesmerism", "The minds of sapient (IQ6+) beings.");
+  const _Mesmerism()
+      : super("Mesmerism", "The minds of sapient (IQ6+) beings.");
 }
 
 class _Necromancy extends Path {
-  const _Necromancy() : super("Necromancy", "The dead and undead, as well as shadows and darkness.");
+  const _Necromancy()
+      : super("Necromancy",
+            "The dead and undead, as well as shadows and darkness.");
 }
 
 class _Protection extends Path {
@@ -64,5 +71,6 @@ class _Protection extends Path {
 
 class _Transfiguration extends Path {
   const _Transfiguration()
-      : super("Transfiguration", "Living sapient beings, including their flesh and blood in general.");
+      : super("Transfiguration",
+            "Living sapient beings, including their flesh and blood in general.");
 }

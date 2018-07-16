@@ -1,8 +1,9 @@
 import 'effect.dart';
 import 'spell_exporter.dart';
 import 'path.dart';
+import 'package:quiver/core.dart';
 
-typedef String toSpellEffectText();
+typedef String ToSpellEffectText();
 
 class SpellEffect {
   Effect effect;
@@ -14,11 +15,17 @@ class SpellEffect {
 
   @override
   bool operator ==(Object other) {
-    if (other is! SpellEffect) return false;
-    return effect == (other as SpellEffect).effect && path == (other as SpellEffect).path;
+    if (identical(this, other)) {
+      return true;
+    }
+    return other is SpellEffect && effect == other.effect && path == other.path;
   }
 
+  @override
+  int hashCode() => hash2(effect.name, path.name);
+
   void export(EffectExporter exporter) {
-    exporter.add(effect: effect.name, path: path.name, spellPoints: spellPoints);
+    exporter.add(
+        effect: effect.name, path: path.name, spellPoints: spellPoints);
   }
 }

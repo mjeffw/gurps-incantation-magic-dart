@@ -1,4 +1,4 @@
-import '../units/gurps_duration.dart';
+import 'package:gurps_dart/gurps_dart.dart';
 import 'modifier_detail.dart';
 
 abstract class SpellExporter {

@@ -1,12 +1,13 @@
-import '../units/gurps_duration.dart';
+import 'package:gurps_dart/gurps_dart.dart';
 import 'spell_exporter.dart';
 import 'ritual_modifier.dart';
 import 'spell_effect.dart';
-import '../gurps/trait_modifier.dart';
 
 class Spell {
   static final List<GurpsDuration> times = [
-    const GurpsDuration(minutes: 2), // Placeholder to make index equivalent to number of effects
+    const GurpsDuration(
+        minutes:
+            2), // Placeholder to make index equivalent to number of effects
 
     const GurpsDuration(minutes: 5),
     const GurpsDuration(minutes: 10),
@@ -54,7 +55,8 @@ class Spell {
   bool conditional = false;
 
   int get spellPoints {
-    int effectCost = effects.map((it) => it.spellPoints).fold(0, (a, b) => a + b);
+    int effectCost =
+        effects.map((it) => it.spellPoints).fold(0, (a, b) => a + b);
     int conditionalCost = _addForConditional();
     int modifierCost = _addForModifiers();
     return effectCost + conditionalCost + modifierCost;
@@ -73,12 +75,15 @@ class Spell {
   }
 
   int _addForModifiers() {
-    return ritualModifiers.map((it) => it.spellPoints).fold(0, (int a, int b) => a + b);
+    return ritualModifiers
+        .map((it) => it.spellPoints)
+        .fold(0, (int a, int b) => a + b);
   }
 
   /// The time required to cast a spell depends exclusively on how many spell effects it has.
   GurpsDuration get castingTime {
-    int effectiveNumberOfEffects = effects.length + _sumOfDrawbackModifierLevels ~/ 40;
+    int effectiveNumberOfEffects =
+        effects.length + _sumOfDrawbackModifierLevels ~/ 40;
     if (effectiveNumberOfEffects < 13) {
       return times[effectiveNumberOfEffects];
     } else {
@@ -86,7 +91,8 @@ class Spell {
     }
   }
 
-  int get _sumOfDrawbackModifierLevels => drawbacks.map((e) => e.level).fold(0, (a, b) => a + b);
+  int get _sumOfDrawbackModifierLevels =>
+      drawbacks.map((e) => e.level).fold(0, (a, b) => a + b);
 
   SpellExporter export(SpellExporter exporter) {
     exporter.name = name;

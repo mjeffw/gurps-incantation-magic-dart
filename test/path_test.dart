@@ -14,7 +14,8 @@ void main() {
     });
 
     test("has aspects", () {
-      expect(arcanum.aspect, equals("Spells, mana, and the creations of the magical arts."));
+      expect(arcanum.aspect,
+          equals("Spells, mana, and the creations of the magical arts."));
     });
   });
 
@@ -46,7 +47,10 @@ void main() {
     });
 
     test("has aspects", () {
-      expect(demonology.aspect, equals("Demons and angels; also traveling to and from Hell (but not Heaven!)."));
+      expect(
+          demonology.aspect,
+          equals(
+              "Demons and angels; also traveling to and from Hell (but not Heaven!)."));
     });
   });
 
@@ -62,8 +66,10 @@ void main() {
     });
 
     test("has aspects", () {
-      expect(elementalism.aspect,
-          equals("Air, earth, fire, water, and wood -- as well as void/sound/ether, if used in the campaign."));
+      expect(
+          elementalism.aspect,
+          equals(
+              "Air, earth, fire, water, and wood -- as well as void/sound/ether, if used in the campaign."));
     });
   });
 
@@ -95,7 +101,8 @@ void main() {
     });
 
     test("has aspects", () {
-      expect(necromancy.aspect, equals("The dead and undead, as well as shadows and darkness."));
+      expect(necromancy.aspect,
+          equals("The dead and undead, as well as shadows and darkness."));
     });
   });
 
@@ -127,7 +134,10 @@ void main() {
     });
 
     test("has aspects", () {
-      expect(protection.aspect, equals("Living sapient beings, including their flesh and blood in general."));
+      expect(
+          protection.aspect,
+          equals(
+              "Living sapient beings, including their flesh and blood in general."));
     });
   });
 }
