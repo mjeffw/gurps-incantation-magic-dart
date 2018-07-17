@@ -1,3 +1,4 @@
+import 'package:gurps_dart/gurps_dart.dart';
 import "package:gurps_incantation_magic_model/incantation_magic.dart";
 import "package:test/test.dart";
 
@@ -31,7 +32,7 @@ void main() {
 
     spell.name = "Alarm";
     spell.conditional = true;
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Arcanum));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.arcanum));
     AreaOfEffect m = new AreaOfEffect(value: 5, inherent: true)
       ..setTargetInfo(6, true);
     spell.ritualModifiers.add(m);
@@ -67,8 +68,8 @@ void main() {
         'Many casters will customize this spell, using Bestows a Bonus (p. 15) to give higher skills or '
         'attributes. Botches usually produce an animated object with creative and hostile intent!';
     spell.name = "Animate Object";
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Arcanum));
-    spell.effects.add(new SpellEffect(Effect.Control, Path.Arcanum));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.arcanum));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.arcanum));
     spell.ritualModifiers
         .add(new DurationMod(value: new GurpsDuration(hours: 12).inSeconds));
     spell.ritualModifiers.add(new SubjectWeight(value: 100));
@@ -105,7 +106,7 @@ void main() {
         "Susceptibility per point by which he failed his roll (maximum of five). These effects last for (20 - HT) "
         "minutes, minimum of one minute.";
     spell.name = 'Arcane Fire';
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Arcanum));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.arcanum));
     Damage dam = new Damage(
         type: DamageType.burning, value: 4, inherent: true, direct: false);
     dam.addTraitModifier(
@@ -146,7 +147,7 @@ void main() {
         "(The short casting time is due to this drawback; see Limited Spells, p. 15.) This is often cast as a "
         "'blocking' spell (p. 20) at the usual -10 to skill.";
     spell.name = 'Bewitchment';
-    spell.effects.add(new SpellEffect(Effect.Destroy, Path.Mesmerism));
+    spell.effects.add(new SpellEffect(Effect.Destroy, Path.mesmerism));
     spell.addDrawback("Requires eye contact", null, -40);
     spell.ritualModifiers
         .add(new Affliction("Daze", value: 50, inherent: true));
@@ -180,7 +181,7 @@ void main() {
         "a normal spell. This essentially uses the rules for conjured weaponry (p. 21), but the weapon itself is "
         "the carrier for the damage.";
     spell.name = 'Black Blade';
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Necromancy));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.necromancy));
     Damage dam = new Damage(type: DamageType.toxic, value: 8, inherent: true);
     dam.addTraitModifier(new TraitModifier("Follow-Up", null, 0));
     spell.ritualModifiers.add(dam);
@@ -222,7 +223,7 @@ void main() {
         "friend in the lava\" fails, \"Make your friend leave\" may still work, so long as leaving doesn't require "
         "a lava-swim.";
     spell.name = 'Bond of Servitude for (Demons)';
-    spell.effects.add(new SpellEffect(Effect.Control, Path.Demonology));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.demonology));
     spell.ritualModifiers.add(new Bestows("Resistance to Bond of Servitude",
         range: BestowsRange.single, value: -2, inherent: true));
     spell.ritualModifiers
@@ -261,7 +262,7 @@ void main() {
         "This spell grants the subject DR 6 with the Tough Skin and Hardened 2 modifiers. This protection lasts for "
         "12 minutes.";
     spell.name = 'Bulwark';
-    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Protection));
+    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.protection));
     AlteredTraits alteredTraits = new AlteredTraits(
         new Trait(
             name: "Damage Resistance",
@@ -309,7 +310,7 @@ void main() {
         "instant banishment from their non-native reality. Critical success on the resistance roll means they "
         "cannot be banished by the caster for the next 24 hours!";
     spell.name = 'Censure';
-    spell.effects.add(new SpellEffect(Effect.Control, Path.Protection));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.protection));
     spell.ritualModifiers
         .add(new Bestows("Resist Censure", value: -6, inherent: true));
     spell.description = _description;
@@ -342,7 +343,7 @@ void main() {
         "yards and length of 20 yards (see Area and Spreading Attacks, p. B413). This cone does 3d burning damage and "
         "requires a roll against Innate Attack (Beam) to hit.";
     spell.name = 'Cone of Flame';
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Elementalism));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.elementalism));
     Damage dam =
         new Damage(type: DamageType.burning, direct: false, inherent: true);
     dam.addTraitModifier(new TraitModifier("Cone", "5 yards", 100));
@@ -385,8 +386,8 @@ void main() {
         "may mistake jokes and harmless social situations for aggression. The warrior is created without armor "
         "or weapons; these must be provided via another spell or given to it by hand.";
     spell.name = 'Create Golem Warrior';
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Arcanum));
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Arcanum));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.arcanum));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.arcanum));
     spell.ritualModifiers.add(new Summoned(value: 50, inherent: true));
     spell.ritualModifiers
         .add(new DurationMod(value: new GurpsDuration(hours: 1).inSeconds));
@@ -419,8 +420,8 @@ void main() {
         "You animate a servitor skeleton or zombie (Summoners, pp. 25-26) from a nearby dead body or grave. It "
         "does your bidding for the next day, after which it crumbles to dust or putrefies.";
     spell.name = 'Create Undead Servitor';
-    spell.effects.add(new SpellEffect(Effect.Control, Path.Necromancy));
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Necromancy));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.necromancy));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.necromancy));
     spell.ritualModifiers.add(new Summoned(value: 25, inherent: true));
     spell.ritualModifiers
         .add(new DurationMod(value: new GurpsDuration(days: 1).inSeconds));
@@ -459,7 +460,7 @@ void main() {
         "Note that the 3d damage being spread out over multiple turns is a special effect: 1d-3 is effectively "
         "1.5 points of damage and 1.5 x 7 = 10.5, the average of rolling 3d.";
     spell.name = 'Creeping Frost';
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Elementalism));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.elementalism));
     spell.ritualModifiers.add(new AlteredTraits(
         new Trait(name: 'Fragile (Brittle)', baseCost: -15),
         inherent: true));
@@ -509,7 +510,7 @@ void main() {
         "This spell cancels any other spell targeted. The caster gets a total of +10 to his Path roll to terminate "
         "the spell: +4 from the SP total of Dispelling and another +6 from Bestows a Bonus.";
     spell.name = 'Dispelling';
-    spell.effects.add(new SpellEffect(Effect.Destroy, Path.Arcanum));
+    spell.effects.add(new SpellEffect(Effect.Destroy, Path.arcanum));
     spell.ritualModifiers.add(new Bestows("Dispelling",
         range: BestowsRange.single, value: 6, inherent: true));
     spell.ritualModifiers.add(new Girded(value: 20, inherent: true));
@@ -544,7 +545,7 @@ void main() {
         "1, and Rcl 1. Consult the table below for the specifics on a given type of energy; each blast is a separate "
         "spell.";
     spell.name = '(Elemental) Blast';
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Elementalism));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.elementalism));
     Damage dam =
         new Damage(type: DamageType.corrosive, direct: false, inherent: true);
     dam.addTraitModifier(new TraitModifier("Incendiary", null, 10));
@@ -583,7 +584,7 @@ void main() {
         "1, and Rcl 1. Consult the table below for the specifics on a given type of energy; each blast is a separate "
         "spell.";
     spell.name = 'Firebomb';
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Elementalism));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.elementalism));
     spell.ritualModifiers.add(new AreaOfEffect(value: 7, inherent: true));
     spell.ritualModifiers.add(
         new Damage(type: DamageType.burning, direct: false, inherent: true));
@@ -620,7 +621,7 @@ void main() {
         "mistaken for him. Success by 5 or more, or a critical success, gives +2 on all other rolls to emulate the "
         "target (Acting, Mimicry, etc.). This effect lasts for an hour.";
     spell.name = 'Flesh Mask';
-    spell.effects.add(new SpellEffect(Effect.Transform, Path.Transfiguration));
+    spell.effects.add(new SpellEffect(Effect.Transform, Path.transfiguration));
     spell.ritualModifiers.add(new SubjectWeight(value: 300));
     spell.ritualModifiers.add(new Bestows("Disguise",
         range: BestowsRange.single, value: 5, inherent: true));
@@ -651,7 +652,7 @@ void main() {
 
   test("Frozen Bonds", () {
     spell.name = 'Frozen Bonds';
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Elementalism));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.elementalism));
     spell.ritualModifiers.add(new Bestows("Binding ST",
         range: BestowsRange.single, value: 3, inherent: true));
     spell.ritualModifiers.add(new Range(value: 20));
@@ -679,8 +680,8 @@ void main() {
 
   test("Greater Solidify Spirit", () {
     spell.name = 'Solidify Spirit';
-    spell.effects.add(new SpellEffect(Effect.Control, Path.Necromancy));
-    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Necromancy));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.necromancy));
+    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.necromancy));
     spell.ritualModifiers.add(new AlteredTraits(
         new Trait(name: "Negated Insubstantiality", baseCost: 16),
         inherent: true));
@@ -711,7 +712,7 @@ void main() {
 
   test("Greater Solidify Spirit", () {
     spell.name = 'Hellfire Aura';
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Demonology));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.demonology));
     Damage dam = new Damage(
         type: DamageType.burning, direct: true, value: 4, inherent: true);
     dam.addTraitModifier(new TraitModifier("Aura", null, 80));
@@ -743,8 +744,8 @@ void main() {
 
   test("Illusion", () {
     spell.name = 'Illusion';
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Elementalism));
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Mesmerism));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.elementalism));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.mesmerism));
     spell.ritualModifiers.add(new DurationMod(value: 3600));
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -770,7 +771,7 @@ void main() {
 
   test("Invisibility", () {
     spell.name = 'Invisibility';
-    spell.effects.add(new SpellEffect(Effect.Control, Path.Elementalism));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.elementalism));
     AlteredTraits traits = new AlteredTraits(
         new Trait(name: "Invisibility", baseCost: 40),
         inherent: true);
@@ -803,7 +804,7 @@ void main() {
 
   test("Jinx", () {
     spell.name = 'Jinx';
-    spell.effects.add(new SpellEffect(Effect.Control, Path.Augury));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.augury));
     AreaOfEffect areaOfEffect = new AreaOfEffect(value: 5, inherent: true);
     areaOfEffect.setTargetInfo(12, false);
     spell.ritualModifiers.add(areaOfEffect);
@@ -835,8 +836,8 @@ void main() {
 
   test("Lesser Solidify Spirit", () {
     spell.name = 'Lesser Solidify Spirit';
-    spell.effects.add(new SpellEffect(Effect.Control, Path.Necromancy));
-    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Necromancy));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.necromancy));
+    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.necromancy));
     spell.ritualModifiers.add(new DurationMod(value: 720));
     spell.ritualModifiers.add(new RangeDimensional(value: 1));
 

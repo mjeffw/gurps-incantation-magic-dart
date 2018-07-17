@@ -116,6 +116,7 @@ class AfflictionStun extends RitualModifier {
       : super.withPredicate("Affliction, Stunning", zeroOnly,
             inherent: inherent);
 
+  @override
   ModifierExporter export(ModifierExporter exporter) {
     ModifierDetail detail = exporter.createAfflictionStunDetail();
     super.exportDetail(detail);
@@ -129,14 +130,16 @@ class AfflictionStun extends RitualModifier {
 ///
 /// This adds +1 SP for every +5% it’s worth as an enhancement to Affliction.
 class Affliction extends RitualModifier with HasSpecialization {
-  String specialization;
-
   Affliction(this.specialization, {int value: 0, bool inherent: false})
       : super("Afflictions", value, inherent);
 
   @override
+  String specialization;
+
+  @override
   int get spellPoints => (_value / 5.0).ceil();
 
+  @override
   ModifierExporter export(ModifierExporter exporter) {
     AfflictionDetail detail =
         exporter.createAfflictionDetail() as AfflictionDetail;
@@ -199,10 +202,14 @@ class AlteredTraits extends RitualModifier with TraitModifiable, HasTrait {
   AlteredTraits(this.trait, {bool inherent: false})
       : super.withPredicateNew("Altered Traits", anyValue, 0, inherent);
 
+  @override
   Trait trait;
 //  String specialization;
 //  int specLevel;
+  @override
   int get value => trait.totalCost;
+
+  @override
   set value(int val) {
     trait.baseCost = val;
     trait.hasLevels = false;
@@ -246,14 +253,14 @@ class AlteredTraits extends RitualModifier with TraitModifiable, HasTrait {
 /// Alternatively, you may exclude everyone in the area, but then include willing potential targets for +1 SP per
 /// two specific subjects
 class AreaOfEffect extends RitualModifier {
+  AreaOfEffect({int value: 0, bool inherent: false})
+      : super("Area of Effect", value, inherent);
+
   int _targets = 0;
   int get targets => _targets;
   set targets(int targets) => _targets = max(targets, 0);
 
   bool includes = false;
-
-  AreaOfEffect({int value: 0, bool inherent: false})
-      : super("Area of Effect", value, inherent);
 
   /// Figure the circular area and add 10 SP per yard of radius from its center.
   /// Add another +1 SP for every two specific subjects in the area that won’t be affected by the spell, or
@@ -293,7 +300,10 @@ enum BestowsRange { single, moderate, broad }
 
 /// Adds a bonus or penalty to skills or attributes.
 class Bestows extends RitualModifier with HasSpecialization, HasBestowsRange {
+  @override
   BestowsRange range = BestowsRange.single;
+
+  @override
   String specialization;
 
   Bestows(this.specialization,
@@ -561,6 +571,7 @@ final RepeatingSequenceConverter rangeTable =
 class Range extends RitualModifier {
   Range({int value: 0, bool inherent: false}) : super("Range", value, inherent);
 
+  @override
   int get spellPoints => rangeTable.valueToOrdinal(_value);
 
   @override
@@ -596,11 +607,13 @@ class Range extends RitualModifier {
 }
 
 class Repair extends RitualModifier with HasSpecialization {
+  @override
   String specialization;
 
   Repair(this.specialization, {int value: 0, bool inherent: false})
       : super("Repair", value, inherent);
 
+  @override
   int get spellPoints => _value;
 
   DieRoll get dice => new DieRoll(1, value);
@@ -619,6 +632,7 @@ class Repair extends RitualModifier with HasSpecialization {
 class Speed extends RitualModifier {
   Speed({int value: 0, bool inherent: false}) : super("Speed", value, inherent);
 
+  @override
   int get spellPoints => rangeTable.valueToOrdinal(_value);
 
   @override
@@ -660,6 +674,7 @@ class SubjectWeight extends RitualModifier {
   SubjectWeight({int value: 0, bool inherent: false})
       : super("Subject Weight", value, inherent);
 
+  @override
   int get spellPoints => sequence.valueToOrdinal(_value);
 
   @override
@@ -705,6 +720,7 @@ class Summoned extends RitualModifier {
   //  | 100% of Static Point Total (250 points*) | +20 SP |
   //  | 150% of Static Point Total (375 points*) | +40 SP |
   //  | +50% of Static Point Total (+125 points*)| +20 SP |
+  @override
   int get spellPoints =>
       (_value <= 75) ? (value / 25).ceil() * 4 : ((value / 50).ceil() - 1) * 20;
 

@@ -1,3 +1,4 @@
+import 'package:gurps_dart/gurps_dart.dart';
 import "package:gurps_incantation_magic_model/incantation_magic.dart";
 import "package:test/test.dart";
 
@@ -17,7 +18,7 @@ void main() {
 
   test('Mule’s Strength', () {
     spell.name = "Mule's Strength";
-    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Transfiguration));
+    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.transfiguration));
     Trait trait = new Trait(
         name: 'Lifting ST', costPerLevel: 3, levels: 5, hasLevels: true);
     spell.ritualModifiers.add(new AlteredTraits(trait, inherent: true));
@@ -46,7 +47,7 @@ void main() {
 
   test('Occultus Oculus', () {
     spell.name = 'Occultus Oculus';
-    spell.effects.add(new SpellEffect(Effect.Sense, Path.Augury));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.augury));
     spell.ritualModifiers.add(new Bestows("Recognition",
         range: BestowsRange.single, value: 6, inherent: true));
 
@@ -70,7 +71,7 @@ void main() {
 
   test('Partial Shapeshifting (Bat Wings)', () {
     spell.name = 'Partial Shapeshifting (Bat Wings)';
-    spell.effects.add(new SpellEffect(Effect.Transform, Path.Transfiguration));
+    spell.effects.add(new SpellEffect(Effect.Transform, Path.transfiguration));
     Trait trait = new Trait(name: 'Flight', baseCost: 40);
     AlteredTraits t = new AlteredTraits(trait, inherent: true);
     t.addTraitModifier(new TraitModifier("Winged", null, -25));
@@ -100,7 +101,7 @@ void main() {
 
   test('Peel Back the Skin', () {
     spell.name = 'Peel Back the Skin';
-    spell.effects.add(new SpellEffect(Effect.Destroy, Path.Transfiguration));
+    spell.effects.add(new SpellEffect(Effect.Destroy, Path.transfiguration));
     spell.ritualModifiers.add(new SubjectWeight(value: 300));
 
     TextSpellExporter exporter = new TextSpellExporter();
@@ -120,7 +121,7 @@ void main() {
 
   test('Radiant Shield', () {
     spell.name = 'Radiant Shield';
-    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Protection));
+    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.protection));
     spell.ritualModifiers.add(new SubjectWeight(value: 30));
     spell.ritualModifiers.add(new DurationMod(value: 3600));
     AreaOfEffect areaOfEffect = new AreaOfEffect(value: 4, inherent: true);
@@ -152,7 +153,7 @@ void main() {
 
   test('Repair Undead', () {
     spell.name = 'Repair Undead';
-    spell.effects.add(new SpellEffect(Effect.Restore, Path.Necromancy));
+    spell.effects.add(new SpellEffect(Effect.Restore, Path.necromancy));
     spell.ritualModifiers.add(new Repair("undead", value: 8, inherent: true));
     spell.ritualModifiers.add(new SubjectWeight(value: 300));
 
@@ -176,8 +177,8 @@ void main() {
 
   test('Safeguard', () {
     spell.name = 'Safeguard';
-    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Protection));
-    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Protection));
+    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.protection));
+    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.protection));
     Trait trait = new Trait(
         name: 'Modified Altered Time Rate',
         hasLevels: true,
@@ -211,7 +212,7 @@ void main() {
 
   test('Scry', () {
     spell.name = 'Scry';
-    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Augury));
+    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.augury));
     spell.ritualModifiers.add(new Speed(value: 20000, inherent: true));
     spell.ritualModifiers.add(new DurationMod(value: 10800));
     spell.ritualModifiers.add(new RangeInformational(value: 200000));
@@ -234,7 +235,7 @@ void main() {
 
   test('Seek Treasure', () {
     spell.name = 'Seek Treasure';
-    spell.effects.add(new SpellEffect(Effect.Sense, Path.Augury));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.augury));
     spell.ritualModifiers.add(
         new RangeInformational(value: new GurpsDistance(miles: 100).inYards));
 
@@ -255,7 +256,7 @@ void main() {
 
   test('Summon Flaming Skull', () {
     spell.name = 'Summon Flaming Skull';
-    spell.effects.add(new SpellEffect(Effect.Control, Path.Demonology));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.demonology));
     spell.ritualModifiers.add(new DurationMod(value: 60));
     spell.ritualModifiers.add(new RangeDimensional(value: 1));
     spell.ritualModifiers.add(new Summoned(value: 100, inherent: true));
@@ -278,7 +279,7 @@ void main() {
 
   test('Twist of Fate', () {
     spell.name = 'Twist of Fate';
-    spell.effects.add(new SpellEffect(Effect.Transform, Path.Augury));
+    spell.effects.add(new SpellEffect(Effect.Transform, Path.augury));
     spell.ritualModifiers.add(new AlteredTraits(
         new Trait(name: "Destiny", baseCost: 5),
         inherent: true));
@@ -301,7 +302,7 @@ void main() {
 
   test('Ward for Augury', () {
     spell.name = 'Ward for Augury';
-    spell.effects.add(new SpellEffect(Effect.Control, Path.Augury));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.augury));
     spell.ritualModifiers.add(new DurationMod(value: 3600));
     spell.ritualModifiers.add(new AreaOfEffect(value: 5, inherent: true));
     spell.ritualModifiers.add(new Bestows("Ward’s Power",
@@ -329,7 +330,7 @@ void main() {
 
   test('Whiplash', () {
     spell.name = 'Whiplash';
-    spell.effects.add(new SpellEffect(Effect.Control, Path.Mesmerism));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.mesmerism));
     spell.ritualModifiers
         .add(new Affliction("Seizure", value: 100, inherent: true));
     spell.ritualModifiers.add(new Damage(value: 1, inherent: true));
@@ -356,8 +357,8 @@ void main() {
 
   test('Wrathchild', () {
     spell.name = 'Wrathchild';
-    spell.effects.add(new SpellEffect(Effect.Control, Path.Mesmerism));
-    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.Transfiguration));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.mesmerism));
+    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.transfiguration));
     spell.ritualModifiers.add(new AlteredTraits(
         new Trait(name: "ST", hasLevels: true, costPerLevel: 10, levels: 5),
         inherent: true));
@@ -400,7 +401,7 @@ void main() {
 
   test('Track Traveler', () {
     spell.name = 'Track Traveler';
-    spell.effects.add(new SpellEffect(Effect.Sense, Path.Arcanum));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.arcanum));
     spell.ritualModifiers.add(new RangeCrossTime(value: 24));
     TextSpellExporter exporter = new TextSpellExporter();
 
@@ -421,8 +422,8 @@ void main() {
 
   test('Death Vison', () {
     spell.name = 'Death Vision';
-    spell.effects.add(new SpellEffect(Effect.Sense, Path.Augury));
-    spell.effects.add(new SpellEffect(Effect.Destroy, Path.Mesmerism));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.augury));
+    spell.effects.add(new SpellEffect(Effect.Destroy, Path.mesmerism));
     spell.ritualModifiers.add(new AfflictionStun(inherent: true));
     spell.ritualModifiers.add(new Range(value: 10));
 

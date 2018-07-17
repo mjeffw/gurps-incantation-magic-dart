@@ -1,22 +1,22 @@
 abstract class Path {
-  static const Path Arcanum = const _Arcanum();
-  static const Path Augury = const _Augury();
-  static const Path Demonology = const _Demonology();
-  static const Path Elementalism = const _Elementalism();
-  static const Path Mesmerism = const _Mesmerism();
-  static const Path Necromancy = const _Necromancy();
-  static const Path Protection = const _Protection();
-  static const Path Transfiguration = const _Transfiguration();
+  static const Path arcanum = const _Arcanum();
+  static const Path augury = const _Augury();
+  static const Path demonology = const _Demonology();
+  static const Path elementalism = const _Elementalism();
+  static const Path mesmerism = const _Mesmerism();
+  static const Path necromancy = const _Necromancy();
+  static const Path protection = const _Protection();
+  static const Path transfiguration = const _Transfiguration();
 
   static const List<Path> values = const [
-    Arcanum,
-    Augury,
-    Demonology,
-    Elementalism,
-    Mesmerism,
-    Necromancy,
-    Protection,
-    Transfiguration
+    arcanum,
+    augury,
+    demonology,
+    elementalism,
+    mesmerism,
+    necromancy,
+    protection,
+    transfiguration
   ];
 
   final String name;

@@ -1,3 +1,4 @@
+import 'package:gurps_dart/gurps_dart.dart';
 import "package:gurps_incantation_magic_model/incantation_magic.dart";
 import "package:test/test.dart";
 
@@ -27,26 +28,26 @@ void main() {
   });
 
   test("contains SpellEffects", () {
-    spell.effects.add(new SpellEffect(Effect.Sense, Path.Augury));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.augury));
     expect(spell.spellPoints, equals(2));
     expect(spell.effects.length, equals(1));
-    expect(spell.effects, contains(new SpellEffect(Effect.Sense, Path.Augury)));
+    expect(spell.effects, contains(new SpellEffect(Effect.Sense, Path.augury)));
 
-    spell.effects.add(new SpellEffect(Effect.Control, Path.Arcanum));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.arcanum));
     expect(spell.spellPoints, equals(7));
     expect(spell.effects.length, equals(2));
-    expect(spell.effects, contains(new SpellEffect(Effect.Sense, Path.Augury)));
+    expect(spell.effects, contains(new SpellEffect(Effect.Sense, Path.augury)));
     expect(
-        spell.effects, contains(new SpellEffect(Effect.Control, Path.Arcanum)));
+        spell.effects, contains(new SpellEffect(Effect.Control, Path.arcanum)));
 
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Elementalism));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.elementalism));
     expect(spell.spellPoints, equals(13));
     expect(spell.effects.length, equals(3));
-    expect(spell.effects, contains(new SpellEffect(Effect.Sense, Path.Augury)));
+    expect(spell.effects, contains(new SpellEffect(Effect.Sense, Path.augury)));
     expect(
-        spell.effects, contains(new SpellEffect(Effect.Control, Path.Arcanum)));
+        spell.effects, contains(new SpellEffect(Effect.Control, Path.arcanum)));
     expect(spell.effects,
-        contains(new SpellEffect(Effect.Create, Path.Elementalism)));
+        contains(new SpellEffect(Effect.Create, Path.elementalism)));
   });
 
   test("contains Modifiers", () {
@@ -82,55 +83,55 @@ void main() {
   });
 
   test("should have casting time", () {
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Arcanum));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.arcanum));
     expect(spell.castingTime, equals(const GurpsDuration(minutes: 5)));
 
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Augury));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.augury));
     expect(spell.castingTime, equals(const GurpsDuration(minutes: 10)));
 
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Demonology));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.demonology));
     expect(spell.castingTime, equals(const GurpsDuration(minutes: 30)));
 
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Elementalism));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.elementalism));
     expect(spell.castingTime, equals(const GurpsDuration(hours: 1)));
 
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Mesmerism));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.mesmerism));
     expect(spell.castingTime, equals(const GurpsDuration(hours: 3)));
 
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Necromancy));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.necromancy));
     expect(spell.castingTime, equals(const GurpsDuration(hours: 6)));
 
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Protection));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.protection));
     expect(spell.castingTime, equals(const GurpsDuration(hours: 12)));
 
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Transfiguration));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.transfiguration));
     expect(spell.castingTime, equals(const GurpsDuration(hours: 24)));
     expect(spell.castingTime, equals(const GurpsDuration(days: 1)));
 
-    spell.effects.add(new SpellEffect(Effect.Sense, Path.Arcanum));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.arcanum));
     expect(spell.castingTime, equals(const GurpsDuration(days: 3)));
 
-    spell.effects.add(new SpellEffect(Effect.Sense, Path.Augury));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.augury));
     expect(spell.castingTime, equals(const GurpsDuration(days: 7)));
     expect(spell.castingTime, equals(const GurpsDuration(weeks: 1)));
 
-    spell.effects.add(new SpellEffect(Effect.Sense, Path.Demonology));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.demonology));
     expect(spell.castingTime, equals(const GurpsDuration(weeks: 2)));
 
-    spell.effects.add(new SpellEffect(Effect.Sense, Path.Elementalism));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.elementalism));
     expect(spell.castingTime, equals(const GurpsDuration(months: 1)));
 
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Mesmerism));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.mesmerism));
     expect(spell.castingTime, equals(const GurpsDuration(months: 2)));
 
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Necromancy));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.necromancy));
     expect(spell.castingTime, equals(const GurpsDuration(months: 3)));
   });
 
   test("conditional spells require an additional +5 SP", () {
-    spell.effects.add(new SpellEffect(Effect.Sense, Path.Augury));
-    spell.effects.add(new SpellEffect(Effect.Control, Path.Arcanum));
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Demonology));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.augury));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.arcanum));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.demonology));
     expect(spell.spellPoints, equals(13));
 
     spell.conditional = true;
@@ -138,9 +139,9 @@ void main() {
   });
 
   test("should add Modifier cost to spellPoints", () {
-    spell.effects.add(new SpellEffect(Effect.Sense, Path.Augury));
-    spell.effects.add(new SpellEffect(Effect.Control, Path.Arcanum));
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Demonology));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.augury));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.arcanum));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.demonology));
     expect(spell.spellPoints, equals(13));
 
     Bestows bestows = new Bestows("Foo");
@@ -157,9 +158,9 @@ void main() {
   });
 
   test("skill penalty", () {
-    spell.effects.add(new SpellEffect(Effect.Sense, Path.Augury));
-    spell.effects.add(new SpellEffect(Effect.Control, Path.Arcanum));
-    spell.effects.add(new SpellEffect(Effect.Create, Path.Demonology));
+    spell.effects.add(new SpellEffect(Effect.Sense, Path.augury));
+    spell.effects.add(new SpellEffect(Effect.Control, Path.arcanum));
+    spell.effects.add(new SpellEffect(Effect.Create, Path.demonology));
     spell.ritualModifiers.add(new Bestows("Bar", value: 5));
     Trait trait = new Trait(name: 'baz', baseCost: -15);
     spell.ritualModifiers.add(new AlteredTraits(trait));

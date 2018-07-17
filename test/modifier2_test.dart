@@ -1,3 +1,4 @@
+import 'package:gurps_dart/gurps_dart.dart';
 import "package:gurps_incantation_magic_model/incantation_magic.dart";
 import "package:test/test.dart";
 

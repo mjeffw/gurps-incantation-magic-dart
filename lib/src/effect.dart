@@ -1,106 +1,40 @@
-abstract class Effect {
+class Effect {
   final String name;
+  final String description;
+  final int spellPoints;
 
-  String get description;
-  int get spellPoints;
+  Effect(this.name, this.spellPoints, this.description);
 
-  const Effect(this.name);
+  static Effect fromString(String name) {
+    return _values[name];
+  }
+
+  static Effect Sense = Effect(
+      "Effect", 2, "Learn something about, or communicate with, the subject.");
+  static Effect Strengthen = Effect(
+      "Strengthen", 3, "Protect, enhance, or otherwise augment the subject.");
+  static Effect Restore =
+      Effect("Restore", 4, "Repair subject or undo a transformation.");
+  static Effect Control = Effect("Control", 5,
+      "Direct or move the subject without changing it fundamentally.");
+  static Effect Destroy = Effect("Destroy", 5, "Damage or weaken the subject.");
+  static Effect Create =
+      Effect("Create", 6, "Bring subject into being from nothing.");
+  static Effect Transform =
+      Effect("Transform", 8, "Significantly alter the subject.");
+
+  static Map<String, Effect> _values = {
+    Sense.name: Sense,
+    Strengthen.name: Strengthen,
+    Restore.name: Restore,
+    Control.name: Control,
+    Destroy.name: Destroy,
+    Create.name: Create,
+    Transform.name: Transform
+  };
+
+  static List<Effect> get values => List.from(_values.keys);
 
   @override
   String toString() => name;
-
-  static Effect fromString(String name) {
-    return values.where((Effect e) => e.name == name).first;
-  }
-
-  static const Effect Sense = const _Sense();
-  static const Effect Strengthen = const _Strengthen();
-  static const Effect Restore = const _Restore();
-  static const Effect Control = const _Control();
-  static const Effect Destroy = const _Destroy();
-  static const Effect Create = const _Create();
-  static const Effect Transform = const _Transform();
-
-  static const List<Effect> values = const [
-    Sense,
-    Strengthen,
-    Restore,
-    Control,
-    Destroy,
-    Create,
-    Transform
-  ];
-}
-
-class _Sense extends Effect {
-  const _Sense() : super("Sense");
-
-  @override
-  String get description =>
-      "Learn something about, or communicate with, the subject.";
-
-  @override
-  int get spellPoints => 2;
-}
-
-class _Strengthen extends Effect {
-  const _Strengthen() : super("Strengthen");
-
-  @override
-  String get description =>
-      "Protect, enhance, or otherwise augment the subject.";
-
-  @override
-  int get spellPoints => 3;
-}
-
-class _Restore extends Effect {
-  const _Restore() : super("Restore");
-
-  @override
-  String get description => "Repair subject or undo a transformation.";
-
-  @override
-  int get spellPoints => 4;
-}
-
-class _Control extends Effect {
-  const _Control() : super("Control");
-
-  @override
-  String get description =>
-      "Direct or move the subject without changing it fundamentally.";
-
-  @override
-  int get spellPoints => 5;
-}
-
-class _Destroy extends Effect {
-  const _Destroy() : super("Destroy");
-
-  @override
-  String get description => "Damage or weaken the subject.";
-
-  @override
-  int get spellPoints => 5;
-}
-
-class _Create extends Effect {
-  const _Create() : super("Create");
-
-  @override
-  String get description => "Bring subject into being from nothing.";
-
-  @override
-  int get spellPoints => 6;
-}
-
-class _Transform extends Effect {
-  const _Transform() : super("Transform");
-
-  @override
-  String get description => "Significantly alter the subject.";
-
-  @override
-  int get spellPoints => 8;
 }

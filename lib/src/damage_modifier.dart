@@ -161,5 +161,6 @@ class Damage extends RitualModifier with TraitModifiable {
     return exporter;
   }
 
+  @override
   Damage asDamage() => this;
 }
