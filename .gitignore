@@ -1,14 +1,21 @@
 
-.DS_Store
-.idea/libraries/Dart_Packages.xml
-.idea/libraries/Dart_SDK.xml
-.idea/misc.xml
-.idea/modules.xml
-.idea/vcs.xml
-.idea/workspace.xml
+# Files and directories created by pub
+.dart_tool/
 .packages
-.pub/bin/sdk-version
-.pub/bin/test/test.dart.snapshot
-gurps-incantation-magic-dart.iml
+
+# Remove the following pattern if you wish to check in your lock file
 pubspec.lock
-.idea/codeStyleSettings.xml
+
+# Conventional directory for build outputs
+build/
+
+# Directory created by dartdoc
+doc/api/
+
+# IDE files
+.idea/
+
+# coverage files
+test/.test_coverage.dart
+coverage/
+.DS_Store
