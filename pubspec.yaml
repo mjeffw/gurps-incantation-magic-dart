@@ -6,15 +6,25 @@ author: M. Jeff Wilson <geek.macbeer@gmail.com>
 homepage: http://hypermediocrity.us
 documentation:
 
-dev_dependencies:
-  test: ^0.12.3
-  build_runner: ^0.9.0
-  build_web_compilers: ^0.4.0
-  build_test: ^0.10.2
+dependencies:
+  gurps_dice:
+    version: ^1.1.1
+    git:
+      url: https://github.com/mjeffw/gurps_dice.git
   gurps_dart:
-    path: ../gurps_dart
+    version: ^1.4.4
+    git:
+      url: https://github.com/mjeffw/gurps_dart.git
+
+dev_dependencies:
+  test: ^1.15.7
+  test_coverage: ^0.5.0
+  # build_runner: ^0.9.0
+  # build_web_compilers: ^0.4.0
+  # build_test: ^0.10.2
+
 
 dependency_overrides:
 
 environment:
-  sdk: '>=2.0.0-dev.68.0 <2.0.0'
+  sdk: '>=2.10.0 <3.0.0'

@@ -17,7 +17,7 @@ void main() {
   Spell spell;
 
   setUp(() async {
-    spell = new Spell();
+    spell = Spell();
   });
 
   test('Alarm', () {
@@ -32,13 +32,13 @@ void main() {
 
     spell.name = "Alarm";
     spell.conditional = true;
-    spell.effects.add(new SpellEffect(Effect.Create, Path.arcanum));
-    AreaOfEffect m = new AreaOfEffect(value: 5, inherent: true)
+    spell.effects.add(SpellEffect(Effect.Create, Path.arcanum));
+    AreaOfEffect m = AreaOfEffect(value: 5, inherent: true)
       ..setTargetInfo(6, true);
     spell.ritualModifiers.add(m);
     spell.description = _description;
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
 
     List<String> lines = exporter.toString().split('\n');
@@ -68,14 +68,14 @@ void main() {
         'Many casters will customize this spell, using Bestows a Bonus (p. 15) to give higher skills or '
         'attributes. Botches usually produce an animated object with creative and hostile intent!';
     spell.name = "Animate Object";
-    spell.effects.add(new SpellEffect(Effect.Create, Path.arcanum));
-    spell.effects.add(new SpellEffect(Effect.Control, Path.arcanum));
+    spell.effects.add(SpellEffect(Effect.Create, Path.arcanum));
+    spell.effects.add(SpellEffect(Effect.Control, Path.arcanum));
     spell.ritualModifiers
-        .add(new DurationMod(value: new GurpsDuration(hours: 12).inSeconds));
-    spell.ritualModifiers.add(new SubjectWeight(value: 100));
+        .add(DurationMod(value: GDuration(hours: 12).inSeconds));
+    spell.ritualModifiers.add(SubjectWeight(value: 100));
     spell.description = _description;
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
 
     List<String> lines = exporter.toString().split('\n');
@@ -106,15 +106,15 @@ void main() {
         "Susceptibility per point by which he failed his roll (maximum of five). These effects last for (20 - HT) "
         "minutes, minimum of one minute.";
     spell.name = 'Arcane Fire';
-    spell.effects.add(new SpellEffect(Effect.Create, Path.arcanum));
-    Damage dam = new Damage(
+    spell.effects.add(SpellEffect(Effect.Create, Path.arcanum));
+    Damage dam = Damage(
         type: DamageType.burning, value: 4, inherent: true, direct: false);
     dam.addTraitModifier(
-        new TraitModifier("Alternative Enhancements", null, 77));
+        TraitModifier(name: "Alternative Enhancements", percent: 77));
     spell.ritualModifiers.add(dam);
     spell.description = _description;
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
 
     List<String> lines = exporter.toString().split('\n');
@@ -147,13 +147,12 @@ void main() {
         "(The short casting time is due to this drawback; see Limited Spells, p. 15.) This is often cast as a "
         "'blocking' spell (p. 20) at the usual -10 to skill.";
     spell.name = 'Bewitchment';
-    spell.effects.add(new SpellEffect(Effect.Destroy, Path.mesmerism));
+    spell.effects.add(SpellEffect(Effect.Destroy, Path.mesmerism));
     spell.addDrawback("Requires eye contact", null, -40);
-    spell.ritualModifiers
-        .add(new Affliction("Daze", value: 50, inherent: true));
+    spell.ritualModifiers.add(Affliction("Daze", value: 50, inherent: true));
     spell.description = _description;
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
 
     List<String> lines = exporter.toString().split('\n');
@@ -181,14 +180,14 @@ void main() {
         "a normal spell. This essentially uses the rules for conjured weaponry (p. 21), but the weapon itself is "
         "the carrier for the damage.";
     spell.name = 'Black Blade';
-    spell.effects.add(new SpellEffect(Effect.Create, Path.necromancy));
-    Damage dam = new Damage(type: DamageType.toxic, value: 8, inherent: true);
-    dam.addTraitModifier(new TraitModifier("Follow-Up", null, 0));
+    spell.effects.add(SpellEffect(Effect.Create, Path.necromancy));
+    Damage dam = Damage(type: DamageType.toxic, value: 8, inherent: true);
+    dam.addTraitModifier(TraitModifier(name: "Follow-Up", percent: 0));
     spell.ritualModifiers.add(dam);
-    spell.ritualModifiers.add(new DurationMod(value: 10));
+    spell.ritualModifiers.add(DurationMod(value: 10));
     spell.description = _description;
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
 
     List<String> lines = exporter.toString().split('\n');
@@ -223,15 +222,15 @@ void main() {
         "friend in the lava\" fails, \"Make your friend leave\" may still work, so long as leaving doesn't require "
         "a lava-swim.";
     spell.name = 'Bond of Servitude for (Demons)';
-    spell.effects.add(new SpellEffect(Effect.Control, Path.demonology));
-    spell.ritualModifiers.add(new Bestows("Resistance to Bond of Servitude",
+    spell.effects.add(SpellEffect(Effect.Control, Path.demonology));
+    spell.ritualModifiers.add(Bestows("Resistance to Bond of Servitude",
         range: BestowsRange.single, value: -2, inherent: true));
     spell.ritualModifiers
-        .add(new DurationMod(value: new GurpsDuration(hours: 1).inSeconds));
-    spell.ritualModifiers.add(new Range(value: 20));
+        .add(DurationMod(value: GDuration(hours: 1).inSeconds));
+    spell.ritualModifiers.add(Range(value: 20));
     spell.description = _description;
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
 
     List<String> lines = exporter.toString().split('\n');
@@ -262,23 +261,25 @@ void main() {
         "This spell grants the subject DR 6 with the Tough Skin and Hardened 2 modifiers. This protection lasts for "
         "12 minutes.";
     spell.name = 'Bulwark';
-    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.protection));
-    AlteredTraits alteredTraits = new AlteredTraits(
-        new Trait(
+    spell.effects.add(SpellEffect(Effect.Strengthen, Path.protection));
+    AlteredTraits alteredTraits = AlteredTraits(
+        Trait(
             name: "Damage Resistance",
             levels: 6,
             hasLevels: true,
             costPerLevel: 5),
         inherent: true);
-    alteredTraits.addTraitModifier(new TraitModifier("Hardened 2", null, 40));
-    alteredTraits.addTraitModifier(new TraitModifier("Tough Skin", null, -40));
+    alteredTraits
+        .addTraitModifier(TraitModifier(name: "Hardened 2", percent: 40));
+    alteredTraits
+        .addTraitModifier(TraitModifier(name: "Tough Skin", percent: -40));
     spell.ritualModifiers.add(alteredTraits);
     spell.ritualModifiers
-        .add(new DurationMod(value: new GurpsDuration(minutes: 12).inSeconds));
-    spell.ritualModifiers.add(new SubjectWeight(value: 1000));
+        .add(DurationMod(value: GDuration(minutes: 12).inSeconds));
+    spell.ritualModifiers.add(SubjectWeight(value: 1000));
     spell.description = _description;
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
 
     List<String> lines = exporter.toString().split('\n');
@@ -310,12 +311,12 @@ void main() {
         "instant banishment from their non-native reality. Critical success on the resistance roll means they "
         "cannot be banished by the caster for the next 24 hours!";
     spell.name = 'Censure';
-    spell.effects.add(new SpellEffect(Effect.Control, Path.protection));
+    spell.effects.add(SpellEffect(Effect.Control, Path.protection));
     spell.ritualModifiers
-        .add(new Bestows("Resist Censure", value: -6, inherent: true));
+        .add(Bestows("Resist Censure", value: -6, inherent: true));
     spell.description = _description;
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
 
     List<String> lines = exporter.toString().split('\n');
@@ -343,15 +344,17 @@ void main() {
         "yards and length of 20 yards (see Area and Spreading Attacks, p. B413). This cone does 3d burning damage and "
         "requires a roll against Innate Attack (Beam) to hit.";
     spell.name = 'Cone of Flame';
-    spell.effects.add(new SpellEffect(Effect.Create, Path.elementalism));
+    spell.effects.add(SpellEffect(Effect.Create, Path.elementalism));
     Damage dam =
-        new Damage(type: DamageType.burning, direct: false, inherent: true);
-    dam.addTraitModifier(new TraitModifier("Cone", "5 yards", 100));
-    dam.addTraitModifier(new TraitModifier("Reduced Range", "x1/5", -20));
+        Damage(type: DamageType.burning, direct: false, inherent: true);
+    dam.addTraitModifier(
+        TraitModifier(name: "Cone", detail: "5 yards", percent: 100));
+    dam.addTraitModifier(
+        TraitModifier(name: "Reduced Range", detail: "x1/5", percent: -20));
     spell.ritualModifiers.add(dam);
     spell.description = _description;
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
 
     List<String> lines = exporter.toString().split('\n');
@@ -386,15 +389,15 @@ void main() {
         "may mistake jokes and harmless social situations for aggression. The warrior is created without armor "
         "or weapons; these must be provided via another spell or given to it by hand.";
     spell.name = 'Create Golem Warrior';
-    spell.effects.add(new SpellEffect(Effect.Create, Path.arcanum));
-    spell.effects.add(new SpellEffect(Effect.Create, Path.arcanum));
-    spell.ritualModifiers.add(new Summoned(value: 50, inherent: true));
+    spell.effects.add(SpellEffect(Effect.Create, Path.arcanum));
+    spell.effects.add(SpellEffect(Effect.Create, Path.arcanum));
+    spell.ritualModifiers.add(Summoned(value: 50, inherent: true));
     spell.ritualModifiers
-        .add(new DurationMod(value: new GurpsDuration(hours: 1).inSeconds));
-    spell.ritualModifiers.add(new SubjectWeight(value: 300));
+        .add(DurationMod(value: GDuration(hours: 1).inSeconds));
+    spell.ritualModifiers.add(SubjectWeight(value: 300));
     spell.description = _description;
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
 
     List<String> lines = exporter.toString().split('\n');
@@ -420,15 +423,14 @@ void main() {
         "You animate a servitor skeleton or zombie (Summoners, pp. 25-26) from a nearby dead body or grave. It "
         "does your bidding for the next day, after which it crumbles to dust or putrefies.";
     spell.name = 'Create Undead Servitor';
-    spell.effects.add(new SpellEffect(Effect.Control, Path.necromancy));
-    spell.effects.add(new SpellEffect(Effect.Create, Path.necromancy));
-    spell.ritualModifiers.add(new Summoned(value: 25, inherent: true));
-    spell.ritualModifiers
-        .add(new DurationMod(value: new GurpsDuration(days: 1).inSeconds));
-    spell.ritualModifiers.add(new SubjectWeight(value: 300));
+    spell.effects.add(SpellEffect(Effect.Control, Path.necromancy));
+    spell.effects.add(SpellEffect(Effect.Create, Path.necromancy));
+    spell.ritualModifiers.add(Summoned(value: 25, inherent: true));
+    spell.ritualModifiers.add(DurationMod(value: GDuration(days: 1).inSeconds));
+    spell.ritualModifiers.add(SubjectWeight(value: 300));
     spell.description = _description;
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
 
     List<String> lines = exporter.toString().split('\n');
@@ -460,25 +462,25 @@ void main() {
         "Note that the 3d damage being spread out over multiple turns is a special effect: 1d-3 is effectively "
         "1.5 points of damage and 1.5 x 7 = 10.5, the average of rolling 3d.";
     spell.name = 'Creeping Frost';
-    spell.effects.add(new SpellEffect(Effect.Create, Path.elementalism));
-    spell.ritualModifiers.add(new AlteredTraits(
-        new Trait(name: 'Fragile (Brittle)', baseCost: -15),
+    spell.effects.add(SpellEffect(Effect.Create, Path.elementalism));
+    spell.ritualModifiers.add(AlteredTraits(
+        Trait(name: 'Fragile (Brittle)', baseCost: -15),
         inherent: true));
-    spell.ritualModifiers.add(new AlteredTraits(
-        new Trait(name: 'Vulnerability (Crushing Attacks x2)', baseCost: -30),
+    spell.ritualModifiers.add(AlteredTraits(
+        Trait(name: 'Vulnerability (Crushing Attacks x2)', baseCost: -30),
         inherent: true));
-    spell.ritualModifiers.add(new AreaOfEffect(value: 3, inherent: true));
-    Damage dam = new Damage(
+    spell.ritualModifiers.add(AreaOfEffect(value: 3, inherent: true));
+    Damage dam = Damage(
         type: DamageType.burning, direct: true, value: 8, inherent: true);
-    dam.addTraitModifier(new TraitModifier("No Incendiary", null, -10));
+    dam.addTraitModifier(TraitModifier(name: "No Incendiary", percent: -10));
     spell.ritualModifiers.add(dam);
-    spell.ritualModifiers.add(new Range(value: 20));
+    spell.ritualModifiers.add(Range(value: 20));
     spell.ritualModifiers
-        .add(new DurationMod(value: new GurpsDuration(minutes: 1).inSeconds));
-    spell.ritualModifiers.add(new SubjectWeight(value: 10000));
+        .add(DurationMod(value: GDuration(minutes: 1).inSeconds));
+    spell.ritualModifiers.add(SubjectWeight(value: 10000));
     spell.description = _description;
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
 
     List<String> lines = exporter.toString().split('\n');
@@ -510,13 +512,13 @@ void main() {
         "This spell cancels any other spell targeted. The caster gets a total of +10 to his Path roll to terminate "
         "the spell: +4 from the SP total of Dispelling and another +6 from Bestows a Bonus.";
     spell.name = 'Dispelling';
-    spell.effects.add(new SpellEffect(Effect.Destroy, Path.arcanum));
-    spell.ritualModifiers.add(new Bestows("Dispelling",
+    spell.effects.add(SpellEffect(Effect.Destroy, Path.arcanum));
+    spell.ritualModifiers.add(Bestows("Dispelling",
         range: BestowsRange.single, value: 6, inherent: true));
-    spell.ritualModifiers.add(new Girded(value: 20, inherent: true));
+    spell.ritualModifiers.add(Girded(value: 20, inherent: true));
     spell.description = _description;
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
 
     List<String> lines = exporter.toString().split('\n');
@@ -545,15 +547,16 @@ void main() {
         "1, and Rcl 1. Consult the table below for the specifics on a given type of energy; each blast is a separate "
         "spell.";
     spell.name = '(Elemental) Blast';
-    spell.effects.add(new SpellEffect(Effect.Create, Path.elementalism));
+    spell.effects.add(SpellEffect(Effect.Create, Path.elementalism));
     Damage dam =
-        new Damage(type: DamageType.corrosive, direct: false, inherent: true);
-    dam.addTraitModifier(new TraitModifier("Incendiary", null, 10));
-    dam.addTraitModifier(new TraitModifier("Increased 1/2D, 5x", null, 10));
+        Damage(type: DamageType.corrosive, direct: false, inherent: true);
+    dam.addTraitModifier(TraitModifier(name: "Incendiary", percent: 10));
+    dam.addTraitModifier(
+        TraitModifier(name: "Increased 1/2D, 5x", percent: 10));
     spell.ritualModifiers.add(dam);
     spell.description = _description;
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
 
     List<String> lines = exporter.toString().split('\n');
@@ -584,13 +587,13 @@ void main() {
         "1, and Rcl 1. Consult the table below for the specifics on a given type of energy; each blast is a separate "
         "spell.";
     spell.name = 'Firebomb';
-    spell.effects.add(new SpellEffect(Effect.Create, Path.elementalism));
-    spell.ritualModifiers.add(new AreaOfEffect(value: 7, inherent: true));
-    spell.ritualModifiers.add(
-        new Damage(type: DamageType.burning, direct: false, inherent: true));
+    spell.effects.add(SpellEffect(Effect.Create, Path.elementalism));
+    spell.ritualModifiers.add(AreaOfEffect(value: 7, inherent: true));
+    spell.ritualModifiers
+        .add(Damage(type: DamageType.burning, direct: false, inherent: true));
     spell.description = _description;
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
 
     List<String> lines = exporter.toString().split('\n');
@@ -621,14 +624,14 @@ void main() {
         "mistaken for him. Success by 5 or more, or a critical success, gives +2 on all other rolls to emulate the "
         "target (Acting, Mimicry, etc.). This effect lasts for an hour.";
     spell.name = 'Flesh Mask';
-    spell.effects.add(new SpellEffect(Effect.Transform, Path.transfiguration));
-    spell.ritualModifiers.add(new SubjectWeight(value: 300));
-    spell.ritualModifiers.add(new Bestows("Disguise",
+    spell.effects.add(SpellEffect(Effect.Transform, Path.transfiguration));
+    spell.ritualModifiers.add(SubjectWeight(value: 300));
+    spell.ritualModifiers.add(Bestows("Disguise",
         range: BestowsRange.single, value: 5, inherent: true));
-    spell.ritualModifiers.add(new DurationMod(value: 3600));
+    spell.ritualModifiers.add(DurationMod(value: 3600));
     spell.description = _description;
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
 
     List<String> lines = exporter.toString().split('\n');
@@ -652,12 +655,12 @@ void main() {
 
   test("Frozen Bonds", () {
     spell.name = 'Frozen Bonds';
-    spell.effects.add(new SpellEffect(Effect.Create, Path.elementalism));
-    spell.ritualModifiers.add(new Bestows("Binding ST",
+    spell.effects.add(SpellEffect(Effect.Create, Path.elementalism));
+    spell.ritualModifiers.add(Bestows("Binding ST",
         range: BestowsRange.single, value: 3, inherent: true));
-    spell.ritualModifiers.add(new Range(value: 20));
+    spell.ritualModifiers.add(Range(value: 20));
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
 
     List<String> lines = exporter.toString().split('\n');
@@ -680,15 +683,15 @@ void main() {
 
   test("Greater Solidify Spirit", () {
     spell.name = 'Solidify Spirit';
-    spell.effects.add(new SpellEffect(Effect.Control, Path.necromancy));
-    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.necromancy));
-    spell.ritualModifiers.add(new AlteredTraits(
-        new Trait(name: "Negated Insubstantiality", baseCost: 16),
+    spell.effects.add(SpellEffect(Effect.Control, Path.necromancy));
+    spell.effects.add(SpellEffect(Effect.Strengthen, Path.necromancy));
+    spell.ritualModifiers.add(AlteredTraits(
+        Trait(name: "Negated Insubstantiality", baseCost: 16),
         inherent: true));
-    spell.ritualModifiers.add(new DurationMod(value: 720));
-    spell.ritualModifiers.add(new RangeDimensional(value: 1));
+    spell.ritualModifiers.add(DurationMod(value: 720));
+    spell.ritualModifiers.add(RangeDimensional(value: 1));
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
     List<String> lines = exporter.toString().split('\n');
 
@@ -712,16 +715,17 @@ void main() {
 
   test("Greater Solidify Spirit", () {
     spell.name = 'Hellfire Aura';
-    spell.effects.add(new SpellEffect(Effect.Create, Path.demonology));
-    Damage dam = new Damage(
+    spell.effects.add(SpellEffect(Effect.Create, Path.demonology));
+    Damage dam = Damage(
         type: DamageType.burning, direct: true, value: 4, inherent: true);
-    dam.addTraitModifier(new TraitModifier("Aura", null, 80));
-    dam.addTraitModifier(new TraitModifier("Incendiary", null, 10));
-    dam.addTraitModifier(new TraitModifier("Melee Attack, Reach C", null, -30));
+    dam.addTraitModifier(TraitModifier(name: "Aura", percent: 80));
+    dam.addTraitModifier(TraitModifier(name: "Incendiary", percent: 10));
+    dam.addTraitModifier(
+        TraitModifier(name: "Melee Attack, Reach C", percent: -30));
     spell.ritualModifiers.add(dam);
-    spell.ritualModifiers.add(new DurationMod(value: 60));
+    spell.ritualModifiers.add(DurationMod(value: 60));
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
     List<String> lines = exporter.toString().split('\n');
 
@@ -744,11 +748,11 @@ void main() {
 
   test("Illusion", () {
     spell.name = 'Illusion';
-    spell.effects.add(new SpellEffect(Effect.Create, Path.elementalism));
-    spell.effects.add(new SpellEffect(Effect.Create, Path.mesmerism));
-    spell.ritualModifiers.add(new DurationMod(value: 3600));
+    spell.effects.add(SpellEffect(Effect.Create, Path.elementalism));
+    spell.effects.add(SpellEffect(Effect.Create, Path.mesmerism));
+    spell.ritualModifiers.add(DurationMod(value: 3600));
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
     List<String> lines = exporter.toString().split('\n');
 
@@ -771,17 +775,17 @@ void main() {
 
   test("Invisibility", () {
     spell.name = 'Invisibility';
-    spell.effects.add(new SpellEffect(Effect.Control, Path.elementalism));
-    AlteredTraits traits = new AlteredTraits(
-        new Trait(name: "Invisibility", baseCost: 40),
+    spell.effects.add(SpellEffect(Effect.Control, Path.elementalism));
+    AlteredTraits traits = AlteredTraits(
+        Trait(name: "Invisibility", baseCost: 40),
         inherent: true);
-    traits.addTraitModifier(
-        new TraitModifier("Can Carry Objects", "Heavy Encumbrance", 100));
+    traits.addTraitModifier(TraitModifier(
+        name: "Can Carry Objects", detail: "Heavy Encumbrance", percent: 100));
     spell.ritualModifiers.add(traits);
-    spell.ritualModifiers.add(new DurationMod(value: 60));
-    spell.ritualModifiers.add(new SubjectWeight(value: 1000));
+    spell.ritualModifiers.add(DurationMod(value: 60));
+    spell.ritualModifiers.add(SubjectWeight(value: 1000));
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
     List<String> lines = exporter.toString().split('\n');
 
@@ -804,15 +808,15 @@ void main() {
 
   test("Jinx", () {
     spell.name = 'Jinx';
-    spell.effects.add(new SpellEffect(Effect.Control, Path.augury));
-    AreaOfEffect areaOfEffect = new AreaOfEffect(value: 5, inherent: true);
+    spell.effects.add(SpellEffect(Effect.Control, Path.augury));
+    AreaOfEffect areaOfEffect = AreaOfEffect(value: 5, inherent: true);
     areaOfEffect.setTargetInfo(12, false);
     spell.ritualModifiers.add(areaOfEffect);
-    spell.ritualModifiers.add(new Bestows("critical failure range of all rolls",
+    spell.ritualModifiers.add(Bestows("critical failure range of all rolls",
         range: BestowsRange.broad, value: -3, inherent: true));
-    spell.ritualModifiers.add(new DurationMod(value: 3600));
+    spell.ritualModifiers.add(DurationMod(value: 3600));
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
     List<String> lines = exporter.toString().split('\n');
 
@@ -836,12 +840,12 @@ void main() {
 
   test("Lesser Solidify Spirit", () {
     spell.name = 'Lesser Solidify Spirit';
-    spell.effects.add(new SpellEffect(Effect.Control, Path.necromancy));
-    spell.effects.add(new SpellEffect(Effect.Strengthen, Path.necromancy));
-    spell.ritualModifiers.add(new DurationMod(value: 720));
-    spell.ritualModifiers.add(new RangeDimensional(value: 1));
+    spell.effects.add(SpellEffect(Effect.Control, Path.necromancy));
+    spell.effects.add(SpellEffect(Effect.Strengthen, Path.necromancy));
+    spell.ritualModifiers.add(DurationMod(value: 720));
+    spell.ritualModifiers.add(RangeDimensional(value: 1));
 
-    TextSpellExporter exporter = new TextSpellExporter();
+    TextSpellExporter exporter = TextSpellExporter();
     spell.export(exporter);
     List<String> lines = exporter.toString().split('\n');
 

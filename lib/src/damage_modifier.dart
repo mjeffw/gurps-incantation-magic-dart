@@ -1,36 +1,9 @@
 import 'package:gurps_dart/gurps_dart.dart';
+import 'package:gurps_dice/gurps_dice.dart';
+
 import 'ritual_modifier.dart';
 import 'spell_exporter.dart';
 import 'modifier_detail.dart';
-
-/// Damage types
-enum DamageType {
-  burning,
-  corrosive,
-  crushing,
-  cutting,
-  fatigue,
-  impaling,
-  hugePiercing,
-  largePiercing,
-  piercing,
-  smallPiercing,
-  toxic
-}
-
-final Map<DamageType, String> damageTypeLabels = {
-  DamageType.burning: "Burning",
-  DamageType.corrosive: "Corrosive",
-  DamageType.crushing: "Crushing",
-  DamageType.cutting: "Cutting",
-  DamageType.fatigue: "Fatigue",
-  DamageType.impaling: "Impaling",
-  DamageType.hugePiercing: "Huge Piercing",
-  DamageType.largePiercing: "Large Piercing",
-  DamageType.piercing: "Piercing",
-  DamageType.smallPiercing: "Small Piercing",
-  DamageType.toxic: "Toxic"
-};
 
 final List<DamageType> impalingTypes = [
   DamageType.corrosive,
@@ -54,13 +27,8 @@ final List<DamageType> cuttingTypes = [
 /// If the spell will cause damage, use the table on p. 16, based on whether the damage is direct or indirect, and
 /// on what type of damage is being done.
 ///
-/// To convert from value to DieRoll: DieRoll dieRoll = new DieRoll(1, value);
+/// To convert from value to DieRoll: DieRoll dieRoll =  DieRoll(1, value);
 class Damage extends RitualModifier with TraitModifiable {
-  DamageType type = DamageType.crushing;
-  bool _direct = true;
-  bool _explosive = false;
-  bool vampiric = false;
-
   Damage(
       {DamageType type: DamageType.crushing,
       bool direct: true,
@@ -69,6 +37,11 @@ class Damage extends RitualModifier with TraitModifiable {
       : this.type = type,
         this._direct = direct,
         super("Damage", value, inherent);
+
+  DamageType type = DamageType.crushing;
+  bool _direct = true;
+  bool _explosive = false;
+  bool vampiric = false;
 
   @override
   int get spellPoints {
@@ -115,7 +88,7 @@ class Damage extends RitualModifier with TraitModifiable {
   }
 
   DieRoll get dice {
-    DieRoll d = new DieRoll(1, value);
+    DieRoll d = DieRoll(dice: 1, adds: value);
     return d * _explosiveFactor();
   }
 
@@ -151,7 +124,7 @@ class Damage extends RitualModifier with TraitModifiable {
   ModifierExporter export(ModifierExporter exporter) {
     DamageDetail detail = exporter.createDamageDetail() as DamageDetail;
     super.exportDetail(detail);
-    detail.type = damageTypeLabels[type];
+    detail.type = type.label;
     detail.direct = _direct;
     detail.vampiric = vampiric;
     detail.explosive = _explosive;

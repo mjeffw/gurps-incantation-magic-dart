@@ -1,14 +1,16 @@
 import 'dart:math';
 
 import 'package:gurps_dart/gurps_dart.dart';
+import 'package:gurps_dice/gurps_dice.dart';
+import 'package:gurps_incantation_magic_model/incantation_magic.dart';
 import 'spell_exporter.dart';
 import 'modifier_detail.dart';
 import 'damage_modifier.dart';
 
 class InputException implements Exception {
-  String message;
-
   InputException(this.message);
+
+  final String message;
 }
 
 /// defines predicate methdos used to validate the range of values a RitualModifier can have
@@ -17,7 +19,7 @@ typedef bool Predicate(int item);
 Predicate zeroOnly = (x) => x == 0;
 Predicate anyValue = (x) => true;
 Predicate nonNegative = (x) => x >= 0;
-Predicate validDuration = (x) => x >= 0 && x <= GurpsDuration.SECONDS_PER_DAY;
+Predicate validDuration = (x) => x >= 0 && x <= GDuration.secondsPerDay;
 
 abstract class HasSpecialization {
   String get specialization;
@@ -42,11 +44,11 @@ abstract class HasBestowsRange {
 
 /// Describes a modifier to an Incantation Spell.
 ///
-/// Modifiers add Damage, Range, GurpsDuration, and other features to a spell, and the cost of the spell is adjusted by
+/// Modifiers add Damage, Range, GDuration, and other features to a spell, and the cost of the spell is adjusted by
 /// the value of the modifiers. Modifiers are identified by their name, and can be inherent (intrisic) or not.
 ///
-/// For example, a spell might momentarily open a Gate between dimensions; a GurpsDuration modifier can be added to make
-/// the Gate remain for a longer time. The GurpsDuration is not inherent or intrinsic in this case.
+/// For example, a spell might momentarily open a Gate between dimensions; a GDuration modifier can be added to make
+/// the Gate remain for a longer time. The GDuration is not inherent or intrinsic in this case.
 ///
 /// A spell that adds +2 to the subject's Strength would need a Bestows a Bonus modifier; this effect is inherent to
 /// the spell.
@@ -78,7 +80,7 @@ abstract class RitualModifier {
     if (_predicate(val)) {
       _value = val;
     } else {
-      throw new InputException("Value out of range");
+      throw InputException("Value out of range");
     }
   }
 
@@ -300,12 +302,6 @@ enum BestowsRange { single, moderate, broad }
 
 /// Adds a bonus or penalty to skills or attributes.
 class Bestows extends RitualModifier with HasSpecialization, HasBestowsRange {
-  @override
-  BestowsRange range = BestowsRange.single;
-
-  @override
-  String specialization;
-
   Bestows(this.specialization,
       {BestowsRange range: BestowsRange.single,
       int value: 0,
@@ -313,6 +309,12 @@ class Bestows extends RitualModifier with HasSpecialization, HasBestowsRange {
       : this.range = range,
         super.withPredicateNew(
             "Bestows a (Bonus or Penalty)", anyValue, value, inherent);
+
+  @override
+  BestowsRange range = BestowsRange.single;
+
+  @override
+  String specialization;
 
   @override
   int get spellPoints => (_value == 0) ? 0 : _spellPointsForRange;
@@ -347,31 +349,31 @@ class Bestows extends RitualModifier with HasSpecialization, HasBestowsRange {
 }
 // ----------------------------------
 
-/// Add a GurpsDuration to a spell.
+/// Add a GDuration to a spell.
 ///
-/// Unless the spell is instantaneous, use the following table. GurpsDurations longer than a day are not normally
+/// Unless the spell is instantaneous, use the following table. GDurations longer than a day are not normally
 /// allowed; the GM will adjudicate a fair SP cost for any exceptions.
 ///
-/// Value is number of seconds in GurpsDuration.
+/// Value is number of seconds in GDuration.
 class DurationMod extends RitualModifier {
-  static List<GurpsDuration> array = [
-    const GurpsDuration(seconds: 0),
-    const GurpsDuration(seconds: 10),
-    const GurpsDuration(seconds: 30),
-    const GurpsDuration(minutes: 1),
-    const GurpsDuration(minutes: 3),
-    const GurpsDuration(minutes: 6),
-    const GurpsDuration(minutes: 12),
-    const GurpsDuration(hours: 1),
-    const GurpsDuration(hours: 3),
-    const GurpsDuration(hours: 6),
-    const GurpsDuration(hours: 12),
-    const GurpsDuration(days: 1)
-  ];
-
   DurationMod({int value: 0, bool inherent: false})
       : super.withPredicate("Duration", validDuration,
             value: value, inherent: inherent);
+
+  static List<GDuration> array = [
+    const GDuration(seconds: 0),
+    const GDuration(seconds: 10),
+    const GDuration(seconds: 30),
+    const GDuration(minutes: 1),
+    const GDuration(minutes: 3),
+    const GDuration(minutes: 6),
+    const GDuration(minutes: 12),
+    const GDuration(hours: 1),
+    const GDuration(hours: 3),
+    const GDuration(hours: 6),
+    const GDuration(hours: 12),
+    const GDuration(days: 1)
+  ];
 
   @override
   int get spellPoints => (_value == 0)
@@ -418,7 +420,7 @@ class Girded extends RitualModifier {
 }
 
 final RepeatingSequenceConverter longDistanceModifiers =
-    new RepeatingSequenceConverter([1, 3]);
+    RepeatingSequenceConverter([1, 3]);
 
 /// Value is in hours.
 class RangeCrossTime extends RitualModifier {
@@ -434,7 +436,7 @@ class RangeCrossTime extends RitualModifier {
     }
 
     var days = (_value / 24).ceil();
-    return longDistanceModifiers.valueToOrdinal(days) + 2;
+    return longDistanceModifiers.valueToIndex(days) + 2;
   }
 
   @override
@@ -453,9 +455,8 @@ class RangeCrossTime extends RitualModifier {
       _value = 24;
     } else {
       int currentIndex =
-          longDistanceModifiers.valueToOrdinal((_value / 24).ceil());
-      int newValue =
-          longDistanceModifiers.ordinalToValue(currentIndex + 1) * 24;
+          longDistanceModifiers.valueToIndex((_value / 24).ceil());
+      int newValue = longDistanceModifiers.indexToValue(currentIndex + 1) * 24;
       if (_predicate(newValue)) {
         _value = newValue;
       }
@@ -472,9 +473,8 @@ class RangeCrossTime extends RitualModifier {
       _value = 12;
     } else {
       int currentIndex =
-          longDistanceModifiers.valueToOrdinal((_value / 24).ceil());
-      int newValue =
-          longDistanceModifiers.ordinalToValue(currentIndex - 1) * 24;
+          longDistanceModifiers.valueToIndex((_value / 24).ceil());
+      int newValue = longDistanceModifiers.indexToValue(currentIndex - 1) * 24;
 
       if (_predicate(newValue)) {
         _value = newValue;
@@ -515,8 +515,8 @@ class RangeInformational extends RitualModifier {
       return 1;
     }
 
-    var miles = (_value / GurpsDistance.YARDS_PER_MILE).ceil();
-    return longDistanceModifiers.valueToOrdinal(miles) + 2;
+    var miles = (_value / GDistance.yardsPerMile).ceil();
+    return longDistanceModifiers.valueToIndex(miles) + 2;
   }
 
   @override
@@ -532,12 +532,12 @@ class RangeInformational extends RitualModifier {
     if (spellPoints == 0) {
       _value = 880;
     } else if (spellPoints == 1) {
-      _value = GurpsDistance.YARDS_PER_MILE;
+      _value = GDistance.yardsPerMile;
     } else {
       int currentIndex = longDistanceModifiers
-          .valueToOrdinal((_value / GurpsDistance.YARDS_PER_MILE).ceil());
-      int newValue = longDistanceModifiers.ordinalToValue(currentIndex + 1) *
-          GurpsDistance.YARDS_PER_MILE;
+          .valueToIndex((_value / GDistance.yardsPerMile).ceil());
+      int newValue = longDistanceModifiers.indexToValue(currentIndex + 1) *
+          GDistance.yardsPerMile;
       if (_predicate(newValue)) {
         _value = newValue;
       }
@@ -554,9 +554,9 @@ class RangeInformational extends RitualModifier {
       _value = 880;
     } else {
       int currentIndex = longDistanceModifiers
-          .valueToOrdinal((_value / GurpsDistance.YARDS_PER_MILE).ceil());
-      int newValue = longDistanceModifiers.ordinalToValue(currentIndex - 1) *
-          GurpsDistance.YARDS_PER_MILE;
+          .valueToIndex((_value / GDistance.yardsPerMile).ceil());
+      int newValue = longDistanceModifiers.indexToValue(currentIndex - 1) *
+          GDistance.yardsPerMile;
 
       if (_predicate(newValue)) {
         _value = newValue;
@@ -566,13 +566,13 @@ class RangeInformational extends RitualModifier {
 }
 
 final RepeatingSequenceConverter rangeTable =
-    new RepeatingSequenceConverter([2, 3, 5, 7, 10, 15]);
+    RepeatingSequenceConverter([2, 3, 5, 7, 10, 15]);
 
 class Range extends RitualModifier {
   Range({int value: 0, bool inherent: false}) : super("Range", value, inherent);
 
   @override
-  int get spellPoints => rangeTable.valueToOrdinal(_value);
+  int get spellPoints => rangeTable.valueToIndex(_value);
 
   @override
   ModifierExporter export(ModifierExporter exporter) {
@@ -584,8 +584,8 @@ class Range extends RitualModifier {
 
   @override
   void incrementValue() {
-    int currentIndex = rangeTable.valueToOrdinal(_value);
-    int newValue = rangeTable.ordinalToValue(currentIndex + 1);
+    int currentIndex = rangeTable.valueToIndex(_value);
+    int newValue = rangeTable.indexToValue(currentIndex + 1);
 
     if (_predicate(newValue)) {
       _value = newValue;
@@ -597,8 +597,8 @@ class Range extends RitualModifier {
     if (spellPoints == 0) {
       return;
     }
-    int currentIndex = rangeTable.valueToOrdinal(_value);
-    int newValue = rangeTable.ordinalToValue(currentIndex - 1);
+    int currentIndex = rangeTable.valueToIndex(_value);
+    int newValue = rangeTable.indexToValue(currentIndex - 1);
 
     if (_predicate(newValue)) {
       _value = newValue;
@@ -607,16 +607,16 @@ class Range extends RitualModifier {
 }
 
 class Repair extends RitualModifier with HasSpecialization {
-  @override
-  String specialization;
-
   Repair(this.specialization, {int value: 0, bool inherent: false})
       : super("Repair", value, inherent);
 
   @override
+  String specialization;
+
+  @override
   int get spellPoints => _value;
 
-  DieRoll get dice => new DieRoll(1, value);
+  DieRoll get dice => DieRoll(dice: 1, adds: value);
 
   @override
   ModifierExporter export(ModifierExporter exporter) {
@@ -633,7 +633,7 @@ class Speed extends RitualModifier {
   Speed({int value: 0, bool inherent: false}) : super("Speed", value, inherent);
 
   @override
-  int get spellPoints => rangeTable.valueToOrdinal(_value);
+  int get spellPoints => rangeTable.valueToIndex(_value);
 
   @override
   ModifierExporter export(ModifierExporter exporter) {
@@ -645,8 +645,8 @@ class Speed extends RitualModifier {
 
   @override
   void incrementValue() {
-    int currentIndex = rangeTable.valueToOrdinal(_value);
-    int newValue = rangeTable.ordinalToValue(currentIndex + 1);
+    int currentIndex = rangeTable.valueToIndex(_value);
+    int newValue = rangeTable.indexToValue(currentIndex + 1);
 
     if (_predicate(newValue)) {
       _value = newValue;
@@ -658,8 +658,8 @@ class Speed extends RitualModifier {
     if (spellPoints == 0) {
       return;
     }
-    int currentIndex = rangeTable.valueToOrdinal(_value);
-    int newValue = rangeTable.ordinalToValue(currentIndex - 1);
+    int currentIndex = rangeTable.valueToIndex(_value);
+    int newValue = rangeTable.indexToValue(currentIndex - 1);
 
     if (_predicate(newValue)) {
       _value = newValue;
@@ -668,14 +668,14 @@ class Speed extends RitualModifier {
 }
 
 class SubjectWeight extends RitualModifier {
-  static RepeatingSequenceConverter sequence =
-      new RepeatingSequenceConverter([10, 30]);
-
   SubjectWeight({int value: 0, bool inherent: false})
       : super("Subject Weight", value, inherent);
 
+  static RepeatingSequenceConverter sequence =
+      RepeatingSequenceConverter([10, 30]);
+
   @override
-  int get spellPoints => sequence.valueToOrdinal(_value);
+  int get spellPoints => sequence.valueToIndex(_value);
 
   @override
   ModifierExporter export(ModifierExporter exporter) {
@@ -687,8 +687,8 @@ class SubjectWeight extends RitualModifier {
 
   @override
   void incrementValue() {
-    int currentIndex = sequence.valueToOrdinal(_value);
-    int newValue = sequence.ordinalToValue(currentIndex + 1);
+    int currentIndex = sequence.valueToIndex(_value);
+    int newValue = sequence.indexToValue(currentIndex + 1);
 
     if (_predicate(newValue)) {
       _value = newValue;
@@ -700,8 +700,8 @@ class SubjectWeight extends RitualModifier {
     if (spellPoints == 0) {
       return;
     }
-    int currentIndex = sequence.valueToOrdinal(_value);
-    int newValue = sequence.ordinalToValue(currentIndex - 1);
+    int currentIndex = sequence.valueToIndex(_value);
+    int newValue = sequence.indexToValue(currentIndex - 1);
 
     if (_predicate(newValue)) {
       _value = newValue;

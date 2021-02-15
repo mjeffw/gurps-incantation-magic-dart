@@ -1,4 +1,10 @@
 abstract class Path {
+  const Path(this.name, this.aspect);
+
+  factory Path.fromString(String name) {
+    return values.where((Path e) => e.name == name).first;
+  }
+
   static const Path arcanum = const _Arcanum();
   static const Path augury = const _Augury();
   static const Path demonology = const _Demonology();
@@ -21,12 +27,6 @@ abstract class Path {
 
   final String name;
   final String aspect;
-
-  const Path(this.name, this.aspect);
-
-  factory Path.fromString(String name) {
-    return values.where((Path e) => e.name == name).first;
-  }
 
   @override
   String toString() => name;

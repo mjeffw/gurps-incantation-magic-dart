@@ -3,7 +3,7 @@ import "package:test/test.dart";
 
 void main() {
   group("Arcanum:", () {
-    Path arcanum = new Path.fromString("Arcanum");
+    Path arcanum = Path.fromString("Arcanum");
 
     test("can create from String", () {
       expect(arcanum, isNotNull);
@@ -20,7 +20,7 @@ void main() {
   });
 
   group("Augury:", () {
-    Path augury = new Path.fromString("Augury");
+    Path augury = Path.fromString("Augury");
 
     test("can create from String", () {
       expect(augury, isNotNull);
@@ -36,7 +36,7 @@ void main() {
   });
 
   group("Demonology:", () {
-    Path demonology = new Path.fromString("Demonology");
+    Path demonology = Path.fromString("Demonology");
 
     test("can create from String", () {
       expect(demonology, isNotNull);
@@ -55,7 +55,7 @@ void main() {
   });
 
   group("Elementalism:", () {
-    Path elementalism = new Path.fromString("Elementalism");
+    Path elementalism = Path.fromString("Elementalism");
 
     test("can create from String", () {
       expect(elementalism, isNotNull);
@@ -74,7 +74,7 @@ void main() {
   });
 
   group("Mesmerism:", () {
-    Path mesmerism = new Path.fromString("Mesmerism");
+    Path mesmerism = Path.fromString("Mesmerism");
 
     test("can create from String", () {
       expect(mesmerism, isNotNull);
@@ -90,7 +90,7 @@ void main() {
   });
 
   group("Necromancy:", () {
-    Path necromancy = new Path.fromString("Necromancy");
+    Path necromancy = Path.fromString("Necromancy");
 
     test("can create from String", () {
       expect(necromancy, isNotNull);
@@ -107,7 +107,7 @@ void main() {
   });
 
   group("Protection:", () {
-    Path protection = new Path.fromString("Protection");
+    Path protection = Path.fromString("Protection");
 
     test("can create from String", () {
       expect(protection, isNotNull);
@@ -123,7 +123,7 @@ void main() {
   });
 
   group("Transfiguration:", () {
-    Path protection = new Path.fromString("Transfiguration");
+    Path protection = Path.fromString("Transfiguration");
 
     test("can create from String", () {
       expect(protection, isNotNull);

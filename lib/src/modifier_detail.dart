@@ -1,4 +1,5 @@
 import 'package:gurps_dart/gurps_dart.dart';
+import 'package:gurps_dice/gurps_dice.dart';
 
 abstract class ModifierDetail {
   set name(String name);

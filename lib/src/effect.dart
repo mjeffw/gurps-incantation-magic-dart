@@ -1,16 +1,16 @@
 class Effect {
+  Effect(this.name, this.spellPoints, this.description);
+
   final String name;
   final String description;
   final int spellPoints;
-
-  Effect(this.name, this.spellPoints, this.description);
 
   static Effect fromString(String name) {
     return _values[name];
   }
 
   static Effect Sense = Effect(
-      "Effect", 2, "Learn something about, or communicate with, the subject.");
+      "Sense", 2, "Learn something about, or communicate with, the subject.");
   static Effect Strengthen = Effect(
       "Strengthen", 3, "Protect, enhance, or otherwise augment the subject.");
   static Effect Restore =

@@ -5,7 +5,7 @@ abstract class SpellExporter {
   set spellPoints(int spellPoints);
   set name(String name);
   set penalty(int skillPenalty);
-  set time(GurpsDuration time);
+  set time(GDuration time);
   set description(String description);
   set conditional(bool conditional);
 

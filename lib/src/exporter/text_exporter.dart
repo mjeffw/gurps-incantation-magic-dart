@@ -9,19 +9,19 @@ class TextSpellExporter implements SpellExporter {
   String name;
 
   @override
-  EffectExporter effectExporter = new TextEffectExporter();
+  EffectExporter effectExporter = TextEffectExporter();
 
   @override
-  ModifierExporter modifierExporter = new TextModifierExporter();
+  ModifierExporter modifierExporter = TextModifierExporter();
   int penalty;
-  GurpsDuration time;
+  GDuration time;
   String description;
   bool conditional;
   int spellPoints;
 
   @override
   String toString() {
-    StringBuffer sb = new StringBuffer()
+    StringBuffer sb = StringBuffer()
       ..writeln(name)
       ..writeln('')
       ..writeln(effectExporter)
@@ -43,7 +43,7 @@ class TextSpellExporter implements SpellExporter {
   String get timeText => "Casting Time: ${castingTime}.";
 
   @override
-  String get castingTime => GurpsDuration.toFormattedString(time.inSeconds);
+  String get castingTime => GDuration.toFormattedString(time.inSeconds);
 
   String get typical {
     List<String> components = [];
@@ -68,11 +68,11 @@ class TextSpellExporter implements SpellExporter {
 }
 
 class _Effect {
+  _Effect(this.effect, this.path, this.spellPoints);
+
   String effect;
   String path;
   int spellPoints;
-
-  _Effect(this.effect, this.path, this.spellPoints);
 
   String get summaryText => '${effect} ${path}';
 
@@ -98,7 +98,7 @@ class TextEffectExporter implements EffectExporter {
 
   @override
   void add({String effect: '', String path: '', int spellPoints: 0}) {
-    values.add(new _Effect(effect, path, spellPoints));
+    values.add(_Effect(effect, path, spellPoints));
   }
 
   @override
@@ -200,52 +200,51 @@ class TextModifierExporter implements ModifierExporter {
   List<ModifierDetail> get details => _details;
 
   @override
-  ModifierDetail createAfflictionDetail() => new TextAfflictionDetail();
+  ModifierDetail createAfflictionDetail() => TextAfflictionDetail();
 
   @override
-  ModifierDetail createAfflictionStunDetail() => new TextModifierDetail();
+  ModifierDetail createAfflictionStunDetail() => TextModifierDetail();
 
   @override
-  ModifierDetail createAlteredTraitsDetail() => new TextAlteredTraitsDetail();
+  ModifierDetail createAlteredTraitsDetail() => TextAlteredTraitsDetail();
 
   @override
-  ModifierDetail createAreaEffectDetail() => new TextAreaOfEffectDetail();
+  ModifierDetail createAreaEffectDetail() => TextAreaOfEffectDetail();
 
   @override
-  ModifierDetail createBestowsDetail() => new TextBestowsDetail();
+  ModifierDetail createBestowsDetail() => TextBestowsDetail();
 
   @override
-  ModifierDetail createDamageDetail() => new TextDamageDetail();
+  ModifierDetail createDamageDetail() => TextDamageDetail();
 
   @override
-  ModifierDetail createDurationDetail() => new TextDurationDetail();
+  ModifierDetail createDurationDetail() => TextDurationDetail();
 
   @override
-  ModifierDetail createGirdedDetail() => new TextModifierDetail();
+  ModifierDetail createGirdedDetail() => TextModifierDetail();
 
   @override
-  ModifierDetail createRangeDetail() => new TextRangeDetail();
+  ModifierDetail createRangeDetail() => TextRangeDetail();
 
   @override
-  ModifierDetail createRangeDimensionalDetail() =>
-      new TextRangeDimensionalDetail();
+  ModifierDetail createRangeDimensionalDetail() => TextRangeDimensionalDetail();
 
   @override
   ModifierDetail createRangeInformationalDetail() =>
-      new TextRangeInformationalDetail();
+      TextRangeInformationalDetail();
 
   @override
-  ModifierDetail createRangeTimeDetail() => new TextRangeTimeDetail();
+  ModifierDetail createRangeTimeDetail() => TextRangeTimeDetail();
 
   @override
-  ModifierDetail createRepairDetail() => new TextRepairDetail();
+  ModifierDetail createRepairDetail() => TextRepairDetail();
 
   @override
-  ModifierDetail createSpeedDetail() => new TextSpeedDetail();
+  ModifierDetail createSpeedDetail() => TextSpeedDetail();
 
   @override
-  ModifierDetail createSubjectWeightDetail() => new TextSubjectWeightDetail();
+  ModifierDetail createSubjectWeightDetail() => TextSubjectWeightDetail();
 
   @override
-  ModifierDetail createSummonedDetail() => new TextSummonedDetail();
+  ModifierDetail createSummonedDetail() => TextSummonedDetail();
 }

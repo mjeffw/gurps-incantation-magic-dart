@@ -7,7 +7,7 @@ void main() {
     DurationMod dur;
 
     setUp(() async {
-      dur = new DurationMod();
+      dur = DurationMod();
     });
 
     test("has initial state", () {
@@ -27,7 +27,7 @@ void main() {
     });
 
     test("should throw exception if more than one day", () {
-      expect(() => dur.value = const GurpsDuration(days: 1).inSeconds + 1,
+      expect(() => dur.value = const GDuration(days: 1).inSeconds + 1,
           throwsException);
     });
 
@@ -49,29 +49,29 @@ void main() {
     test("should have SpellPoints", () {
       dur.value = 0;
       expect(dur.spellPoints, equals(0));
-      dur.value = const GurpsDuration(seconds: 9).inSeconds;
+      dur.value = const GDuration(seconds: 9).inSeconds;
       expect(dur.spellPoints, equals(1));
-      dur.value = const GurpsDuration(seconds: 10).inSeconds;
+      dur.value = const GDuration(seconds: 10).inSeconds;
       expect(dur.spellPoints, equals(1));
-      dur.value = const GurpsDuration(seconds: 30).inSeconds;
+      dur.value = const GDuration(seconds: 30).inSeconds;
       expect(dur.spellPoints, equals(2));
-      dur.value = const GurpsDuration(minutes: 1).inSeconds;
+      dur.value = const GDuration(minutes: 1).inSeconds;
       expect(dur.spellPoints, equals(3));
-      dur.value = const GurpsDuration(minutes: 3).inSeconds;
+      dur.value = const GDuration(minutes: 3).inSeconds;
       expect(dur.spellPoints, equals(4));
-      dur.value = const GurpsDuration(minutes: 6).inSeconds;
+      dur.value = const GDuration(minutes: 6).inSeconds;
       expect(dur.spellPoints, equals(5));
-      dur.value = const GurpsDuration(minutes: 12).inSeconds;
+      dur.value = const GDuration(minutes: 12).inSeconds;
       expect(dur.spellPoints, equals(6));
-      dur.value = const GurpsDuration(hours: 1).inSeconds;
+      dur.value = const GDuration(hours: 1).inSeconds;
       expect(dur.spellPoints, equals(7));
-      dur.value = const GurpsDuration(hours: 3).inSeconds;
+      dur.value = const GDuration(hours: 3).inSeconds;
       expect(dur.spellPoints, equals(8));
-      dur.value = const GurpsDuration(hours: 6).inSeconds;
+      dur.value = const GDuration(hours: 6).inSeconds;
       expect(dur.spellPoints, equals(9));
-      dur.value = const GurpsDuration(hours: 12).inSeconds;
+      dur.value = const GDuration(hours: 12).inSeconds;
       expect(dur.spellPoints, equals(10));
-      dur.value = const GurpsDuration(days: 1).inSeconds;
+      dur.value = const GDuration(days: 1).inSeconds;
       expect(dur.spellPoints, equals(11));
     });
   });
@@ -80,7 +80,7 @@ void main() {
     RitualModifier m;
 
     setUp(() async {
-      m = new Girded();
+      m = Girded();
     });
 
     test("has initial state", () {
@@ -123,7 +123,7 @@ void main() {
     RitualModifier m;
 
     setUp(() async {
-      m = new RangeCrossTime();
+      m = RangeCrossTime();
     });
 
     test("has initial state", () {
@@ -165,28 +165,28 @@ void main() {
       m.value = 13;
       expect(m.spellPoints, equals(2));
 
-      m.value = const GurpsDuration(days: 1).inHours;
+      m.value = const GDuration(days: 1).inHours;
       expect(m.spellPoints, equals(2));
 
-      m.value = const GurpsDuration(days: 3).inHours;
+      m.value = const GDuration(days: 3).inHours;
       expect(m.spellPoints, equals(3));
 
-      m.value = const GurpsDuration(days: 10).inHours;
+      m.value = const GDuration(days: 10).inHours;
       expect(m.spellPoints, equals(4));
 
-      m.value = const GurpsDuration(days: 30).inHours;
+      m.value = const GDuration(days: 30).inHours;
       expect(m.spellPoints, equals(5));
 
-      m.value = const GurpsDuration(days: 100).inHours;
+      m.value = const GDuration(days: 100).inHours;
       expect(m.spellPoints, equals(6));
 
-      m.value = const GurpsDuration(days: 300).inHours;
+      m.value = const GDuration(days: 300).inHours;
       expect(m.spellPoints, equals(7));
 
-      m.value = const GurpsDuration(days: 1000).inHours;
+      m.value = const GDuration(days: 1000).inHours;
       expect(m.spellPoints, equals(8));
 
-      m.value = const GurpsDuration(days: 3000).inHours;
+      m.value = const GDuration(days: 3000).inHours;
       expect(m.spellPoints, equals(9));
     });
 
@@ -199,7 +199,7 @@ void main() {
     RitualModifier m;
 
     setUp(() async {
-      m = new RangeDimensional();
+      m = RangeDimensional();
     });
 
     test("has initial state", () {
@@ -232,7 +232,7 @@ void main() {
     RitualModifier m;
 
     setUp(() async {
-      m = new RangeInformational();
+      m = RangeInformational();
     });
 
     test("has initial state", () {
@@ -267,31 +267,31 @@ void main() {
       m.value = 881;
       expect(m.spellPoints, equals(2));
 
-      m.value = new GurpsDistance(miles: 1).inYards;
+      m.value = GDistance(miles: 1).inYards;
       expect(m.spellPoints, equals(2));
 
-      m.value = new GurpsDistance(miles: 1).inYards + 1;
+      m.value = GDistance(miles: 1).inYards + 1;
       expect(m.spellPoints, equals(3));
 
-      m.value = new GurpsDistance(miles: 3).inYards;
+      m.value = GDistance(miles: 3).inYards;
       expect(m.spellPoints, equals(3));
 
-      m.value = new GurpsDistance(miles: 10).inYards;
+      m.value = GDistance(miles: 10).inYards;
       expect(m.spellPoints, equals(4));
 
-      m.value = new GurpsDistance(miles: 30).inYards;
+      m.value = GDistance(miles: 30).inYards;
       expect(m.spellPoints, equals(5));
 
-      m.value = new GurpsDistance(miles: 100).inYards;
+      m.value = GDistance(miles: 100).inYards;
       expect(m.spellPoints, equals(6));
 
-      m.value = new GurpsDistance(miles: 300).inYards;
+      m.value = GDistance(miles: 300).inYards;
       expect(m.spellPoints, equals(7));
 
-      m.value = new GurpsDistance(miles: 1000).inYards;
+      m.value = GDistance(miles: 1000).inYards;
       expect(m.spellPoints, equals(8));
 
-      m.value = new GurpsDistance(miles: 3000).inYards;
+      m.value = GDistance(miles: 3000).inYards;
       expect(m.spellPoints, equals(9));
     });
   });
@@ -300,7 +300,7 @@ void main() {
     RitualModifier m;
 
     setUp(() async {
-      m = new Range();
+      m = Range();
     });
 
     test("has initial state", () {
@@ -320,64 +320,64 @@ void main() {
     });
 
     test("has SpellPoints", () {
-      m.value = new GurpsDistance(yards: 0).inYards;
+      m.value = GDistance(yards: 0).inYards;
       expect(m.spellPoints, equals(0));
 
-      m.value = new GurpsDistance(yards: 2).inYards;
+      m.value = GDistance(yards: 2).inYards;
       expect(m.spellPoints, equals(0));
 
-      m.value = new GurpsDistance(yards: 3).inYards;
+      m.value = GDistance(yards: 3).inYards;
       expect(m.spellPoints, equals(1));
 
-      m.value = new GurpsDistance(yards: 4).inYards;
+      m.value = GDistance(yards: 4).inYards;
       expect(m.spellPoints, equals(2));
 
-      m.value = new GurpsDistance(yards: 5).inYards;
+      m.value = GDistance(yards: 5).inYards;
       expect(m.spellPoints, equals(2));
 
-      m.value = new GurpsDistance(yards: 7).inYards;
+      m.value = GDistance(yards: 7).inYards;
       expect(m.spellPoints, equals(3));
 
-      m.value = new GurpsDistance(yards: 10).inYards;
+      m.value = GDistance(yards: 10).inYards;
       expect(m.spellPoints, equals(4));
 
-      m.value = new GurpsDistance(yards: 15).inYards;
+      m.value = GDistance(yards: 15).inYards;
       expect(m.spellPoints, equals(5));
 
-      m.value = new GurpsDistance(yards: 20).inYards;
+      m.value = GDistance(yards: 20).inYards;
       expect(m.spellPoints, equals(6));
 
-      m.value = new GurpsDistance(yards: 30).inYards;
+      m.value = GDistance(yards: 30).inYards;
       expect(m.spellPoints, equals(7));
 
-      m.value = new GurpsDistance(yards: 50).inYards;
+      m.value = GDistance(yards: 50).inYards;
       expect(m.spellPoints, equals(8));
 
-      m.value = new GurpsDistance(yards: 70).inYards;
+      m.value = GDistance(yards: 70).inYards;
       expect(m.spellPoints, equals(9));
 
-      m.value = new GurpsDistance(yards: 100).inYards;
+      m.value = GDistance(yards: 100).inYards;
       expect(m.spellPoints, equals(10));
 
-      m.value = new GurpsDistance(yards: 150).inYards;
+      m.value = GDistance(yards: 150).inYards;
       expect(m.spellPoints, equals(11));
 
-      m.value = new GurpsDistance(yards: 200).inYards;
+      m.value = GDistance(yards: 200).inYards;
       expect(m.spellPoints, equals(12));
 
-      m.value = new GurpsDistance(yards: 300).inYards;
+      m.value = GDistance(yards: 300).inYards;
       expect(m.spellPoints, equals(13));
 
-      m.value = new GurpsDistance(yards: 500).inYards;
+      m.value = GDistance(yards: 500).inYards;
       expect(m.spellPoints, equals(14));
 
-      m.value = new GurpsDistance(yards: 700).inYards;
+      m.value = GDistance(yards: 700).inYards;
       expect(m.spellPoints, equals(15));
 
-      m.value = new GurpsDistance(yards: 1000).inYards;
+      m.value = GDistance(yards: 1000).inYards;
       expect(m.spellPoints, equals(16));
 
-      m.value = new GurpsDistance(yards: 1500).inYards;
+      m.value = GDistance(yards: 1500).inYards;
       expect(m.spellPoints, equals(17));
     });
   });
@@ -386,7 +386,7 @@ void main() {
     RitualModifier m;
 
     setUp(() async {
-      m = new Repair("test");
+      m = Repair("test");
     });
 
     test("has initial state", () {
@@ -427,7 +427,7 @@ void main() {
     RitualModifier m;
 
     setUp(() async {
-      m = new Speed();
+      m = Speed();
     });
 
     test("has initial state", () {
@@ -458,46 +458,46 @@ void main() {
     //  |    10 |    4 ||   100 |   10 ||  1000 |   16 |
     //  |    15 |    5 ||   150 |   11 ||  1500 |   17 |
     test("has spellPoints", () {
-      m.value = new GurpsDistance(yards: 0).inYards;
+      m.value = GDistance(yards: 0).inYards;
       expect(m.spellPoints, equals(0));
 
-      m.value = new GurpsDistance(yards: 2).inYards;
+      m.value = GDistance(yards: 2).inYards;
       expect(m.spellPoints, equals(0));
 
-      m.value = new GurpsDistance(yards: 3).inYards;
+      m.value = GDistance(yards: 3).inYards;
       expect(m.spellPoints, equals(1));
 
-      m.value = new GurpsDistance(yards: 4).inYards;
+      m.value = GDistance(yards: 4).inYards;
       expect(m.spellPoints, equals(2));
 
-      m.value = new GurpsDistance(yards: 5).inYards;
+      m.value = GDistance(yards: 5).inYards;
       expect(m.spellPoints, equals(2));
 
-      m.value = new GurpsDistance(yards: 7).inYards;
+      m.value = GDistance(yards: 7).inYards;
       expect(m.spellPoints, equals(3));
 
-      m.value = new GurpsDistance(yards: 10).inYards;
+      m.value = GDistance(yards: 10).inYards;
       expect(m.spellPoints, equals(4));
 
-      m.value = new GurpsDistance(yards: 15).inYards;
+      m.value = GDistance(yards: 15).inYards;
       expect(m.spellPoints, equals(5));
 
-      m.value = new GurpsDistance(yards: 20).inYards;
+      m.value = GDistance(yards: 20).inYards;
       expect(m.spellPoints, equals(6));
 
-      m.value = new GurpsDistance(yards: 30).inYards;
+      m.value = GDistance(yards: 30).inYards;
       expect(m.spellPoints, equals(7));
 
-      m.value = new GurpsDistance(yards: 50).inYards;
+      m.value = GDistance(yards: 50).inYards;
       expect(m.spellPoints, equals(8));
 
-      m.value = new GurpsDistance(yards: 70).inYards;
+      m.value = GDistance(yards: 70).inYards;
       expect(m.spellPoints, equals(9));
 
-      m.value = new GurpsDistance(yards: 100).inYards;
+      m.value = GDistance(yards: 100).inYards;
       expect(m.spellPoints, equals(10));
 
-      m.value = new GurpsDistance(yards: 150).inYards;
+      m.value = GDistance(yards: 150).inYards;
       expect(m.spellPoints, equals(11));
     });
   });
@@ -506,7 +506,7 @@ void main() {
     RitualModifier m;
 
     setUp(() async {
-      m = new SubjectWeight();
+      m = SubjectWeight();
     });
 
     test("has initial state", () {
@@ -531,34 +531,34 @@ void main() {
     //  |  100 lbs |  +2 || 5 tons   | +6 |
     //  |  300 lbs |  +3 || x3       | +1 |")
     test("should have spell points", () {
-      m.value = new Weight(pounds: 0).inPounds;
+      m.value = GWeight(pounds: 0).inPounds;
       expect(m.spellPoints, equals(0));
 
-      m.value = new Weight(pounds: 10).inPounds;
+      m.value = GWeight(pounds: 10).inPounds;
       expect(m.spellPoints, equals(0));
 
-      m.value = new Weight(pounds: 11).inPounds;
+      m.value = GWeight(pounds: 11).inPounds;
       expect(m.spellPoints, equals(1));
 
-      m.value = new Weight(pounds: 30).inPounds;
+      m.value = GWeight(pounds: 30).inPounds;
       expect(m.spellPoints, equals(1));
 
-      m.value = new Weight(pounds: 31).inPounds;
+      m.value = GWeight(pounds: 31).inPounds;
       expect(m.spellPoints, equals(2));
 
-      m.value = new Weight(pounds: 100).inPounds;
+      m.value = GWeight(pounds: 100).inPounds;
       expect(m.spellPoints, equals(2));
 
-      m.value = new Weight(pounds: 300).inPounds;
+      m.value = GWeight(pounds: 300).inPounds;
       expect(m.spellPoints, equals(3));
 
-      m.value = new Weight(pounds: 1000).inPounds;
+      m.value = GWeight(pounds: 1000).inPounds;
       expect(m.spellPoints, equals(4));
 
-      m.value = new Weight(tons: 5).inPounds;
+      m.value = GWeight(tons: 5).inPounds;
       expect(m.spellPoints, equals(6));
 
-      m.value = new Weight(tons: 15).inPounds;
+      m.value = GWeight(tons: 15).inPounds;
       expect(m.spellPoints, equals(7));
     });
   });
@@ -567,7 +567,7 @@ void main() {
     RitualModifier m;
 
     setUp(() async {
-      m = new Summoned();
+      m = Summoned();
     });
 
     test("has initial state", () {

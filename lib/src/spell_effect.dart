@@ -6,10 +6,10 @@ import 'package:quiver/core.dart';
 typedef String ToSpellEffectText();
 
 class SpellEffect {
+  SpellEffect(this.effect, this.path);
+
   Effect effect;
   Path path;
-
-  SpellEffect(this.effect, this.path);
 
   int get spellPoints => effect?.spellPoints ?? 0;
 
@@ -22,7 +22,7 @@ class SpellEffect {
   }
 
   @override
-  int hashCode() => hash2(effect.name, path.name);
+  int get hashCode => hash2(effect.name, path.name);
 
   void export(EffectExporter exporter) {
     exporter.add(

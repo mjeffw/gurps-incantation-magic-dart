@@ -1,3 +1,5 @@
+import 'package:gurps_dice/gurps_dice.dart';
+
 import '../modifier_detail.dart';
 import 'package:gurps_dart/gurps_dart.dart';
 
@@ -146,12 +148,12 @@ class TextDamageDetail extends TextModifierDetail implements DamageDetail {
 
 class TextDurationDetail extends TextModifierDetail {
   @override
-  String get detailText => GurpsDuration.toFormattedString(value);
+  String get detailText => GDuration.toFormattedString(value);
 }
 
 class TextRangeDetail extends TextModifierDetail {
   @override
-  String get detailText => GurpsDistance.toFormattedString(value);
+  String get detailText => GDistance.toFormattedString(value);
 }
 
 class TextRangeDimensionalDetail extends TextModifierDetail {
@@ -164,18 +166,16 @@ class TextRangeInformationalDetail extends TextModifierDetail {
   String get name => 'Range';
 
   @override
-  String get detailText => GurpsDistance.toFormattedString(value);
+  String get detailText => GDistance.toFormattedString(value);
 }
 
 class TextRangeTimeDetail extends TextModifierDetail {
   @override
   String get detailText {
     if (value == 0) {
-      return GurpsDuration.toFormattedString(
-          new GurpsDuration(hours: 2).inSeconds);
+      return GDuration.toFormattedString(GDuration(hours: 2).inSeconds);
     } else {
-      return GurpsDuration.toFormattedString(
-          new GurpsDuration(hours: value).inSeconds);
+      return GDuration.toFormattedString(GDuration(hours: value).inSeconds);
     }
   }
 }
@@ -201,12 +201,12 @@ class TextRepairDetail extends TextModifierDetail implements RepairDetail {
 
 class TextSpeedDetail extends TextModifierDetail {
   @override
-  String get detailText => '${GurpsDistance.toFormattedString(value)}/second';
+  String get detailText => '${GDistance.toFormattedString(value)}/second';
 }
 
 class TextSubjectWeightDetail extends TextModifierDetail {
   @override
-  String get detailText => Weight.toFormattedString(value);
+  String get detailText => GWeight.toFormattedString(value);
 }
 
 class TextSummonedDetail extends TextModifierDetail {
