@@ -33,7 +33,8 @@ class Effect {
     Transform.name: Transform
   };
 
-  static List<Effect> get values => List.from(_values.keys);
+  static List<Effect> get values => List.from(_values.values);
+  static List<Effect> get keys => List.from(_values.keys);
 
   @override
   String toString() => name;
