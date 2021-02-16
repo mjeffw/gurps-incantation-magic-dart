@@ -1,5 +1,5 @@
 name: gurps_incantation_magic_model
-version: 1.0.0
+version: 1.0.1
 description: >
   This module contains the model that implements the GURPS Dungeon Fantasy Incantation Magic system.
 author: M. Jeff Wilson <geek.macbeer@gmail.com>
